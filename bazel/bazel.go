@@ -15,16 +15,15 @@ var ErrInvalidLabel = errors.New("invalid label")
 // WorkspaceName is the name of a Bazel workspace (not including leading "@"), or empty if it refers
 // to the "current" workspace.
 //
-// A valid non-empty workspace name must be a valid target name (see below). TODO(vtl): Is this
-// right? (This is vaguely implied since it shows up as the "name" argument, but are there more
-// restrictions?)
-// TODO(vtl): This is wrong; see
-// https://docs.bazel.build/versions/master/be/functions.html#workspace.
+// A valid, non-empty workspace name must consist of only characters 'A'-'Z', 'a'-z', '0'-'9', and
+// '_', and must begin with a letter.
 type WorkspaceName string
+
+var workspaceNameRegexp = regexp.MustCompile(`^([A-Za-z][A-Za-z0-9_]*)?$`)
 
 // IsValid returns whether the given WorkspaceName is valid.
 func (w WorkspaceName) IsValid() bool {
-	return w == "" || TargetName(w).IsValid()
+	return workspaceNameRegexp.MatchString(string(w))
 }
 
 // PackageName is the name of a Bazel package (not including leading "//").

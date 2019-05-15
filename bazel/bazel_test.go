@@ -10,16 +10,16 @@ import (
 )
 
 func TestWorkspaceName_IsValid(t *testing.T) {
-	valids := []WorkspaceName{"a", "A", "0", "_", "+", "-", "=", ",", "@", "~", "a.", "a.b",
-		"a..b", "a/B", "0/1/2/A-b/C.e/f..G/h...i/_.+-=,@~789xyzXYz", ".", ""}
+	valids := []WorkspaceName{"", "a", "A", "abc", "ABC", "Abc", "aBC", "a1", "ab_123", "a_b_C",
+		"a_", "a_1_B_2_c_3__", "a____"}
 	for _, valid := range valids {
 		if !valid.IsValid() {
 			t.Error(valid, " should be valid")
 		}
 	}
 
-	invalids := []WorkspaceName{"!", "a#", "..", "/", "/a", "a/", "a//b", "a/./b", "./a", "./",
-		"../a", "a/../b"}
+	invalids := []WorkspaceName{"!", "a#", ".", "_", "1", "..", "/", "/a", "a/", "a/b", "a//b",
+		"a.b", "a-b", "a/./b", "./a", "./", "../a", "a/../b", "1a", "1A", "1_", "_a"}
 	for _, invalid := range invalids {
 		if invalid.IsValid() {
 			t.Error(invalid, " should be invalid")
@@ -68,9 +68,9 @@ func TestLabel_IsValid(t *testing.T) {
 		{"", "", "."},
 		{"", "my_package", "target.1"},
 		{"", "my/pkg/over/here", "target/is/over.there"},
-		{"my-workspace", "", "root-target"},
+		{"my_workspace", "", "root-target"},
 		{"your_workspace", "my_package", "target.1"},
-		{"everyones.workspace", "my/pkg/over/here", "target/is/over.there"},
+		{"everyones_workspace", "my/pkg/over/here", "target/is/over.there"},
 	}
 	for _, valid := range valids {
 		if !valid.IsValid() {

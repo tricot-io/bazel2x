@@ -86,6 +86,8 @@ func (l Label) IsValid() bool {
 //
 // Note that this requires that source files (which are also targets) be written with a leading ":"
 // (or full specified including package name and possibly also workspace name).
+//
+// TODO(vtl): This doesn't handle a label like "//foo" (meaning "//foo:foo").
 func ParseLabel(currWorkspace WorkspaceName, currPackage PackageName, s string) (Label, error) {
 	if !currWorkspace.IsValid() {
 		panic(currWorkspace)
@@ -131,7 +133,11 @@ func ParseLabel(currWorkspace WorkspaceName, currPackage PackageName, s string) 
 	}
 	workspace := WorkspaceName(s[1:slashslash])
 	// Note that workspace is allowed to be empty here (you're allowed to write, e.g.,
-	// "@//foo:bar").
+	// "@//foo:bar"), but then we apply the current workspace.
+	// TODO(vtl): Is that right? Hopefully.
+	if workspace == "" {
+		workspace = currWorkspace
+	}
 
 	if rv := (Label{workspace, pkg, target}); rv.IsValid() {
 		return rv, nil

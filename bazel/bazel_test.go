@@ -92,4 +92,49 @@ func TestLabel_IsValid(t *testing.T) {
 	}
 }
 
-// TODO(vtl): Test ParseLabel.
+func TestParseLabel(t *testing.T) {
+	const currWorkspace WorkspaceName = "default_workspace"
+	const currPackage PackageName = "default/package"
+
+	valids := []struct{
+		in  string
+		out Label
+	}{
+		{":foo", Label{currWorkspace, currPackage, "foo"}},
+		{":foo.txt", Label{currWorkspace, currPackage, "foo.txt"}},
+		{":.", Label{currWorkspace, currPackage, "."}},
+		{":@-+=", Label{currWorkspace, currPackage, "@-+="}},
+		{"//foo:bar", Label{currWorkspace, "foo", "bar"}},
+		{"//foo:bar.txt", Label{currWorkspace, "foo", "bar.txt"}},
+		{"//foo/bar:baz", Label{currWorkspace, "foo/bar", "baz"}},
+		{"//foo/bar:baz.txt", Label{currWorkspace, "foo/bar", "baz.txt"}},
+		{"//foo/bar:baz/quux", Label{currWorkspace, "foo/bar", "baz/quux"}},
+		{"//foo/bar:baz/quux.txt", Label{currWorkspace, "foo/bar", "baz/quux.txt"}},
+		{"//foo/bar:baz.d/quux.txt", Label{currWorkspace, "foo/bar", "baz.d/quux.txt"}},
+		{"@//foo:bar", Label{currWorkspace, "foo", "bar"}},
+		{"@//foo/bar:baz", Label{currWorkspace, "foo/bar", "baz"}},
+		{"@//foo/bar:baz/quux", Label{currWorkspace, "foo/bar", "baz/quux"}},
+		{"@my_workspace//foo:bar", Label{"my_workspace", "foo", "bar"}},
+		{"@my_workspace//foo/bar:baz", Label{"my_workspace", "foo/bar", "baz"}},
+		{"@my_workspace//foo/bar:baz/quux", Label{"my_workspace", "foo/bar", "baz/quux"}},
+	}
+	for _, valid := range valids {
+		label, err := ParseLabel(currWorkspace, currPackage, valid.in)
+		if err != nil {
+			t.Error(valid.in, " should not have resulted in error: ", err)
+		} else if label != valid.out {
+			t.Error(valid.in, " should have resulted in ", valid.out,
+				", but resulted in ", label)
+		}
+
+	}
+
+	invalids := []string{"", ":", "//", "@", "foo:bar", "./foo:bar", "foo//bar", ":!",
+		"foo//@bar:baz", "f@@//bar:baz", "@_foo//bar:baz", "@foo//b+r:baz", "@foo//bar:b!z"}
+	for _, invalid := range invalids {
+		label, err := ParseLabel(currWorkspace, currPackage, invalid)
+		if err == nil {
+			t.Error(invalid, " should have resulted in error, but resulted in ", label)
+		}
+	}
+}

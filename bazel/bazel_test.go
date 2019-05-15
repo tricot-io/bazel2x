@@ -96,25 +96,35 @@ func TestParseLabel(t *testing.T) {
 	const currWorkspace WorkspaceName = "default_workspace"
 	const currPackage PackageName = "default/package"
 
-	valids := []struct{
+	valids := []struct {
 		in  string
 		out Label
 	}{
-		{":foo", Label{currWorkspace, currPackage, "foo"}},
-		{":foo.txt", Label{currWorkspace, currPackage, "foo.txt"}},
 		{":.", Label{currWorkspace, currPackage, "."}},
 		{":@-+=", Label{currWorkspace, currPackage, "@-+="}},
+		{":foo", Label{currWorkspace, currPackage, "foo"}},
+		{":foo.txt", Label{currWorkspace, currPackage, "foo.txt"}},
+		{"//:foo", Label{currWorkspace, "", "foo"}},
+		{"//:foo.txt", Label{currWorkspace, "", "foo.txt"}},
+		{"//foo", Label{currWorkspace, "foo", "foo"}},
 		{"//foo:bar", Label{currWorkspace, "foo", "bar"}},
 		{"//foo:bar.txt", Label{currWorkspace, "foo", "bar.txt"}},
+		{"//foo/bar", Label{currWorkspace, "foo/bar", "bar"}},
 		{"//foo/bar:baz", Label{currWorkspace, "foo/bar", "baz"}},
 		{"//foo/bar:baz.txt", Label{currWorkspace, "foo/bar", "baz.txt"}},
 		{"//foo/bar:baz/quux", Label{currWorkspace, "foo/bar", "baz/quux"}},
 		{"//foo/bar:baz/quux.txt", Label{currWorkspace, "foo/bar", "baz/quux.txt"}},
 		{"//foo/bar:baz.d/quux.txt", Label{currWorkspace, "foo/bar", "baz.d/quux.txt"}},
+		{"@//:foo", Label{currWorkspace, "", "foo"}},
+		{"@//foo", Label{currWorkspace, "foo", "foo"}},
 		{"@//foo:bar", Label{currWorkspace, "foo", "bar"}},
+		{"@//foo/bar", Label{currWorkspace, "foo/bar", "bar"}},
 		{"@//foo/bar:baz", Label{currWorkspace, "foo/bar", "baz"}},
 		{"@//foo/bar:baz/quux", Label{currWorkspace, "foo/bar", "baz/quux"}},
+		{"@my_workspace//:foo", Label{"my_workspace", "", "foo"}},
+		{"@my_workspace//foo", Label{"my_workspace", "foo", "foo"}},
 		{"@my_workspace//foo:bar", Label{"my_workspace", "foo", "bar"}},
+		{"@my_workspace//foo/bar", Label{"my_workspace", "foo/bar", "bar"}},
 		{"@my_workspace//foo/bar:baz", Label{"my_workspace", "foo/bar", "baz"}},
 		{"@my_workspace//foo/bar:baz/quux", Label{"my_workspace", "foo/bar", "baz/quux"}},
 	}

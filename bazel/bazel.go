@@ -86,8 +86,6 @@ func (l Label) IsValid() bool {
 //
 // Note that this requires that source files (which are also targets) be written with a leading ":"
 // (or full specified including package name and possibly also workspace name).
-//
-// TODO(vtl): This doesn't handle a label like "//foo" (meaning "//foo:foo").
 func ParseLabel(currWorkspace WorkspaceName, currPackage PackageName, s string) (Label, error) {
 	if !currWorkspace.IsValid() {
 		panic(currWorkspace)
@@ -96,10 +94,17 @@ func ParseLabel(currWorkspace WorkspaceName, currPackage PackageName, s string) 
 		panic(currPackage)
 	}
 
-	// Labels must always contain ":":
+	// Find the ":", which delimits the target.
 	colon := strings.Index(s, ":")
+	// If there's no ":", then the target is implicitly the same as the last component of the
+	// package.
 	if colon == -1 {
-		return Label{}, ErrInvalidLabel
+		lastslash := strings.LastIndex(s, "/")
+		if lastslash == -1 {
+			return Label{}, ErrInvalidLabel
+		}
+		colon = len(s)
+		s += ":" + s[lastslash+1:]
 	}
 	target := TargetName(s[colon+1:])
 

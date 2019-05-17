@@ -54,6 +54,8 @@ type BuiltinsIface interface {
 	// workspace(name = "com_example_project")
 	Workspace(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
 		starlark.Value, error)
+
+	// TODO(vtl): More (e.g., rules).
 }
 
 const builtinsImplKey = "bazel2make-bazel-builtins-impl"
@@ -97,4 +99,5 @@ var Builtins = starlark.StringDict{
 			kwargs []starlark.Tuple) (starlark.Value, error) {
 			return GetBuiltinsImpl(thread).Workspace(thread, args, kwargs)
 		}),
+	// TODO(vtl): More (e.g., globals, rules).
 }

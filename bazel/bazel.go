@@ -26,6 +26,14 @@ func (w WorkspaceName) IsValid() bool {
 	return workspaceNameRegexp.MatchString(string(w))
 }
 
+// String formats a workspace name as a string ("" if empty, "@<workspace name>" otherwise).
+func (w WorkspaceName) String() string {
+	if w == "" {
+		return ""
+	}
+	return "@" + string(w)
+}
+
 // PackageName is the name of a Bazel package (not including leading "//").
 //
 // A valid package name must consist of only characters 'A'-'Z', 'a'-'z', '0'-'9', '/', '-', '.',
@@ -38,6 +46,11 @@ var packageNameRegexp = regexp.MustCompile(`^([A-Za-z0-9\-._]+(/[A-Za-z0-9\-._]+
 // IsValid returns whether the given PackageName is valid.
 func (p PackageName) IsValid() bool {
 	return packageNameRegexp.MatchString(string(p))
+}
+
+// String formats a package name as a string (prepends "//").
+func (p PackageName) String() string {
+	return "//" + string(p)
 }
 
 // TargetName is the name of a Bazel target (not including leading ":").
@@ -68,6 +81,11 @@ func (t TargetName) IsValid() bool {
 	return true
 }
 
+// String formats a target name as a string (prepends ":").
+func (t TargetName) String() string {
+	return ":" + string(t)
+}
+
 // Label is a Bazel label.
 type Label struct {
 	Workspace WorkspaceName
@@ -78,6 +96,12 @@ type Label struct {
 // IsValid returns whether the given Label is valid.
 func (l Label) IsValid() bool {
 	return l.Workspace.IsValid() && l.Package.IsValid() && l.Target.IsValid()
+}
+
+// String formats a label as a string. Note that it does not abbreviate "//foo/bar:bar" as
+// "//foo/bar".
+func (l Label) String() string {
+	return l.Workspace.String() + l.Package.String() + l.Target.String()
 }
 
 // ParseLabel parses a label. If the label is absolute and doesn't have a workspace, currWorkspace

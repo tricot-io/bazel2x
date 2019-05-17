@@ -27,6 +27,33 @@ func TestWorkspaceName_IsValid(t *testing.T) {
 	}
 }
 
+func TestWorkspaceName_String(t *testing.T) {
+	testCases := []struct {
+		in  WorkspaceName
+		out string
+	}{
+		{"", ""},
+		{"a", "@a"},
+		{"A", "@A"},
+		{"abc", "@abc"},
+		{"ABC", "@ABC"},
+		{"Abc", "@Abc"},
+		{"aBC", "@aBC"},
+		{"a1", "@a1"},
+		{"ab_123", "@ab_123"},
+		{"a_b_C", "@a_b_C"},
+		{"a_", "@a_"},
+		{"a_1_B_2_c_3__", "@a_1_B_2_c_3__"},
+		{"a____", "@a____"},
+	}
+	for _, testCase := range testCases {
+		if out := testCase.in.String(); out != testCase.out {
+			t.Error(string(testCase.in), " should have resulted in ", testCase.out,
+				", but resulted in ", out)
+		}
+	}
+}
+
 func TestPackageName_IsValid(t *testing.T) {
 	valids := []PackageName{"", "a", "A", "0", "-", ".", "_", "aBc-DeF/012.gHi_JkL",
 		"Ab/C-d/E_f/1.2", "1/2/3/4/5/6/7/8/9", "X/Y/Z/x/y/z"}
@@ -40,6 +67,31 @@ func TestPackageName_IsValid(t *testing.T) {
 	for _, invalid := range invalids {
 		if invalid.IsValid() {
 			t.Error(invalid, " should be invalid")
+		}
+	}
+}
+
+func TestPackageName_String(t *testing.T) {
+	testCases := []struct {
+		in  PackageName
+		out string
+	}{
+		{"", "//"},
+		{"a", "//a"},
+		{"A", "//A"},
+		{"0", "//0"},
+		{"-", "//-"},
+		{".", "//."},
+		{"_", "//_"},
+		{"aBc-DeF/012.gHi_JkL", "//aBc-DeF/012.gHi_JkL"},
+		{"Ab/C-d/E_f/1.2", "//Ab/C-d/E_f/1.2"},
+		{"1/2/3/4/5/6/7/8/9", "//1/2/3/4/5/6/7/8/9"},
+		{"X/Y/Z/x/y/z", "//X/Y/Z/x/y/z"},
+	}
+	for _, testCase := range testCases {
+		if out := testCase.in.String(); out != testCase.out {
+			t.Error(string(testCase.in), " should have resulted in ", testCase.out,
+				", but resulted in ", out)
 		}
 	}
 }
@@ -58,6 +110,37 @@ func TestTargetName_IsValid(t *testing.T) {
 	for _, invalid := range invalids {
 		if invalid.IsValid() {
 			t.Error(invalid, " should be invalid")
+		}
+	}
+}
+
+func TestTargetName_String(t *testing.T) {
+	testCases := []struct {
+		in  TargetName
+		out string
+	}{
+		{"a", ":a"},
+		{"A", ":A"},
+		{"0", ":0"},
+		{"_", ":_"},
+		{"+", ":+"},
+		{"-", ":-"},
+		{"=", ":="},
+		{",", ":,"},
+		{"@", ":@"},
+		{"~", ":~"},
+		{"a.", ":a."},
+		{"a.b", ":a.b"},
+		{"a..b", ":a..b"},
+		{"a/B", ":a/B"},
+		{"0/1/2/A-b/C.e/f..G/h...i/_.+-=,@~789xyzXYz",
+			":0/1/2/A-b/C.e/f..G/h...i/_.+-=,@~789xyzXYz"},
+		{".", ":."},
+	}
+	for _, testCase := range testCases {
+		if out := testCase.in.String(); out != testCase.out {
+			t.Error(string(testCase.in), " should have resulted in ", testCase.out,
+				", but resulted in ", out)
 		}
 	}
 }
@@ -88,6 +171,45 @@ func TestLabel_IsValid(t *testing.T) {
 	for _, invalid := range invalids {
 		if invalid.IsValid() {
 			t.Error(invalid, " should be invalid")
+		}
+	}
+}
+
+func TestLabel_String(t *testing.T) {
+	// Note: We use ParseLabel (below).
+	testCases := []struct {
+		in  string
+		out string
+	}{
+		{"//:foo", "//:foo"},
+		{"//:foo.txt", "//:foo.txt"},
+		{"//foo", "//foo:foo"},
+		{"//foo:bar", "//foo:bar"},
+		{"//foo:bar.txt", "//foo:bar.txt"},
+		{"//foo/bar", "//foo/bar:bar"},
+		{"//foo/bar:baz", "//foo/bar:baz"},
+		{"//foo/bar:baz.txt", "//foo/bar:baz.txt"},
+		{"//foo/bar:baz/quux", "//foo/bar:baz/quux"},
+		{"//foo/bar:baz/quux.txt", "//foo/bar:baz/quux.txt"},
+		{"//foo/bar:baz.d/quux.txt", "//foo/bar:baz.d/quux.txt"},
+		{"@//:foo", "//:foo"},
+		{"@//foo", "//foo:foo"},
+		{"@//foo:bar", "//foo:bar"},
+		{"@//foo/bar", "//foo/bar:bar"},
+		{"@//foo/bar:baz", "//foo/bar:baz"},
+		{"@//foo/bar:baz/quux", "//foo/bar:baz/quux"},
+		{"@my_workspace//:foo", "@my_workspace//:foo"},
+		{"@my_workspace//foo", "@my_workspace//foo:foo"},
+		{"@my_workspace//foo:bar", "@my_workspace//foo:bar"},
+		{"@my_workspace//foo/bar", "@my_workspace//foo/bar:bar"},
+		{"@my_workspace//foo/bar:baz", "@my_workspace//foo/bar:baz"},
+		{"@my_workspace//foo/bar:baz/quux", "@my_workspace//foo/bar:baz/quux"},
+	}
+	for _, testCase := range testCases {
+		label, _ := ParseLabel("", "should_not_appear", testCase.in)
+		if out := label.String(); out != testCase.out {
+			t.Error(testCase.in, " should have resulted in ", testCase.out,
+				", but resulted in ", out)
 		}
 	}
 }

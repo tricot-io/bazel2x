@@ -214,6 +214,35 @@ func TestLabel_String(t *testing.T) {
 	}
 }
 
+func TestLabel_SourcePath(t *testing.T) {
+	workspaceDir := "/foo"
+	externalDir := workspaceDir + "bazel-foo/external"
+
+	// Note: We use ParseLabel (below).
+	testCases := []struct {
+		in  string
+		out string
+	}{
+		{"//:foo.txt", workspaceDir + "/foo.txt"},
+		{"//foo:bar.txt", workspaceDir + "/foo/bar.txt"},
+		{"//foo/bar:baz.txt", workspaceDir + "/foo/bar/baz.txt"},
+		{"//foo/bar:baz/quux.txt", workspaceDir + "/foo/bar/baz/quux.txt"},
+		{"//foo/bar:baz.d/quux.txt", workspaceDir + "/foo/bar/baz.d/quux.txt"},
+		{"@my_workspace//:foo.txt", externalDir + "/my_workspace/foo.txt"},
+		{"@my_workspace//foo:bar.txt", externalDir + "/my_workspace/foo/bar.txt"},
+		{"@my_workspace//foo/bar:baz.txt", externalDir + "/my_workspace/foo/bar/baz.txt"},
+		{"@my_workspace//foo/bar:baz/quux.txt",
+			externalDir + "/my_workspace/foo/bar/baz/quux.txt"},
+	}
+	for _, testCase := range testCases {
+		label, _ := ParseLabel("", "should_not_appear", testCase.in)
+		if out := label.SourcePath(workspaceDir, externalDir); out != testCase.out {
+			t.Error(testCase.in, " should have resulted in ", testCase.out,
+				", but resulted in ", out)
+		}
+	}
+}
+
 func TestParseLabel(t *testing.T) {
 	const currWorkspace WorkspaceName = "default_workspace"
 	const currPackage PackageName = "default/package"

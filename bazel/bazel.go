@@ -6,6 +6,7 @@ package bazel
 
 import (
 	"errors"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -102,6 +103,17 @@ func (l Label) IsValid() bool {
 // "//foo/bar".
 func (l Label) String() string {
 	return l.Workspace.String() + l.Package.String() + l.Target.String()
+}
+
+// SourcePath returns the source path for the given label, assuming that it in fact does refer to a
+// source file. workspaceDir is the directory for the main workspace; externalDir is the directory
+// containing external workspaces (so their directories are externalDir/<workspace name>).
+func (l Label) SourcePath(workspaceDir string, externalDir string) string {
+	relPath := filepath.Join(string(l.Package), string(l.Target))
+	if l.Workspace == "" {
+		return filepath.Join(workspaceDir, relPath)
+	}
+	return filepath.Join(externalDir, string(l.Workspace), relPath)
 }
 
 // ParseLabel parses a label. If the label is absolute and doesn't have a workspace, currWorkspace

@@ -1,4 +1,2 @@
-github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e h1:fY5BOSpyZCqRo5OhCuC+XN+r/bBCmeuuJtjz+bCNIf8=
-github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
-go.starlark.net v0.0.0-20190506145734-95b2783e7d63 h1:WVWIwnUjRw+Tf2iLM4GbAKbSteS4EOhS3z5qXOXN3Vk=
-go.starlark.net v0.0.0-20190506145734-95b2783e7d63/go.mod h1:c1/X6cHgvdXj6pUlmWKMkuqRnW4K8x2vwt6JAaaircg=
+go.starlark.net v0.0.0-20190517184341-47ec06841dbe h1:5bJ42qtSV0Y/JWnWNoREM37bQ6EDRNEqy5Fe0w0TCO4=
+go.starlark.net v0.0.0-20190517184341-47ec06841dbe/go.mod h1:c1/X6cHgvdXj6pUlmWKMkuqRnW4K8x2vwt6JAaaircg=

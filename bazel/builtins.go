@@ -125,7 +125,6 @@ func getBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
 }
 
 func MakeInitialGlobals(ctx *Context) starlark.StringDict {
-	// TODO(vtl): Customize this.
 	return starlark.StringDict{
 		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
@@ -162,7 +161,8 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Fail(args, kwargs)
 			}),
-		// TODO(vtl): PACKAGE_NAME
+		// TODO(vtl): Maybe this should be delegated somehow.
+		"PACKAGE_NAME": starlark.String(string(ctx.Label.Package)),
 		"provider": starlark.NewBuiltin("provider",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -179,7 +179,8 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).RegisterToolchains(args, kwargs)
 			}),
-		// TODO(vtl): REPOSITORY_NAME
+		// TODO(vtl): Maybe this should be delegated somehow.
+		"REPOSITORY_NAME": starlark.String("@"+string(ctx.Label.Workspace)),
 		"repository_rule": starlark.NewBuiltin("repository_rule",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

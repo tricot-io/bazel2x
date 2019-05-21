@@ -583,14 +583,3 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 			}),
 	}
 }
-
-/*
-# Workspace Rules
-bind
-local_repository
-maven_jar
-maven_server
-new_local_repository
-xcode_config
-xcode_version
-*/

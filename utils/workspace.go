@@ -12,7 +12,7 @@ import (
 
 // ErrNoWorkspace is the error returned when no WORKSPACE file can be found (at or above a given
 // directory).
-var ErrNoWorkspace = errors.New("No WORKSPACE file found")
+var ErrNoWorkspace = errors.New("no WORKSPACE file found")
 
 // FindWorkspaceDir finds the first directory at or above startDir containing a WORKSPACE file. It
 // returns the directory's absolute path and the relative path from that directory to startDir

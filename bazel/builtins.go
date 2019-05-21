@@ -8,38 +8,10 @@ import (
 )
 
 type BuiltinsIface interface {
-	// https://docs.bazel.build/versions/master/be/functions.html#package
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#select
+	// unknown select(x, no_match_error='')
 	//
-	// BUILD file only.
-	//
-	// package(default_deprecation, default_testonly, default_visibility, features)
-	Package(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#package_group
-	//
-	// BUILD file only.
-	//
-	// package_group(name, packages, includes)
-	PackageGroup(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#exports_files
-	//
-	// BUILD file only.
-	//
-	// exports_files([label, ...], visibility, licenses)
-	ExportsFiles(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#glob
-	//
-	// glob(include, exclude=[], exclude_directories=1)
-	Glob(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value,
-		error)
-
 	// https://docs.bazel.build/versions/master/be/functions.html#select
-	//
 	// select(
 	//     {conditionA: valuesA, conditionB: valuesB, ...},
 	//     no_match_error = "custom message"
@@ -47,13 +19,33 @@ type BuiltinsIface interface {
 	Select(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
 		starlark.Value, error)
 
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#workspace
+	// None workspace(name, managed_directories={})
+	//
 	// https://docs.bazel.build/versions/master/be/functions.html#workspace
-	//
-	// WORKSPACE file only.
-	//
 	// workspace(name = "com_example_project")
 	Workspace(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
 		starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/be/functions.html#package
+	// package(default_deprecation, default_testonly, default_visibility, features)
+	Package(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
+		starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/be/functions.html#package_group
+	// package_group(name, packages, includes)
+	PackageGroup(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
+		starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/be/functions.html#exports_files
+	// exports_files([label, ...], visibility, licenses)
+	ExportsFiles(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
+		starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/be/functions.html#glob
+	// glob(include, exclude=[], exclude_directories=1)
+	Glob(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value,
+		error)
 
 	// TODO(vtl): More (e.g., rules).
 }
@@ -69,6 +61,16 @@ func GetBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
 }
 
 var Builtins = starlark.StringDict{
+	"select": starlark.NewBuiltin("select",
+		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+			kwargs []starlark.Tuple) (starlark.Value, error) {
+			return GetBuiltinsImpl(thread).Select(thread, args, kwargs)
+		}),
+	"workspace": starlark.NewBuiltin("workspace",
+		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+			kwargs []starlark.Tuple) (starlark.Value, error) {
+			return GetBuiltinsImpl(thread).Workspace(thread, args, kwargs)
+		}),
 	"package": starlark.NewBuiltin("package",
 		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 			kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -88,16 +90,6 @@ var Builtins = starlark.StringDict{
 		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 			kwargs []starlark.Tuple) (starlark.Value, error) {
 			return GetBuiltinsImpl(thread).Glob(thread, args, kwargs)
-		}),
-	"select": starlark.NewBuiltin("select",
-		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-			kwargs []starlark.Tuple) (starlark.Value, error) {
-			return GetBuiltinsImpl(thread).Select(thread, args, kwargs)
-		}),
-	"workspace": starlark.NewBuiltin("workspace",
-		func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-			kwargs []starlark.Tuple) (starlark.Value, error) {
-			return GetBuiltinsImpl(thread).Workspace(thread, args, kwargs)
 		}),
 	// TODO(vtl): More (e.g., globals, rules).
 }

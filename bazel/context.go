@@ -20,14 +20,16 @@ type Context struct {
 	FileType FileType
 	Loader   *Loader
 	Thread   *starlark.Thread
+
+	BuiltinsImpl BuiltinsIface
 }
 
 func (ctx *Context) CreateThread(label Label, fileType FileType) *starlark.Thread {
 	return CreateThread(ctx.Loader, label, fileType)
 }
 
-func (ctx *Context) GetBuiltins() starlark.StringDict {
-	return MakeBuiltins(ctx)
+func (ctx *Context) MakeInitialGlobals() starlark.StringDict {
+	return MakeInitialGlobals(ctx)
 }
 
 const contextKey = "bazel2make-bazel-context"
@@ -42,14 +44,11 @@ func CreateThread(loader *Loader, label Label, fileType FileType) *starlark.Thre
 		FileType: fileType,
 		Loader:   loader,
 		Thread:   thread,
+		// TODO(vtl): Choose BuiltinsImpl based on fileType.
+		BuiltinsImpl: &NoOpBuiltinsImpl{},
 	}
 	// And attach it to the thread.
 	thread.SetLocal(contextKey, ctx)
-
-	// Set the thread's builtins.
-	// TODO(vtl): Choose builtinsImpl based on fileType.
-	builtinsImpl := &NoOpBuiltinsImpl{}
-	SetBuiltinsImpl(thread, builtinsImpl)
 
 	return thread
 }

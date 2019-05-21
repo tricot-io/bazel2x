@@ -19,16 +19,14 @@ type BuiltinsIface interface {
 	//     {conditionA: valuesA, conditionB: valuesB, ...},
 	//     no_match_error = "custom message"
 	// )
-	Select(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
+	Select(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#workspace
 	// None workspace(name, managed_directories={})
 	//
 	// https://docs.bazel.build/versions/master/be/functions.html#workspace
 	// workspace(name = "com_example_project")
-	Workspace(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
+	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// TODO(vtl): The rest of them.
 
@@ -37,38 +35,28 @@ type BuiltinsIface interface {
 
 	// https://docs.bazel.build/versions/master/be/functions.html#package
 	// package(default_deprecation, default_testonly, default_visibility, features)
-	Package(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
+	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// https://docs.bazel.build/versions/master/be/functions.html#package_group
 	// package_group(name, packages, includes)
-	PackageGroup(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
+	PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// https://docs.bazel.build/versions/master/be/functions.html#exports_files
 	// exports_files([label, ...], visibility, licenses)
-	ExportsFiles(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
+	ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// https://docs.bazel.build/versions/master/be/functions.html#glob
 	// glob(include, exclude=[], exclude_directories=1)
-	Glob(thread *starlark.Thread, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value,
-		error)
+	Glob(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// TODO(vtl): More (e.g., rules).
 }
 
-const builtinsImplKey = "bazel2make-bazel-builtins-impl"
-
-func SetBuiltinsImpl(thread *starlark.Thread, builtinsImpl BuiltinsIface) {
-	thread.SetLocal(builtinsImplKey, builtinsImpl)
+func getBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
+	return GetContext(thread).BuiltinsImpl
 }
 
-func GetBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
-	return thread.Local(builtinsImplKey).(BuiltinsIface)
-}
-
-func MakeBuiltins(ctx *Context) starlark.StringDict {
+func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 	// TODO(vtl): Customize this.
 	return starlark.StringDict{
 		// Globals
@@ -76,12 +64,12 @@ func MakeBuiltins(ctx *Context) starlark.StringDict {
 		"select": starlark.NewBuiltin("select",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).Select(thread, args, kwargs)
+				return getBuiltinsImpl(thread).Select(args, kwargs)
 			}),
 		"workspace": starlark.NewBuiltin("workspace",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).Workspace(thread, args, kwargs)
+				return getBuiltinsImpl(thread).Workspace(args, kwargs)
 			}),
 		// TODO(vtl): The rest of them.
 		// Build functions
@@ -89,22 +77,22 @@ func MakeBuiltins(ctx *Context) starlark.StringDict {
 		"package": starlark.NewBuiltin("package",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).Package(thread, args, kwargs)
+				return getBuiltinsImpl(thread).Package(args, kwargs)
 			}),
 		"package_group": starlark.NewBuiltin("package_group",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).PackageGroup(thread, args, kwargs)
+				return getBuiltinsImpl(thread).PackageGroup(args, kwargs)
 			}),
 		"exports_files": starlark.NewBuiltin("exports_files",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).ExportsFiles(thread, args, kwargs)
+				return getBuiltinsImpl(thread).ExportsFiles(args, kwargs)
 			}),
 		"glob": starlark.NewBuiltin("glob",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return GetBuiltinsImpl(thread).Glob(thread, args, kwargs)
+				return getBuiltinsImpl(thread).Glob(args, kwargs)
 			}),
 		// TODO(vtl): More (e.g., globals, rules).
 	}

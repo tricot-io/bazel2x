@@ -26,6 +26,11 @@ func (ctx *Context) CreateThread(label Label, fileType FileType) *starlark.Threa
 	return CreateThread(ctx.Loader, label, fileType)
 }
 
+func (ctx *Context) GetBuiltins() starlark.StringDict {
+	// TODO(vtl): Customize this.
+	return Builtins
+}
+
 const contextKey = "bazel2make-bazel-context"
 
 func CreateThread(loader *Loader, label Label, fileType FileType) *starlark.Thread {

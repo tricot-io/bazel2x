@@ -15,9 +15,8 @@ type loadEntry struct {
 }
 
 type Loader struct {
-	SourceFileReader func(sourceFileLabel Label) ([]byte, error)
-
-	cache map[string]*loadEntry
+	sourceFileReader SourceFileReader
+	cache            map[string]*loadEntry
 }
 
 func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, error) {
@@ -35,7 +34,7 @@ func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, erro
 		return e.globals, e.err
 	}
 
-	sourceData, err := self.SourceFileReader(moduleLabel)
+	sourceData, err := self.sourceFileReader(moduleLabel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read %s: %s", moduleLabel, err)
 	}
@@ -51,4 +50,11 @@ func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, erro
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContext(thread)
 	return ctx.Loader.Load(ctx, module)
+}
+
+func NewLoader(sourceFileReader SourceFileReader) *Loader {
+	return &Loader{
+		sourceFileReader: sourceFileReader,
+		cache:            make(map[string]*loadEntry),
+	}
 }

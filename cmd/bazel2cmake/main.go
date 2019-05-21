@@ -69,5 +69,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// TODO(vtl)
+	for _, buildFileLabel := range buildFileLabels {
+		// TODO(vtl)
+	}
 }

@@ -234,4 +234,34 @@ func (self *NoOpBuiltinsImpl) JavaToolchain(args starlark.Tuple, kwargs []starla
 	return starlark.None, nil
 }
 
+func (self *NoOpBuiltinsImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
 var _ BuiltinsIface = (*NoOpBuiltinsImpl)(nil)

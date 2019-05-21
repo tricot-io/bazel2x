@@ -86,7 +86,12 @@ type BuiltinsJavaRulesIface interface {
 // Objective-C rules
 // https://docs.bazel.build/versions/master/be/objective-c.html#objective-c-rules
 type BuiltinsObjectiveCRulesIface interface {
-	// TODO(vtl)
+	AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
 type BuiltinsIface interface {
@@ -341,6 +346,36 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).JavaToolchain(args, kwargs)
 			}),
+		"apple_binary": starlark.NewBuiltin("apple_binary",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).AppleBinary(args, kwargs)
+			}),
+		"apple_static_library": starlark.NewBuiltin("apple_static_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).AppleStaticLibrary(args, kwargs)
+			}),
+		"j2objc_library": starlark.NewBuiltin("j2objc_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).J2objcLibrary(args, kwargs)
+			}),
+		"objc_import": starlark.NewBuiltin("objc_import",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ObjcImport(args, kwargs)
+			}),
+		"objc_library": starlark.NewBuiltin("objc_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ObjcLibrary(args, kwargs)
+			}),
+		"objc_proto_library": starlark.NewBuiltin("objc_proto_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ObjcProtoLibrary(args, kwargs)
+			}),
 		// TODO(vtl): More rules.
 		/*
 		"X": starlark.NewBuiltin("X",
@@ -355,26 +390,6 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 /*
 
 # Rules
-
-# Java
-java_binary
-java_import
-java_library
-java_lite_proto_library
-java_proto_library
-java_test
-java_package_configuration
-java_plugin
-java_runtime
-java_toolchain
-
-# Objective-C
-apple_binary
-apple_static_library
-j2objc_library
-objc_import
-objc_library
-objc_proto_library
 
 # Protocol Buffer
 proto_lang_toolchain

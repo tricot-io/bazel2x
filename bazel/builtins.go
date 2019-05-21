@@ -29,9 +29,9 @@ type BuiltinsGlobalsIface interface {
 	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Build functions
+// Functions
 // https://docs.bazel.build/versions/master/be/functions.html
-type BuiltinsBuildFunctionsIface interface {
+type BuiltinsFunctionsIface interface {
 	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -39,8 +39,8 @@ type BuiltinsBuildFunctionsIface interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Android rules
-// https://docs.bazel.build/versions/master/be/android.html#android-rules
+// Android Rules
+// https://docs.bazel.build/versions/master/be/android.html
 type BuiltinsAndroidRulesIface interface {
 	AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -53,8 +53,8 @@ type BuiltinsAndroidRulesIface interface {
 	AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// C/C++ rules
-// https://docs.bazel.build/versions/master/be/c-cpp.html#c-c-rules
+// C/C++ Rules
+// https://docs.bazel.build/versions/master/be/c-cpp.html
 type BuiltinsCcRulesIface interface {
 	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -67,8 +67,8 @@ type BuiltinsCcRulesIface interface {
 	CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Java rules
-// https://docs.bazel.build/versions/master/be/java.html#java-rules
+// Java Rules
+// https://docs.bazel.build/versions/master/be/java.html
 type BuiltinsJavaRulesIface interface {
 	JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -83,8 +83,8 @@ type BuiltinsJavaRulesIface interface {
 	JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Objective-C rules
-// https://docs.bazel.build/versions/master/be/objective-c.html#objective-c-rules
+// Objective-C Rules
+// https://docs.bazel.build/versions/master/be/objective-c.html
 type BuiltinsObjCRulesIface interface {
 	AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -94,15 +94,15 @@ type BuiltinsObjCRulesIface interface {
 	ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Protocol Buffer rules
-// https://docs.bazel.build/versions/master/be/protocol-buffer.html#protocol-buffer-rules
+// Protocol Buffer Rules
+// https://docs.bazel.build/versions/master/be/protocol-buffer.html
 type BuiltinsProtoBufRulesIface interface {
 	ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Python rules
-// https://docs.bazel.build/versions/master/be/python.html#python-rules
+// Python Rules
+// https://docs.bazel.build/versions/master/be/python.html
 type BuiltinsPythonRulesIface interface {
 	PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -110,17 +110,56 @@ type BuiltinsPythonRulesIface interface {
 	PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// Shell rules
-// https://docs.bazel.build/versions/master/be/shell.html#shell-rules
+// Shell Rules
+// https://docs.bazel.build/versions/master/be/shell.html
 type BuiltinsShellRulesIface interface {
 	ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
+// Extra Actions Rules
+// https://docs.bazel.build/versions/master/be/extra-actions.html
+type BuiltinsExtraActionsRulesIface interface {
+	ActionListener(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ExtraAction(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// General Rules
+// https://docs.bazel.build/versions/master/be/general.html
+type BuiltinsGeneralRulesIface interface {
+	Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	Genquery(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	TestSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	Alias(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ConfigSetting(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	Genrule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// Platform Rules
+// https://docs.bazel.build/versions/master/be/platform.html
+type BuiltinsPlatformRulesIface interface {
+	ConstraintSetting(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ConstraintValue(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	Platform(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	Toolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// Workspace Rules
+// https://docs.bazel.build/versions/master/be/workspace.html
+type BuiltinsWorkspaceRulesIface interface {
+	// Note: Bind is under "globals".
+	LocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	MavenJar(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	MavenServer(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	NewLocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	XcodeConfig(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	XcodeVersion(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
 type BuiltinsIface interface {
 	BuiltinsGlobalsIface
-	BuiltinsBuildFunctionsIface
+	BuiltinsFunctionsIface
 	BuiltinsAndroidRulesIface
 	BuiltinsCcRulesIface
 	BuiltinsJavaRulesIface
@@ -128,6 +167,10 @@ type BuiltinsIface interface {
 	BuiltinsProtoBufRulesIface
 	BuiltinsPythonRulesIface
 	BuiltinsShellRulesIface
+	BuiltinsExtraActionsRulesIface
+	BuiltinsGeneralRulesIface
+	BuiltinsPlatformRulesIface
+	BuiltinsWorkspaceRulesIface
 
 	// TODO(vtl): More (e.g., rules).
 }
@@ -448,39 +491,101 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ShTest(args, kwargs)
 			}),
-		// TODO(vtl): More rules.
-		/*
-		"X": starlark.NewBuiltin("X",
+		"action_listener": starlark.NewBuiltin("action_listener",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).X(args, kwargs)
+				return getBuiltinsImpl(thread).ActionListener(args, kwargs)
 			}),
-		*/
+		"extra_action": starlark.NewBuiltin("extra_action",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ExtraAction(args, kwargs)
+			}),
+		"filegroup": starlark.NewBuiltin("filegroup",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Filegroup(args, kwargs)
+			}),
+		"genquery": starlark.NewBuiltin("genquery",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Genquery(args, kwargs)
+			}),
+		"test_suite": starlark.NewBuiltin("test_suite",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).TestSuite(args, kwargs)
+			}),
+		"alias": starlark.NewBuiltin("alias",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Alias(args, kwargs)
+			}),
+		"config_setting": starlark.NewBuiltin("config_setting",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ConfigSetting(args, kwargs)
+			}),
+		"genrule": starlark.NewBuiltin("genrule",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Genrule(args, kwargs)
+			}),
+		"constraint_setting": starlark.NewBuiltin("constraint_setting",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ConstraintSetting(args, kwargs)
+			}),
+		"constraint_value": starlark.NewBuiltin("constraint_value",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ConstraintValue(args, kwargs)
+			}),
+		"platform": starlark.NewBuiltin("platform",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Platform(args, kwargs)
+			}),
+		"toolchain": starlark.NewBuiltin("toolchain",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Toolchain(args, kwargs)
+			}),
+		"local_repository": starlark.NewBuiltin("local_repository",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).LocalRepository(args, kwargs)
+			}),
+		"maven_jar": starlark.NewBuiltin("maven_jar",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).MavenJar(args, kwargs)
+			}),
+		"maven_server": starlark.NewBuiltin("maven_server",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).MavenServer(args, kwargs)
+			}),
+		"new_local_repository": starlark.NewBuiltin("new_local_repository",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).NewLocalRepository(args, kwargs)
+			}),
+		"xcode_config": starlark.NewBuiltin("xcode_config",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).XcodeConfig(args, kwargs)
+			}),
+		"xcode_version": starlark.NewBuiltin("xcode_version",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).XcodeVersion(args, kwargs)
+			}),
 	}
 }
 
 /*
-
-# Extra Actions
-
-action_listener
-extra_action
-
-# General
-filegroup
-genquery
-test_suite
-alias
-config_setting
-genrule
-
-# Platform
-constraint_setting
-constraint_value
-platform
-toolchain
-
-# Workspace
+# Workspace Rules
 bind
 local_repository
 maven_jar

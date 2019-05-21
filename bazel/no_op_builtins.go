@@ -184,4 +184,54 @@ func (self *NoOpBuiltinsImpl) CcToolchainSuite(args starlark.Tuple, kwargs []sta
 	return starlark.None, nil
 }
 
+func (self *NoOpBuiltinsImpl) JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaLiteProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaPackageConfiguration(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
 var _ BuiltinsIface = (*NoOpBuiltinsImpl)(nil)

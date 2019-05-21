@@ -54,7 +54,7 @@ type BuiltinsAndroidRulesIface interface {
 }
 
 // C/C++ rules
-// android_sdk_repository(name, api_level, build_tools_version, path)
+// https://docs.bazel.build/versions/master/be/c-cpp.html#c-c-rules
 type BuiltinsCcRulesIface interface {
 	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -67,11 +67,35 @@ type BuiltinsCcRulesIface interface {
 	CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
+// Java rules
+// https://docs.bazel.build/versions/master/be/java.html#java-rules
+type BuiltinsJavaRulesIface interface {
+	JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaLiteProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaPackageConfiguration(args starlark.Tuple, kwargs []starlark.Tuple) (
+		starlark.Value, error)
+	JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// Objective-C rules
+// https://docs.bazel.build/versions/master/be/objective-c.html#objective-c-rules
+type BuiltinsObjectiveCRulesIface interface {
+	// TODO(vtl)
+}
+
 type BuiltinsIface interface {
 	BuiltinsGlobalsIface
 	BuiltinsBuildFunctionsIface
 	BuiltinsAndroidRulesIface
 	BuiltinsCcRulesIface
+	BuiltinsJavaRulesIface
+	BuiltinsObjectiveCRulesIface
 
 	// TODO(vtl): More (e.g., rules).
 }
@@ -266,24 +290,71 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).CcToolchainSuite(args, kwargs)
 			}),
+		"java_binary": starlark.NewBuiltin("java_binary",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaBinary(args, kwargs)
+			}),
+		"java_import": starlark.NewBuiltin("java_import",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaImport(args, kwargs)
+			}),
+		"java_library": starlark.NewBuiltin("java_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaLibrary(args, kwargs)
+			}),
+		"java_lite_proto_library": starlark.NewBuiltin("java_lite_proto_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaLiteProtoLibrary(args, kwargs)
+			}),
+		"java_proto_library": starlark.NewBuiltin("java_proto_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaProtoLibrary(args, kwargs)
+			}),
+		"java_test": starlark.NewBuiltin("java_test",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaTest(args, kwargs)
+			}),
+		"java_package_configuration": starlark.NewBuiltin("java_package_configuration",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaPackageConfiguration(args,
+					kwargs)
+			}),
+		"java_plugin": starlark.NewBuiltin("java_plugin",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaPlugin(args, kwargs)
+			}),
+		"java_runtime": starlark.NewBuiltin("java_runtime",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaRuntime(args, kwargs)
+			}),
+		"java_toolchain": starlark.NewBuiltin("java_toolchain",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).JavaToolchain(args, kwargs)
+			}),
 		// TODO(vtl): More rules.
+		/*
+		"X": starlark.NewBuiltin("X",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).X(args, kwargs)
+			}),
+		*/
 	}
 }
 
 /*
 
 # Rules
-
-# C / C++
-cc_binary
-cc_import
-cc_library
-cc_proto_library
-fdo_prefetch_hints
-fdo_profile
-cc_test
-cc_toolchain
-cc_toolchain_suite
 
 # Java
 java_binary

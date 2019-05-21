@@ -27,7 +27,7 @@ func main() {
 	// Use the first arg to determine the workspace root.
 	workspaceDir, _, err := utils.FindWorkspaceDir(filepath.Dir(args[0]))
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
+		fmt.Printf("ERROR: %s\n", err)
 		os.Exit(1)
 	}
 	fmt.Printf("Workspace root: %s\n", workspaceDir)
@@ -45,7 +45,7 @@ func main() {
 	for i, arg := range args {
 		wsDir, relDir, err := utils.FindWorkspaceDir(filepath.Dir(arg))
 		if err != nil {
-			fmt.Printf("ERROR: %v\n", err)
+			fmt.Printf("ERROR: %s\n", err)
 			os.Exit(1)
 		}
 
@@ -65,11 +65,21 @@ func main() {
 
 	err = os.Chdir(workspaceDir)
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
+		fmt.Printf("ERROR: %s\n", err)
 		os.Exit(1)
 	}
 
+	loader := bazel.NewLoader(bazel.GetSourceFileReader(workspaceDir, projectName))
 	for _, buildFileLabel := range buildFileLabels {
+		thread := bazel.CreateThread(loader, buildFileLabel, bazel.FileTypeBuild)
+		// TODO(vtl): Converting buildFileLabel to a string is suboptimal (since it'll just
+		// be parsed back to a Label).
+		globals, err := bazel.Load(thread, buildFileLabel.String())
+		if err != nil {
+			fmt.Printf("ERROR: %s\n", err)
+			os.Exit(1)
+		}
 		// TODO(vtl)
+		_ = globals
 	}
 }

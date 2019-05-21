@@ -5,6 +5,7 @@ package bazel
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"go.starlark.net/starlark"
 )
@@ -19,8 +20,32 @@ type Loader struct {
 	cache            map[string]*loadEntry
 }
 
+func checkFileType(fileType FileType, label Label) error {
+	switch fileType {
+	case FileTypeBuild:
+		if string(label.Target) != "BUILD" && string(label.Target) != "BUILD.bazel" {
+			return fmt.Errorf("load not allowed: %s is not a BUILD[.bazel] file", label)
+		}
+	case FileTypeBzl:
+		if filepath.Ext(string(label.Target)) != ".bzl" {
+			return fmt.Errorf("load not allowed: %s is not a .bzl file", label)
+		}
+	case FileTypeWorkspace:
+		if string(label.Target) != "WORKSPACE" {
+			return fmt.Errorf("load not allowed: %s is not a WORKSPACE file", label)
+		}
+	default:
+		panic(fileType)
+	}
+	return nil
+}
+
 func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, error) {
 	moduleLabel, err := ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
+	if err != nil {
+		return nil, err
+	}
+	err = checkFileType(ctx.FileType, moduleLabel)
 	if err != nil {
 		return nil, err
 	}

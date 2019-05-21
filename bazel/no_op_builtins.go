@@ -99,4 +99,44 @@ func (self *NoOpBuiltinsImpl) Glob(args starlark.Tuple, kwargs []starlark.Tuple)
 	return starlark.None, nil
 }
 
+func (self *NoOpBuiltinsImpl) AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidInstrumentationTest(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidLocalTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidDevice(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidNdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
 var _ BuiltinsIface = (*NoOpBuiltinsImpl)(nil)

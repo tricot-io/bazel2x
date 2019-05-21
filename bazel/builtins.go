@@ -10,175 +10,68 @@ import (
 // Globals
 // https://docs.bazel.build/versions/master/skylark/lib/globals.html
 type BuiltinsGlobalsIface interface {
-	// TODO(vtl)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#analysis_test_transition
-	// transition analysis_test_transition(settings)
 	AnalysisTestTransition(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#aspect
-	// Aspect aspect(implementation, attr_aspects=[], attrs=None, required_aspect_providers=[],
-	//	provides=[], fragments=[], host_fragments=[], toolchains=[], doc='')
 	Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#bind
-	// None bind(name, actual=None)
 	Bind(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#configuration_field
-	// LateBoundDefault configuration_field(fragment, name)
 	ConfigurationField(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#depset
-	// depset depset(items=[], order="default", *, direct=None, transitive=None)
 	Depset(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
-	// unknown existing_rules()
 	ExistingRules(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
-	// None fail(msg=None, attr=None)
 	Fail(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#PACKAGE_NAME
-	// PACKAGE_NAME [string value]
-	// TODO(vtl)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#provider
-	// Provider provider(doc='', *, fields=None)
+	// TODO(vtl): Helper for PACKAGE_NAME?
 	Provider(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_execution_platforms
-	// None register_execution_platforms(*platform_labels)
 	RegisterExecutionPlatforms(args starlark.Tuple, kwargs []starlark.Tuple) (
 		starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_toolchains
-	// None register_toolchains(*toolchain_labels)
 	RegisterToolchains(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#REPOSITORY_NAME
-	// REPOSITORY_NAME [string]
-	// TODO(vtl)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#repository_rule
-	// function repository_rule(implementation, *, attrs=None, local=False, environ=[], doc='')
+	// TODO(vtl): Helper for REPOSITORY_NAME?
 	RepositoryRule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#rule
-	// function rule(implementation, test=False, attrs=None, outputs=None, executable=False,
-	//     output_to_genfiles=False, fragments=[], host_fragments=[], _skylark_testable=False,
-	//     toolchains=[], doc='', *, provides=[], execution_platform_constraints_allowed=False,
-	//     exec_compatible_with=[], analysis_test=unbound, build_setting=None, cfg=None)
 	Rule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#select
-	// unknown select(x, no_match_error='')
-	//
-	// https://docs.bazel.build/versions/master/be/functions.html#select
-	// select(
-	//     {conditionA: valuesA, conditionB: valuesB, ...},
-	//     no_match_error = "custom message"
-	// )
 	Select(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#workspace
-	// None workspace(name, managed_directories={})
-	//
-	// https://docs.bazel.build/versions/master/be/functions.html#workspace
-	// workspace(name = "com_example_project")
 	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
 // Build functions
 // https://docs.bazel.build/versions/master/be/functions.html
 type BuiltinsBuildFunctionsIface interface {
-	// https://docs.bazel.build/versions/master/be/functions.html#package
-	// package(default_deprecation, default_testonly, default_visibility, features)
 	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#package_group
-	// package_group(name, packages, includes)
 	PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#exports_files
-	// exports_files([label, ...], visibility, licenses)
 	ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/functions.html#glob
-	// glob(include, exclude=[], exclude_directories=1)
 	Glob(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
 	// Note: Select and Workspace are under "globals".
 }
 
 // Android rules
 // https://docs.bazel.build/versions/master/be/android.html#android-rules
 type BuiltinsAndroidRulesIface interface {
-	// https://docs.bazel.build/versions/master/be/android.html#android_binary
-	// android_binary(name, deps, srcs, aapt_version, assets, assets_dir, compatible_with,
-	//     crunch_png, custom_package, debug_key, densities, deprecation, dex_shards, dexopts,
-	//     distribs, enable_data_binding, exec_compatible_with, features, incremental_dexing,
-	//     inline_constants, instruments, javacopts, licenses, main_dex_list,
-	//     main_dex_list_opts, main_dex_proguard_specs, manifest, manifest_values, multidex,
-	//     nocompress_extensions, plugins, proguard_apply_dictionary, proguard_apply_mapping,
-	//     proguard_generate_mapping, proguard_specs, resource_configuration_filters,
-	//     resource_files, restricted_to, shrink_resources, tags, testonly, visibility)
 	AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#aar_import
-	// aar_import(name, deps, data, aar, compatible_with, deprecation, distribs,
-	//     exec_compatible_with, exports, features, licenses, restricted_to, tags, testonly,
-	//     visibility)
 	AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_library
-	// android_library(name, deps, srcs, data, assets, assets_dir, compatible_with,
-	//     custom_package, deprecation, distribs, enable_data_binding, exec_compatible_with,
-	//     exported_plugins, exports, exports_manifest, features, idl_import_root,
-	//     idl_parcelables, idl_preprocessed, idl_srcs, inline_constants, javacopts, licenses,
-	//     manifest, neverlink, plugins, proguard_specs, resource_files, restricted_to, tags,
-	//     testonly, visibility)
 	AndroidLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_instrumentation_test
-	// android_instrumentation_test(name, data, args, compatible_with, deprecation, distribs,
-	//     exec_compatible_with, features, flaky, licenses, local, restricted_to, shard_count,
-	//     size, support_apks, tags, target_device, test_app, testonly, timeout, toolchains,
-	//     visibility)
 	AndroidInstrumentationTest(args starlark.Tuple, kwargs []starlark.Tuple) (
 		starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_local_test
-	// android_local_test(name, deps, srcs, data, aapt_version, args, compatible_with,
-	//     custom_package, deprecation, exec_compatible_with, features, flaky, javacopts,
-	//     jvm_flags, licenses, local, manifest, manifest_values, nocompress_extensions,
-	//     plugins, resource_jars, resource_strip_prefix, restricted_to, runtime_deps,
-	//     shard_count, size, stamp, tags, test_class, testonly, timeout, toolchains,
-	//     visibility)
 	AndroidLocalTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_device
-	// android_device(name, cache, compatible_with, default_properties, deprecation, distribs,
-	//     exec_compatible_with, features, horizontal_resolution, licenses, platform_apks, ram,
-	//     restricted_to, screen_density, system_image, tags, testonly, vertical_resolution,
-	//     visibility, vm_heap)
 	AndroidDevice(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_ndk_repository
-	// android_ndk_repository(name, api_level, path)
 	AndroidNdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// https://docs.bazel.build/versions/master/be/android.html#android_sdk_repository
-	// android_sdk_repository(name, api_level, build_tools_version, path)
 	AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// C/C++ rules
+// android_sdk_repository(name, api_level, build_tools_version, path)
+type BuiltinsCcRulesIface interface {
+	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
 type BuiltinsIface interface {
 	BuiltinsGlobalsIface
 	BuiltinsBuildFunctionsIface
 	BuiltinsAndroidRulesIface
+	BuiltinsCcRulesIface
 
 	// TODO(vtl): More (e.g., rules).
 }
@@ -287,7 +180,6 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Glob(args, kwargs)
 			}),
-		// TODO(vtl): More (e.g., globals, rules).
 		"android_binary": starlark.NewBuiltin("android_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -329,6 +221,52 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).AndroidSdkRepository(args, kwargs)
 			}),
+		"cc_binary": starlark.NewBuiltin("cc_binary",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcBinary(args, kwargs)
+			}),
+		"cc_import": starlark.NewBuiltin("cc_import",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcImport(args, kwargs)
+			}),
+		"cc_library": starlark.NewBuiltin("cc_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcLibrary(args, kwargs)
+			}),
+		"cc_proto_library": starlark.NewBuiltin("cc_proto_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcProtoLibrary(args, kwargs)
+			}),
+		"fdo_prefetch_hints": starlark.NewBuiltin("fdo_prefetch_hints",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).FdoPrefetchHints(args, kwargs)
+			}),
+		"fdo_profile": starlark.NewBuiltin("fdo_profile",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).FdoProfile(args, kwargs)
+			}),
+		"cc_test": starlark.NewBuiltin("cc_test",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcTest(args, kwargs)
+			}),
+		"cc_toolchain": starlark.NewBuiltin("cc_toolchain",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcToolchain(args, kwargs)
+			}),
+		"cc_toolchain_suite": starlark.NewBuiltin("cc_toolchain_suite",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).CcToolchainSuite(args, kwargs)
+			}),
+		// TODO(vtl): More rules.
 	}
 }
 

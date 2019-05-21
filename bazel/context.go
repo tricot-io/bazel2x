@@ -16,26 +16,40 @@ const (
 )
 
 type Context struct {
-	FileType FileType
 	Label    Label
+	FileType FileType
+	Loader   *Loader
 	Thread   *starlark.Thread
+}
+
+func (ctx* Context) CreateThread(label Label, fileType FileType) *starlark.Thread {
+	return CreateThread(ctx.Loader, label, fileType)
 }
 
 const contextKey = "bazel2make-bazel-context"
 
-// TODO(vtl): More args (before thread).
-func InitThread(fileType FileType, label Label, builtinsImpl BuiltinsIface,
-	thread *starlark.Thread) {
+func CreateThread(loader *Loader, label Label, fileType FileType) *starlark.Thread {
+	// Create the thread.
+	thread := &starlark.Thread{Name: "exec " + label.String(), Load: Load}
 
+	// Create a new context (with the same loader).
 	ctx := &Context{
-		FileType: fileType,
 		Label:    label,
+		FileType: fileType,
+		Loader:   loader,
 		Thread:   thread,
 	}
+	// And attach it to the thread.
 	thread.SetLocal(contextKey, ctx)
 
+	// Set the thread's builtins.
+	// TODO(vtl): Choose builtinsImpl based on fileType.
+	builtinsImpl := &NoOpBuiltinsImpl{}
 	SetBuiltinsImpl(thread, builtinsImpl)
+
+	return thread
 }
+
 
 func GetContext(thread *starlark.Thread) *Context {
 	return thread.Local(contextKey).(*Context)

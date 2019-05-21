@@ -20,9 +20,8 @@ type Loader struct {
 	cache map[string]*loadEntry
 }
 
-// TODO(vtl): FIXME -- should get caller label from calling thread instead?
-func (self *Loader) Load(caller Label, module string) (starlark.StringDict, error) {
-	moduleLabel, err := ParseLabel(caller.Workspace, caller.Package, module)
+func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, error) {
+	moduleLabel, err := ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
 	if err != nil {
 		return nil, err
 	}
@@ -43,14 +42,13 @@ func (self *Loader) Load(caller Label, module string) (starlark.StringDict, erro
 
 	self.cache[moduleLabelString] = nil
 
-	load := func(_ *starlark.Thread, module2 string) (starlark.StringDict, error) {
-		return self.Load(moduleLabel, module2)
-	}
-	// TODO(vtl): FIXME -- need to add thread local stuff to `thread` (via InitThread, or maybe
-	// we should have a CreateThread).
-	thread := &starlark.Thread{Name: "exec " + moduleLabelString, Load: load}
-	// TODO(vtl): FIXME -- nil is wrong; need to add builtins.
-	globals, err := starlark.ExecFile(thread, module, sourceData, nil)
+	thread := ctx.CreateThread(moduleLabel, FileTypeBzl)
+	globals, err := starlark.ExecFile(thread, module, sourceData, Builtins)
 	self.cache[moduleLabelString] = &loadEntry{globals, err}
 	return globals, err
+}
+
+func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
+	ctx := GetContext(thread)
+	return ctx.Loader.Load(ctx, module)
 }

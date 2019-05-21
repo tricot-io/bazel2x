@@ -7,10 +7,9 @@ import (
 	"go.starlark.net/starlark"
 )
 
-type BuiltinsIface interface {
-	// Globals
-	// https://docs.bazel.build/versions/master/skylark/lib/globals.html
-
+// Globals
+// https://docs.bazel.build/versions/master/skylark/lib/globals.html
+type BuiltinsGlobalsIface interface {
 	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#select
 	// unknown select(x, no_match_error='')
 	//
@@ -29,10 +28,11 @@ type BuiltinsIface interface {
 	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 
 	// TODO(vtl): The rest of them.
+}
 
-	// Build functions
-	// https://docs.bazel.build/versions/master/be/functions.html
-
+// Build functions
+// https://docs.bazel.build/versions/master/be/functions.html
+type BuiltinsBuildFunctionsIface interface {
 	// https://docs.bazel.build/versions/master/be/functions.html#package
 	// package(default_deprecation, default_testonly, default_visibility, features)
 	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -48,6 +48,13 @@ type BuiltinsIface interface {
 	// https://docs.bazel.build/versions/master/be/functions.html#glob
 	// glob(include, exclude=[], exclude_directories=1)
 	Glob(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// Note: Select and Workspace are under "globals".
+}
+
+type BuiltinsIface interface {
+	BuiltinsGlobalsIface
+	BuiltinsBuildFunctionsIface
 
 	// TODO(vtl): More (e.g., rules).
 }

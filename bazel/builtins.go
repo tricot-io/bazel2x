@@ -85,7 +85,7 @@ type BuiltinsJavaRulesIface interface {
 
 // Objective-C rules
 // https://docs.bazel.build/versions/master/be/objective-c.html#objective-c-rules
-type BuiltinsObjectiveCRulesIface interface {
+type BuiltinsObjCRulesIface interface {
 	AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -94,13 +94,40 @@ type BuiltinsObjectiveCRulesIface interface {
 	ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
+// Protocol Buffer rules
+// https://docs.bazel.build/versions/master/be/protocol-buffer.html#protocol-buffer-rules
+type BuiltinsProtoBufRulesIface interface {
+	ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// Python rules
+// https://docs.bazel.build/versions/master/be/python.html#python-rules
+type BuiltinsPythonRulesIface interface {
+	PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
+// Shell rules
+// https://docs.bazel.build/versions/master/be/shell.html#shell-rules
+type BuiltinsShellRulesIface interface {
+	ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+}
+
 type BuiltinsIface interface {
 	BuiltinsGlobalsIface
 	BuiltinsBuildFunctionsIface
 	BuiltinsAndroidRulesIface
 	BuiltinsCcRulesIface
 	BuiltinsJavaRulesIface
-	BuiltinsObjectiveCRulesIface
+	BuiltinsObjCRulesIface
+	BuiltinsProtoBufRulesIface
+	BuiltinsPythonRulesIface
+	BuiltinsShellRulesIface
 
 	// TODO(vtl): More (e.g., rules).
 }
@@ -376,6 +403,51 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ObjcProtoLibrary(args, kwargs)
 			}),
+		"proto_lang_toolchain": starlark.NewBuiltin("proto_lang_toolchain",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ProtoLangToolchain(args, kwargs)
+			}),
+		"proto_library": starlark.NewBuiltin("proto_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ProtoLibrary(args, kwargs)
+			}),
+		"py_binary": starlark.NewBuiltin("py_binary",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).PyBinary(args, kwargs)
+			}),
+		"py_library": starlark.NewBuiltin("py_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).PyLibrary(args, kwargs)
+			}),
+		"py_test": starlark.NewBuiltin("py_test",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).PyTest(args, kwargs)
+			}),
+		"py_runtime": starlark.NewBuiltin("py_runtime",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).PyRuntime(args, kwargs)
+			}),
+		"sh_binary": starlark.NewBuiltin("sh_binary",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ShBinary(args, kwargs)
+			}),
+		"sh_library": starlark.NewBuiltin("sh_library",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ShLibrary(args, kwargs)
+			}),
+		"sh_test": starlark.NewBuiltin("sh_test",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ShTest(args, kwargs)
+			}),
 		// TODO(vtl): More rules.
 		/*
 		"X": starlark.NewBuiltin("X",
@@ -388,23 +460,6 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 }
 
 /*
-
-# Rules
-
-# Protocol Buffer
-proto_lang_toolchain
-proto_library
-
-# Python
-py_binary
-py_library
-py_test
-py_runtime
-
-# Shell
-sh_binary
-sh_library
-sh_test
 
 # Extra Actions
 

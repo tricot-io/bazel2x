@@ -264,4 +264,49 @@ func (self *NoOpBuiltinsImpl) ObjcProtoLibrary(args starlark.Tuple, kwargs []sta
 	return starlark.None, nil
 }
 
+func (self *NoOpBuiltinsImpl) ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsImpl) ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
 var _ BuiltinsIface = (*NoOpBuiltinsImpl)(nil)

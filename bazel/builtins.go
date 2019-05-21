@@ -10,6 +10,69 @@ import (
 // Globals
 // https://docs.bazel.build/versions/master/skylark/lib/globals.html
 type BuiltinsGlobalsIface interface {
+	// TODO(vtl)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#analysis_test_transition
+	// transition analysis_test_transition(settings)
+	AnalysisTestTransition(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#aspect
+	// Aspect aspect(implementation, attr_aspects=[], attrs=None, required_aspect_providers=[],
+	//	provides=[], fragments=[], host_fragments=[], toolchains=[], doc='')
+	Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#bind
+	// None bind(name, actual=None)
+	Bind(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#configuration_field
+	// LateBoundDefault configuration_field(fragment, name)
+	ConfigurationField(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#depset
+	// depset depset(items=[], order="default", *, direct=None, transitive=None)
+	Depset(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
+	// unknown existing_rules()
+	ExistingRules(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
+	// None fail(msg=None, attr=None)
+	Fail(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#PACKAGE_NAME
+	// PACKAGE_NAME [string value]
+	// TODO(vtl)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#provider
+	// Provider provider(doc='', *, fields=None)
+	Provider(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_execution_platforms
+	// None register_execution_platforms(*platform_labels)
+	RegisterExecutionPlatforms(args starlark.Tuple, kwargs []starlark.Tuple) (
+		starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_toolchains
+	// None register_toolchains(*toolchain_labels)
+	RegisterToolchains(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#REPOSITORY_NAME
+	// REPOSITORY_NAME [string]
+	// TODO(vtl)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#repository_rule
+	// function repository_rule(implementation, *, attrs=None, local=False, environ=[], doc='')
+	RepositoryRule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
+	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#rule
+	// function rule(implementation, test=False, attrs=None, outputs=None, executable=False,
+	//     output_to_genfiles=False, fragments=[], host_fragments=[], _skylark_testable=False,
+	//     toolchains=[], doc='', *, provides=[], execution_platform_constraints_allowed=False,
+	//     exec_compatible_with=[], analysis_test=unbound, build_setting=None, cfg=None)
+	Rule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+
 	// https://docs.bazel.build/versions/master/skylark/lib/globals.html#select
 	// unknown select(x, no_match_error='')
 	//
@@ -26,8 +89,6 @@ type BuiltinsGlobalsIface interface {
 	// https://docs.bazel.build/versions/master/be/functions.html#workspace
 	// workspace(name = "com_example_project")
 	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-
-	// TODO(vtl): The rest of them.
 }
 
 // Build functions
@@ -66,8 +127,69 @@ func getBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
 func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 	// TODO(vtl): Customize this.
 	return starlark.StringDict{
-		// Globals
-		// https://docs.bazel.build/versions/master/skylark/lib/globals.html
+		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).AnalysisTestTransition(args, kwargs)
+			}),
+		"aspect": starlark.NewBuiltin("aspect",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Aspect(args, kwargs)
+			}),
+		"bind": starlark.NewBuiltin("bind",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Bind(args, kwargs)
+			}),
+		"configuration_field": starlark.NewBuiltin("configuration_field",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ConfigurationField(args, kwargs)
+			}),
+		"depset": starlark.NewBuiltin("depset",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Provider(args, kwargs)
+			}),
+		"existing_rules": starlark.NewBuiltin("existing_rules",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).ExistingRules(args, kwargs)
+			}),
+		"fail": starlark.NewBuiltin("fail",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Fail(args, kwargs)
+			}),
+		// TODO(vtl): PACKAGE_NAME
+		"provider": starlark.NewBuiltin("provider",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Provider(args, kwargs)
+			}),
+		"register_execution_platforms": starlark.NewBuiltin("register_execution_platforms",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).RegisterExecutionPlatforms(args,
+					kwargs)
+			}),
+		"register_toolchains": starlark.NewBuiltin("register_toolchains",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).RegisterToolchains(args, kwargs)
+			}),
+		// TODO(vtl): REPOSITORY_NAME
+		"repository_rule": starlark.NewBuiltin("repository_rule",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).RepositoryRule(args, kwargs)
+			}),
+		"rule": starlark.NewBuiltin("rule",
+			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+				kwargs []starlark.Tuple) (starlark.Value, error) {
+				return getBuiltinsImpl(thread).Rule(args, kwargs)
+			}),
 		"select": starlark.NewBuiltin("select",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -106,55 +228,6 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 }
 
 /*
-# Globals
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#analysis_test_transition
-analysis_test_transition [function; experimental]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#aspect
-aspect [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#bind
-bind [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#configuration_field
-configuration_field [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#depset
-depset [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
-existing_rules [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#existing_rules
-fail [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#PACKAGE_NAME
-PACKAGE_NAME [string; deprecated]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#provider
-provider [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_execution_platforms
-register_execution_platforms [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#register_toolchains
-register_toolchains [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#REPOSITORY_NAME
-REPOSITORY_NAME [string; deprecated]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#repository_rule
-repository_rule [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#rule
-rule [function]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#select
-select [function; duplicated above]
-
-https://docs.bazel.build/versions/master/skylark/lib/globals.html#workspace
-workspace [function; duplicated above]
 
 # Rules
 

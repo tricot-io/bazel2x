@@ -22,7 +22,7 @@ type Context struct {
 	Thread   *starlark.Thread
 }
 
-func (ctx* Context) CreateThread(label Label, fileType FileType) *starlark.Thread {
+func (ctx *Context) CreateThread(label Label, fileType FileType) *starlark.Thread {
 	return CreateThread(ctx.Loader, label, fileType)
 }
 
@@ -49,7 +49,6 @@ func CreateThread(loader *Loader, label Label, fileType FileType) *starlark.Thre
 
 	return thread
 }
-
 
 func GetContext(thread *starlark.Thread) *Context {
 	return thread.Local(contextKey).(*Context)

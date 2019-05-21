@@ -11,7 +11,7 @@ import (
 type SourceFileReader func(sourceFileLabel Label) ([]byte, error)
 
 func GetSourceFileReader(workspaceDir string, projectName string) SourceFileReader {
-	externalDir := filepath.Join(workspaceDir, "bazel-" + projectName, "external")
+	externalDir := filepath.Join(workspaceDir, "bazel-"+projectName, "external")
 	return func(sourceFileLabel Label) ([]byte, error) {
 		sourceFilePath := sourceFileLabel.SourcePath(workspaceDir, externalDir)
 		return ioutil.ReadFile(sourceFilePath)

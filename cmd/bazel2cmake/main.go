@@ -72,14 +72,10 @@ func main() {
 	loader := bazel.NewLoader(bazel.GetSourceFileReader(workspaceDir, projectName))
 	for _, buildFileLabel := range buildFileLabels {
 		thread := bazel.CreateThread(loader, buildFileLabel, bazel.FileTypeBuild)
-		// TODO(vtl): Converting buildFileLabel to a string is suboptimal (since it'll just
-		// be parsed back to a Label).
-		globals, err := bazel.Load(thread, buildFileLabel.String())
+		_, err := bazel.LoadLabel(thread, buildFileLabel)
 		if err != nil {
 			fmt.Printf("ERROR: %s\n", err)
 			os.Exit(1)
 		}
-		// TODO(vtl)
-		_ = globals
 	}
 }

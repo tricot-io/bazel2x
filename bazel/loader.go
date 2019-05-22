@@ -40,12 +40,8 @@ func checkFileType(fileType FileType, label Label) error {
 	return nil
 }
 
-func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, error) {
-	moduleLabel, err := ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
-	if err != nil {
-		return nil, err
-	}
-	err = checkFileType(ctx.FileType, moduleLabel)
+func (self *Loader) Load(ctx *Context, moduleLabel Label) (starlark.StringDict, error) {
+	err := checkFileType(ctx.FileType, moduleLabel)
 	if err != nil {
 		return nil, err
 	}
@@ -67,14 +63,24 @@ func (self *Loader) Load(ctx *Context, module string) (starlark.StringDict, erro
 	self.cache[moduleLabelString] = nil
 
 	thread := ctx.CreateThread(moduleLabel, FileTypeBzl)
-	globals, err := starlark.ExecFile(thread, module, sourceData, ctx.MakeInitialGlobals())
+	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
+		ctx.MakeInitialGlobals())
 	self.cache[moduleLabelString] = &loadEntry{globals, err}
 	return globals, err
 }
 
+func LoadLabel(thread *starlark.Thread, moduleLabel Label) (starlark.StringDict, error) {
+	ctx := GetContext(thread)
+	return ctx.Loader.Load(ctx, moduleLabel)
+}
+
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContext(thread)
-	return ctx.Loader.Load(ctx, module)
+	moduleLabel, err := ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
+	if err != nil {
+		return nil, err
+	}
+	return ctx.Loader.Load(ctx, moduleLabel)
 }
 
 func NewLoader(sourceFileReader SourceFileReader) *Loader {

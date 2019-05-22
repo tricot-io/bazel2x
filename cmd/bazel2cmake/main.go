@@ -69,10 +69,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	loader := bazel.NewLoader(bazel.GetSourceFileReader(workspaceDir, projectName))
+	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))
 	for _, buildFileLabel := range buildFileLabels {
-		thread := bazel.CreateThread(loader, buildFileLabel, bazel.FileTypeBuild)
-		_, err := bazel.LoadLabel(thread, buildFileLabel)
+		err := build.AddBuildFile(buildFileLabel)
 		if err != nil {
 			fmt.Printf("ERROR: %s\n", err)
 			os.Exit(1)

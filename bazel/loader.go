@@ -71,7 +71,7 @@ func (self *Loader) Load(ctx *Context, moduleLabel Label) (starlark.StringDict, 
 
 func LoadLabel(thread *starlark.Thread, moduleLabel Label) (starlark.StringDict, error) {
 	ctx := GetContext(thread)
-	return ctx.Loader.Load(ctx, moduleLabel)
+	return ctx.Build.Loader.Load(ctx, moduleLabel)
 }
 
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
@@ -80,7 +80,7 @@ func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ctx.Loader.Load(ctx, moduleLabel)
+	return ctx.Build.Loader.Load(ctx, moduleLabel)
 }
 
 func NewLoader(sourceFileReader SourceFileReader) *Loader {

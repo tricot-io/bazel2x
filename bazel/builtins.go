@@ -157,6 +157,7 @@ type BuiltinsWorkspaceRulesIface interface {
 	XcodeVersion(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
+// TODO(vtl): Probably should split this into rules and non-rules.
 type BuiltinsIface interface {
 	BuiltinsGlobalsIface
 	BuiltinsFunctionsIface

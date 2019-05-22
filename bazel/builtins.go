@@ -171,8 +171,6 @@ type BuiltinsIface interface {
 	BuiltinsGeneralRulesIface
 	BuiltinsPlatformRulesIface
 	BuiltinsWorkspaceRulesIface
-
-	// TODO(vtl): More (e.g., rules).
 }
 
 func getBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
@@ -256,7 +254,6 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Workspace(args, kwargs)
 			}),
-		// TODO(vtl): The rest of them.
 		// Build functions
 		// https://docs.bazel.build/versions/master/be/functions.html
 		"package": starlark.NewBuiltin("package",

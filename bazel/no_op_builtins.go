@@ -462,9 +462,8 @@ func (self *NoOpBuiltinsWorkspaceRulesImpl) XcodeVersion(args starlark.Tuple,
 
 var _ BuiltinsWorkspaceRules = (*NoOpBuiltinsWorkspaceRulesImpl)(nil)
 
-// NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation is split up so other
-// implementations to pick and choose no-op implementations.
-// TODO(vtl): Split this up.
+// NoOpBuiltinsImpl is a no-op implementation of Builtins. Note: Its implementation is split up so
+// other implementations to pick and choose no-op implementations.
 type NoOpBuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl

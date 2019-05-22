@@ -257,8 +257,103 @@ func (self *NoOpBuiltinsJavaRulesImpl) JavaToolchain(args starlark.Tuple, kwargs
 
 var _ BuiltinsJavaRules = (*NoOpBuiltinsJavaRulesImpl)(nil)
 
-// NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation being split up
-// allows other implementations to pick and choose no-op implementations.
+// NoOpBuiltinsObjCRulesImpl is a no-op implementation of BuiltinsObjCRules.
+type NoOpBuiltinsObjCRulesImpl struct {}
+
+func (self *NoOpBuiltinsObjCRulesImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsObjCRulesImpl) AppleStaticLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsObjCRulesImpl) J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsObjCRulesImpl) ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsObjCRulesImpl) ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsObjCRulesImpl) ObjcProtoLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsObjCRules = (*NoOpBuiltinsObjCRulesImpl)(nil)
+
+// NoOpBuiltinsProtoBufRulesImpl is a no-op implementation of BuiltinsProtoBufRules.
+type NoOpBuiltinsProtoBufRulesImpl struct {}
+
+func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLangToolchain(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsProtoBufRules = (*NoOpBuiltinsProtoBufRulesImpl)(nil)
+
+// NoOpBuiltinsPythonRulesImpl is a no-op implementation of BuiltinsPythonRules.
+type NoOpBuiltinsPythonRulesImpl struct {}
+
+func (self *NoOpBuiltinsPythonRulesImpl) PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPythonRulesImpl) PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPythonRulesImpl) PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPythonRulesImpl) PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsPythonRules = (*NoOpBuiltinsPythonRulesImpl)(nil)
+
+// NoOpBuiltinsShellRulesImpl is a no-op implementation of BuiltinsShellRules.
+type NoOpBuiltinsShellRulesImpl struct {}
+
+func (self *NoOpBuiltinsShellRulesImpl) ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsShellRulesImpl) ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsShellRulesImpl) ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsShellRules = (*NoOpBuiltinsShellRulesImpl)(nil)
+
+// NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation is split up so other
+// implementations to pick and choose no-op implementations.
 // TODO(vtl): Split this up.
 type NoOpBuiltinsImpl struct{
 	NoOpBuiltinsGlobalsImpl
@@ -266,81 +361,10 @@ type NoOpBuiltinsImpl struct{
 	NoOpBuiltinsAndroidRulesImpl
 	NoOpBuiltinsCcRulesImpl
 	NoOpBuiltinsJavaRulesImpl
-}
-
-func (self *NoOpBuiltinsImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
+	NoOpBuiltinsObjCRulesImpl
+	NoOpBuiltinsProtoBufRulesImpl
+	NoOpBuiltinsPythonRulesImpl
+	NoOpBuiltinsShellRulesImpl
 }
 
 func (self *NoOpBuiltinsImpl) ActionListener(args starlark.Tuple, kwargs []starlark.Tuple) (

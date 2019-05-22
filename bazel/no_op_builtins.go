@@ -352,6 +352,116 @@ func (self *NoOpBuiltinsShellRulesImpl) ShTest(args starlark.Tuple, kwargs []sta
 
 var _ BuiltinsShellRules = (*NoOpBuiltinsShellRulesImpl)(nil)
 
+// NoOpBuiltinsExtraActionsRulesImpl is a no-op implementation of BuiltinsExtraActionsRules.
+type NoOpBuiltinsExtraActionsRulesImpl struct {}
+
+func (self *NoOpBuiltinsExtraActionsRulesImpl) ActionListener(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsExtraActionsRulesImpl) ExtraAction(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsExtraActionsRules = (*NoOpBuiltinsExtraActionsRulesImpl)(nil)
+
+// NoOpBuiltinsGeneralRulesImpl is a no-op implementation of BuiltinsGeneralRules.
+type NoOpBuiltinsGeneralRulesImpl struct {}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) Genquery(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) TestSuite(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) Alias(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) ConfigSetting(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGeneralRulesImpl) Genrule(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsGeneralRules = (*NoOpBuiltinsGeneralRulesImpl)(nil)
+
+// NoOpBuiltinsPlatformRulesImpl is a no-op implementation of BuiltinsPlatformRules.
+type NoOpBuiltinsPlatformRulesImpl struct {}
+
+func (self *NoOpBuiltinsPlatformRulesImpl) ConstraintSetting(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPlatformRulesImpl) ConstraintValue(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPlatformRulesImpl) Platform(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsPlatformRulesImpl) Toolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsPlatformRules = (*NoOpBuiltinsPlatformRulesImpl)(nil)
+
+// NoOpBuiltinsWorkspaceRulesImpl is a no-op implementation of BuiltinsWorkspaceRules.
+type NoOpBuiltinsWorkspaceRulesImpl struct {}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) LocalRepository(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) MavenJar(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) MavenServer(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) NewLocalRepository(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) XcodeConfig(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsWorkspaceRulesImpl) XcodeVersion(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsWorkspaceRules = (*NoOpBuiltinsWorkspaceRulesImpl)(nil)
+
 // NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation is split up so other
 // implementations to pick and choose no-op implementations.
 // TODO(vtl): Split this up.
@@ -365,96 +475,10 @@ type NoOpBuiltinsImpl struct{
 	NoOpBuiltinsProtoBufRulesImpl
 	NoOpBuiltinsPythonRulesImpl
 	NoOpBuiltinsShellRulesImpl
-}
-
-func (self *NoOpBuiltinsImpl) ActionListener(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ExtraAction(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Genquery(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) TestSuite(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Alias(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ConfigSetting(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Genrule(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ConstraintSetting(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ConstraintValue(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Platform(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Toolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) LocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) MavenJar(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) MavenServer(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) NewLocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) XcodeConfig(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) XcodeVersion(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
+	NoOpBuiltinsExtraActionsRulesImpl
+	NoOpBuiltinsGeneralRulesImpl
+	NoOpBuiltinsPlatformRulesImpl
+	NoOpBuiltinsWorkspaceRulesImpl
 }
 
 var _ Builtins = (*NoOpBuiltinsImpl)(nil)

@@ -9,7 +9,7 @@ import (
 
 // Globals
 // https://docs.bazel.build/versions/master/skylark/lib/globals.html
-type BuiltinsGlobalsIface interface {
+type BuiltinsGlobals interface {
 	AnalysisTestTransition(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	Bind(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -31,7 +31,7 @@ type BuiltinsGlobalsIface interface {
 
 // Functions
 // https://docs.bazel.build/versions/master/be/functions.html
-type BuiltinsFunctionsIface interface {
+type BuiltinsFunctions interface {
 	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -41,7 +41,7 @@ type BuiltinsFunctionsIface interface {
 
 // Android Rules
 // https://docs.bazel.build/versions/master/be/android.html
-type BuiltinsAndroidRulesIface interface {
+type BuiltinsAndroidRules interface {
 	AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AndroidLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -55,7 +55,7 @@ type BuiltinsAndroidRulesIface interface {
 
 // C/C++ Rules
 // https://docs.bazel.build/versions/master/be/c-cpp.html
-type BuiltinsCcRulesIface interface {
+type BuiltinsCcRules interface {
 	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -69,7 +69,7 @@ type BuiltinsCcRulesIface interface {
 
 // Java Rules
 // https://docs.bazel.build/versions/master/be/java.html
-type BuiltinsJavaRulesIface interface {
+type BuiltinsJavaRules interface {
 	JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -85,7 +85,7 @@ type BuiltinsJavaRulesIface interface {
 
 // Objective-C Rules
 // https://docs.bazel.build/versions/master/be/objective-c.html
-type BuiltinsObjCRulesIface interface {
+type BuiltinsObjCRules interface {
 	AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -96,14 +96,14 @@ type BuiltinsObjCRulesIface interface {
 
 // Protocol Buffer Rules
 // https://docs.bazel.build/versions/master/be/protocol-buffer.html
-type BuiltinsProtoBufRulesIface interface {
+type BuiltinsProtoBufRules interface {
 	ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
 // Python Rules
 // https://docs.bazel.build/versions/master/be/python.html
-type BuiltinsPythonRulesIface interface {
+type BuiltinsPythonRules interface {
 	PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -112,7 +112,7 @@ type BuiltinsPythonRulesIface interface {
 
 // Shell Rules
 // https://docs.bazel.build/versions/master/be/shell.html
-type BuiltinsShellRulesIface interface {
+type BuiltinsShellRules interface {
 	ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -120,14 +120,14 @@ type BuiltinsShellRulesIface interface {
 
 // Extra Actions Rules
 // https://docs.bazel.build/versions/master/be/extra-actions.html
-type BuiltinsExtraActionsRulesIface interface {
+type BuiltinsExtraActionsRules interface {
 	ActionListener(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ExtraAction(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
 // General Rules
 // https://docs.bazel.build/versions/master/be/general.html
-type BuiltinsGeneralRulesIface interface {
+type BuiltinsGeneralRules interface {
 	Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	Genquery(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	TestSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -138,7 +138,7 @@ type BuiltinsGeneralRulesIface interface {
 
 // Platform Rules
 // https://docs.bazel.build/versions/master/be/platform.html
-type BuiltinsPlatformRulesIface interface {
+type BuiltinsPlatformRules interface {
 	ConstraintSetting(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	ConstraintValue(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	Platform(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -147,7 +147,7 @@ type BuiltinsPlatformRulesIface interface {
 
 // Workspace Rules
 // https://docs.bazel.build/versions/master/be/workspace.html
-type BuiltinsWorkspaceRulesIface interface {
+type BuiltinsWorkspaceRules interface {
 	// Note: Bind is under "globals".
 	LocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	MavenJar(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -158,23 +158,23 @@ type BuiltinsWorkspaceRulesIface interface {
 }
 
 // TODO(vtl): Probably should split this into rules and non-rules.
-type BuiltinsIface interface {
-	BuiltinsGlobalsIface
-	BuiltinsFunctionsIface
-	BuiltinsAndroidRulesIface
-	BuiltinsCcRulesIface
-	BuiltinsJavaRulesIface
-	BuiltinsObjCRulesIface
-	BuiltinsProtoBufRulesIface
-	BuiltinsPythonRulesIface
-	BuiltinsShellRulesIface
-	BuiltinsExtraActionsRulesIface
-	BuiltinsGeneralRulesIface
-	BuiltinsPlatformRulesIface
-	BuiltinsWorkspaceRulesIface
+type Builtins interface {
+	BuiltinsGlobals
+	BuiltinsFunctions
+	BuiltinsAndroidRules
+	BuiltinsCcRules
+	BuiltinsJavaRules
+	BuiltinsObjCRules
+	BuiltinsProtoBufRules
+	BuiltinsPythonRules
+	BuiltinsShellRules
+	BuiltinsExtraActionsRules
+	BuiltinsGeneralRules
+	BuiltinsPlatformRules
+	BuiltinsWorkspaceRules
 }
 
-func getBuiltinsImpl(thread *starlark.Thread) BuiltinsIface {
+func getBuiltinsImpl(thread *starlark.Thread) Builtins {
 	return GetContext(thread).BuiltinsImpl
 }
 

@@ -22,7 +22,7 @@ type Context struct {
 	FileType FileType
 	Thread   *starlark.Thread
 
-	BuiltinsImpl BuiltinsIface
+	BuiltinsImpl Builtins
 }
 
 func (ctx *Context) CreateThread(label Label, fileType FileType) *starlark.Thread {

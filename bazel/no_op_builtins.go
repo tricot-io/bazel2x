@@ -399,4 +399,4 @@ func (self *NoOpBuiltinsImpl) XcodeVersion(args starlark.Tuple, kwargs []starlar
 	return starlark.None, nil
 }
 
-var _ BuiltinsIface = (*NoOpBuiltinsImpl)(nil)
+var _ Builtins = (*NoOpBuiltinsImpl)(nil)

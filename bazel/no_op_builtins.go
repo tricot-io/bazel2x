@@ -82,6 +82,7 @@ func (self *NoOpBuiltinsGlobalsImpl) Workspace(args starlark.Tuple, kwargs []sta
 
 var _ BuiltinsGlobals = (*NoOpBuiltinsGlobalsImpl)(nil)
 
+// NoOpBuiltinsFunctionsImpl is a no-op implementation of BuiltinsFunctions.
 type NoOpBuiltinsFunctionsImpl struct {}
 
 func (self *NoOpBuiltinsFunctionsImpl) Package(args starlark.Tuple, kwargs []starlark.Tuple) (
@@ -106,6 +107,7 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
+// NoOpBuiltinsAndroidRulesImpl is a no-op implementation of BuiltinsAndroidRules.
 type NoOpBuiltinsAndroidRulesImpl struct {}
 
 func (self *NoOpBuiltinsAndroidRulesImpl) AndroidBinary(args starlark.Tuple,
@@ -150,106 +152,120 @@ func (self *NoOpBuiltinsAndroidRulesImpl) AndroidSdkRepository(args starlark.Tup
 
 var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
 
+// NoOpBuiltinsCcRulesImpl is a no-op implementation of BuiltinsCcRules.
+type NoOpBuiltinsCcRulesImpl struct {}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsCcRulesImpl) CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsCcRules = (*NoOpBuiltinsCcRulesImpl)(nil)
+
+// NoOpBuiltinsJavaRulesImpl is a no-op implementation of BuiltinsJavaRules.
+type NoOpBuiltinsJavaRulesImpl struct {}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaLiteProtoLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaProtoLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaPackageConfiguration(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsJavaRulesImpl) JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsJavaRules = (*NoOpBuiltinsJavaRulesImpl)(nil)
+
+// NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation being split up
+// allows other implementations to pick and choose no-op implementations.
 // TODO(vtl): Split this up.
 type NoOpBuiltinsImpl struct{
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
 	NoOpBuiltinsAndroidRulesImpl
-}
-
-func (self *NoOpBuiltinsImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaLiteProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaPackageConfiguration(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
+	NoOpBuiltinsCcRulesImpl
+	NoOpBuiltinsJavaRulesImpl
 }
 
 func (self *NoOpBuiltinsImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (

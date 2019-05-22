@@ -82,69 +82,79 @@ func (self *NoOpBuiltinsGlobalsImpl) Workspace(args starlark.Tuple, kwargs []sta
 
 var _ BuiltinsGlobals = (*NoOpBuiltinsGlobalsImpl)(nil)
 
-// TODO(vtl): Split this up.
-type NoOpBuiltinsImpl struct{
-	NoOpBuiltinsGlobalsImpl
-}
+type NoOpBuiltinsFunctionsImpl struct {}
 
-func (self *NoOpBuiltinsImpl) Package(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsFunctionsImpl) Package(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsFunctionsImpl) PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsFunctionsImpl) ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) Glob(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
+var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
-func (self *NoOpBuiltinsImpl) AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
+type NoOpBuiltinsAndroidRulesImpl struct {}
 
-func (self *NoOpBuiltinsImpl) AndroidLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) AndroidInstrumentationTest(args starlark.Tuple,
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidBinary(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) AndroidLocalTest(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsAndroidRulesImpl) AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) AndroidDevice(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidLibrary(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) AndroidNdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidInstrumentationTest(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidLocalTest(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
 	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidDevice(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidNdkRepository(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsAndroidRulesImpl) AndroidSdkRepository(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
+
+// TODO(vtl): Split this up.
+type NoOpBuiltinsImpl struct{
+	NoOpBuiltinsGlobalsImpl
+	NoOpBuiltinsFunctionsImpl
+	NoOpBuiltinsAndroidRulesImpl
 }
 
 func (self *NoOpBuiltinsImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (

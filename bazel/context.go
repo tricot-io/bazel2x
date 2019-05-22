@@ -16,7 +16,7 @@ const (
 )
 
 type Context struct {
-	Build    *Build
+	Build *Build
 
 	Label    Label
 	FileType FileType

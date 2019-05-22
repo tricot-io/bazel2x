@@ -8,7 +8,7 @@ import (
 )
 
 // NoOpBuiltinsGlobalsImpl is a no-op implementation of BuiltinsGlobals.
-type NoOpBuiltinsGlobalsImpl struct {}
+type NoOpBuiltinsGlobalsImpl struct{}
 
 func (self *NoOpBuiltinsGlobalsImpl) AnalysisTestTransition(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -83,7 +83,7 @@ func (self *NoOpBuiltinsGlobalsImpl) Workspace(args starlark.Tuple, kwargs []sta
 var _ BuiltinsGlobals = (*NoOpBuiltinsGlobalsImpl)(nil)
 
 // NoOpBuiltinsFunctionsImpl is a no-op implementation of BuiltinsFunctions.
-type NoOpBuiltinsFunctionsImpl struct {}
+type NoOpBuiltinsFunctionsImpl struct{}
 
 func (self *NoOpBuiltinsFunctionsImpl) Package(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -108,7 +108,7 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
 // NoOpBuiltinsAndroidRulesImpl is a no-op implementation of BuiltinsAndroidRules.
-type NoOpBuiltinsAndroidRulesImpl struct {}
+type NoOpBuiltinsAndroidRulesImpl struct{}
 
 func (self *NoOpBuiltinsAndroidRulesImpl) AndroidBinary(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -153,7 +153,7 @@ func (self *NoOpBuiltinsAndroidRulesImpl) AndroidSdkRepository(args starlark.Tup
 var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
 
 // NoOpBuiltinsCcRulesImpl is a no-op implementation of BuiltinsCcRules.
-type NoOpBuiltinsCcRulesImpl struct {}
+type NoOpBuiltinsCcRulesImpl struct{}
 
 func (self *NoOpBuiltinsCcRulesImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -203,7 +203,7 @@ func (self *NoOpBuiltinsCcRulesImpl) CcToolchainSuite(args starlark.Tuple, kwarg
 var _ BuiltinsCcRules = (*NoOpBuiltinsCcRulesImpl)(nil)
 
 // NoOpBuiltinsJavaRulesImpl is a no-op implementation of BuiltinsJavaRules.
-type NoOpBuiltinsJavaRulesImpl struct {}
+type NoOpBuiltinsJavaRulesImpl struct{}
 
 func (self *NoOpBuiltinsJavaRulesImpl) JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -258,7 +258,7 @@ func (self *NoOpBuiltinsJavaRulesImpl) JavaToolchain(args starlark.Tuple, kwargs
 var _ BuiltinsJavaRules = (*NoOpBuiltinsJavaRulesImpl)(nil)
 
 // NoOpBuiltinsObjCRulesImpl is a no-op implementation of BuiltinsObjCRules.
-type NoOpBuiltinsObjCRulesImpl struct {}
+type NoOpBuiltinsObjCRulesImpl struct{}
 
 func (self *NoOpBuiltinsObjCRulesImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -293,7 +293,7 @@ func (self *NoOpBuiltinsObjCRulesImpl) ObjcProtoLibrary(args starlark.Tuple,
 var _ BuiltinsObjCRules = (*NoOpBuiltinsObjCRulesImpl)(nil)
 
 // NoOpBuiltinsProtoBufRulesImpl is a no-op implementation of BuiltinsProtoBufRules.
-type NoOpBuiltinsProtoBufRulesImpl struct {}
+type NoOpBuiltinsProtoBufRulesImpl struct{}
 
 func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLangToolchain(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -308,7 +308,7 @@ func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLibrary(args starlark.Tuple,
 var _ BuiltinsProtoBufRules = (*NoOpBuiltinsProtoBufRulesImpl)(nil)
 
 // NoOpBuiltinsPythonRulesImpl is a no-op implementation of BuiltinsPythonRules.
-type NoOpBuiltinsPythonRulesImpl struct {}
+type NoOpBuiltinsPythonRulesImpl struct{}
 
 func (self *NoOpBuiltinsPythonRulesImpl) PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -333,7 +333,7 @@ func (self *NoOpBuiltinsPythonRulesImpl) PyRuntime(args starlark.Tuple, kwargs [
 var _ BuiltinsPythonRules = (*NoOpBuiltinsPythonRulesImpl)(nil)
 
 // NoOpBuiltinsShellRulesImpl is a no-op implementation of BuiltinsShellRules.
-type NoOpBuiltinsShellRulesImpl struct {}
+type NoOpBuiltinsShellRulesImpl struct{}
 
 func (self *NoOpBuiltinsShellRulesImpl) ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -353,7 +353,7 @@ func (self *NoOpBuiltinsShellRulesImpl) ShTest(args starlark.Tuple, kwargs []sta
 var _ BuiltinsShellRules = (*NoOpBuiltinsShellRulesImpl)(nil)
 
 // NoOpBuiltinsExtraActionsRulesImpl is a no-op implementation of BuiltinsExtraActionsRules.
-type NoOpBuiltinsExtraActionsRulesImpl struct {}
+type NoOpBuiltinsExtraActionsRulesImpl struct{}
 
 func (self *NoOpBuiltinsExtraActionsRulesImpl) ActionListener(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -368,7 +368,7 @@ func (self *NoOpBuiltinsExtraActionsRulesImpl) ExtraAction(args starlark.Tuple,
 var _ BuiltinsExtraActionsRules = (*NoOpBuiltinsExtraActionsRulesImpl)(nil)
 
 // NoOpBuiltinsGeneralRulesImpl is a no-op implementation of BuiltinsGeneralRules.
-type NoOpBuiltinsGeneralRulesImpl struct {}
+type NoOpBuiltinsGeneralRulesImpl struct{}
 
 func (self *NoOpBuiltinsGeneralRulesImpl) Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
@@ -403,7 +403,7 @@ func (self *NoOpBuiltinsGeneralRulesImpl) Genrule(args starlark.Tuple, kwargs []
 var _ BuiltinsGeneralRules = (*NoOpBuiltinsGeneralRulesImpl)(nil)
 
 // NoOpBuiltinsPlatformRulesImpl is a no-op implementation of BuiltinsPlatformRules.
-type NoOpBuiltinsPlatformRulesImpl struct {}
+type NoOpBuiltinsPlatformRulesImpl struct{}
 
 func (self *NoOpBuiltinsPlatformRulesImpl) ConstraintSetting(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -428,7 +428,7 @@ func (self *NoOpBuiltinsPlatformRulesImpl) Toolchain(args starlark.Tuple, kwargs
 var _ BuiltinsPlatformRules = (*NoOpBuiltinsPlatformRulesImpl)(nil)
 
 // NoOpBuiltinsWorkspaceRulesImpl is a no-op implementation of BuiltinsWorkspaceRules.
-type NoOpBuiltinsWorkspaceRulesImpl struct {}
+type NoOpBuiltinsWorkspaceRulesImpl struct{}
 
 func (self *NoOpBuiltinsWorkspaceRulesImpl) LocalRepository(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -465,7 +465,7 @@ var _ BuiltinsWorkspaceRules = (*NoOpBuiltinsWorkspaceRulesImpl)(nil)
 // NoOpBuiltins is a no-op implementation of Builtins. Note: Its implementation is split up so other
 // implementations to pick and choose no-op implementations.
 // TODO(vtl): Split this up.
-type NoOpBuiltinsImpl struct{
+type NoOpBuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
 	NoOpBuiltinsAndroidRulesImpl

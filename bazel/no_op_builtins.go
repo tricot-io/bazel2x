@@ -7,76 +7,84 @@ import (
 	"go.starlark.net/starlark"
 )
 
-type NoOpBuiltinsImpl struct{}
+// NoOpBuiltinsGlobalsImpl is a no-op implementation of BuiltinsGlobals.
+type NoOpBuiltinsGlobalsImpl struct {}
 
-func (self *NoOpBuiltinsImpl) AnalysisTestTransition(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Bind(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ConfigurationField(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Depset(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) ExistingRules(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Fail(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) Provider(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsImpl) RegisterExecutionPlatforms(args starlark.Tuple,
+func (self *NoOpBuiltinsGlobalsImpl) AnalysisTestTransition(args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) RegisterToolchains(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsGlobalsImpl) Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) RepositoryRule(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsGlobalsImpl) Bind(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) Rule(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsGlobalsImpl) ConfigurationField(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) Depset(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) Select(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsGlobalsImpl) ExistingRules(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsImpl) Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (
+func (self *NoOpBuiltinsGlobalsImpl) Fail(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) Provider(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) RegisterExecutionPlatforms(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) RegisterToolchains(args starlark.Tuple,
+	kwargs []starlark.Tuple) (starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) RepositoryRule(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) Rule(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) Select(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+func (self *NoOpBuiltinsGlobalsImpl) Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (
+	starlark.Value, error) {
+	return starlark.None, nil
+}
+
+var _ BuiltinsGlobals = (*NoOpBuiltinsGlobalsImpl)(nil)
+
+// TODO(vtl): Split this up.
+type NoOpBuiltinsImpl struct{
+	NoOpBuiltinsGlobalsImpl
 }
 
 func (self *NoOpBuiltinsImpl) Package(args starlark.Tuple, kwargs []starlark.Tuple) (

@@ -107,51 +107,6 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
-// NoOpBuiltinsPythonRulesImpl is a no-op implementation of BuiltinsPythonRules.
-type NoOpBuiltinsPythonRulesImpl struct{}
-
-func (self *NoOpBuiltinsPythonRulesImpl) PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsPythonRulesImpl) PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsPythonRulesImpl) PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsPythonRulesImpl) PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsPythonRules = (*NoOpBuiltinsPythonRulesImpl)(nil)
-
-// NoOpBuiltinsShellRulesImpl is a no-op implementation of BuiltinsShellRules.
-type NoOpBuiltinsShellRulesImpl struct{}
-
-func (self *NoOpBuiltinsShellRulesImpl) ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsShellRulesImpl) ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsShellRulesImpl) ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsShellRules = (*NoOpBuiltinsShellRulesImpl)(nil)
-
 // NoOpBuiltinsExtraActionsRulesImpl is a no-op implementation of BuiltinsExtraActionsRules.
 type NoOpBuiltinsExtraActionsRulesImpl struct{}
 

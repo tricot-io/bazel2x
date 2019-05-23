@@ -42,23 +42,6 @@ type BuiltinsFunctions interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Python Rules
-// https://docs.bazel.build/versions/master/be/python.html
-type BuiltinsPythonRules interface {
-	PyBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	PyLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	PyTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	PyRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
-// Shell Rules
-// https://docs.bazel.build/versions/master/be/shell.html
-type BuiltinsShellRules interface {
-	ShBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ShLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ShTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // Extra Actions Rules
 // https://docs.bazel.build/versions/master/be/extra-actions.html
 type BuiltinsExtraActionsRules interface {
@@ -102,8 +85,6 @@ type BuiltinsWorkspaceRules interface {
 type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
-	BuiltinsPythonRules
-	BuiltinsShellRules
 	BuiltinsExtraActionsRules
 	BuiltinsGeneralRules
 	BuiltinsPlatformRules
@@ -282,44 +263,16 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Python Rules
 		// https://docs.bazel.build/versions/master/be/python.html
-		"py_binary": starlark.NewBuiltin("py_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).PyBinary(args, kwargs)
-			}),
-		"py_library": starlark.NewBuiltin("py_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).PyLibrary(args, kwargs)
-			}),
-		"py_test": starlark.NewBuiltin("py_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).PyTest(args, kwargs)
-			}),
-		"py_runtime": starlark.NewBuiltin("py_runtime",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).PyRuntime(args, kwargs)
-			}),
+		"py_binary": starlark.NewBuiltin("py_binary", rules.NotImplemented),
+		"py_library": starlark.NewBuiltin("py_library", rules.NotImplemented),
+		"py_test": starlark.NewBuiltin("py_test", rules.NotImplemented),
+		"py_runtime": starlark.NewBuiltin("py_runtime", rules.NotImplemented),
 
 		// Shell Rules
 		// https://docs.bazel.build/versions/master/be/shell.html
-		"sh_binary": starlark.NewBuiltin("sh_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ShBinary(args, kwargs)
-			}),
-		"sh_library": starlark.NewBuiltin("sh_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ShLibrary(args, kwargs)
-			}),
-		"sh_test": starlark.NewBuiltin("sh_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ShTest(args, kwargs)
-			}),
+		"sh_binary": starlark.NewBuiltin("sh_binary", rules.NotImplemented),
+		"sh_library": starlark.NewBuiltin("sh_library", rules.NotImplemented),
+		"sh_test": starlark.NewBuiltin("sh_test", rules.NotImplemented),
 
 		// Extra Actions Rules
 		// https://docs.bazel.build/versions/master/be/extra-actions.html

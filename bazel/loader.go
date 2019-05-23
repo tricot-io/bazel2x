@@ -72,17 +72,17 @@ func (self *Loader) Load(ctx *Context, moduleLabel core.Label) (starlark.StringD
 }
 
 func LoadLabel(thread *starlark.Thread, moduleLabel core.Label) (starlark.StringDict, error) {
-	ctx := GetContext(thread)
-	return ctx.Build.Loader.Load(ctx, moduleLabel)
+	ctx := GetContextImpl(thread)
+	return ctx.build.Loader.Load(ctx, moduleLabel)
 }
 
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
-	ctx := GetContext(thread)
+	ctx := GetContextImpl(thread)
 	moduleLabel, err := core.ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
 	if err != nil {
 		return nil, err
 	}
-	return ctx.Build.Loader.Load(ctx, moduleLabel)
+	return ctx.build.Loader.Load(ctx, moduleLabel)
 }
 
 func NewLoader(sourceFileReader SourceFileReader) *Loader {

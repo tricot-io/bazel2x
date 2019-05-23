@@ -10,7 +10,7 @@ import (
 )
 
 type Context struct {
-	Build *Build
+	build *Build
 
 	Label    core.Label
 	FileType core.FileType
@@ -20,7 +20,7 @@ type Context struct {
 }
 
 func (ctx *Context) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
-	return CreateThread(ctx.Build, label, fileType)
+	return CreateThread(ctx.build, label, fileType)
 }
 
 func (ctx *Context) MakeInitialGlobals() starlark.StringDict {
@@ -35,7 +35,7 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 
 	// Create a new context (with the same loader).
 	ctx := &Context{
-		Build:        build,
+		build:        build,
 		Label:        label,
 		FileType:     fileType,
 		Thread:       thread,
@@ -49,4 +49,9 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 
 func GetContext(thread *starlark.Thread) *Context {
 	return thread.Local(contextKey).(*Context)
+}
+
+// TODO(vtl): This will make more sense once Context becomes an interface.
+func GetContextImpl(thread *starlark.Thread) *Context {
+	return GetContext(thread)
 }

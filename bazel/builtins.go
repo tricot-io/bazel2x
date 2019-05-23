@@ -5,6 +5,9 @@ package bazel
 
 import (
 	"go.starlark.net/starlark"
+
+	// TODO(vtl)
+	// "bazel2cmake/bazel/rules"
 )
 
 // Globals
@@ -328,6 +331,8 @@ func MakeInitialGlobals(ctx *Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).CcImport(args, kwargs)
 			}),
+		// TODO(vtl)
+		// "cc_library": rules.CcLibrary,
 		"cc_library": starlark.NewBuiltin("cc_library",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

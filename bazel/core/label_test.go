@@ -1,12 +1,12 @@
 // Copyright 2019 Tricot Inc.
 // Use of this source code is governed by the license in the LICENSE file.
 
-package bazel_test
+package core_test
 
 import (
 	"testing"
 
-	. "bazel2cmake/bazel"
+	. "bazel2cmake/bazel/core"
 )
 
 func TestWorkspaceName_IsValid(t *testing.T) {

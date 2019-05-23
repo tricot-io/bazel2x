@@ -43,7 +43,7 @@ func checkFileType(fileType core.FileType, label core.Label) error {
 }
 
 func (self *Loader) Load(ctx *Context, moduleLabel core.Label) (starlark.StringDict, error) {
-	err := checkFileType(ctx.FileType, moduleLabel)
+	err := checkFileType(ctx.FileType(), moduleLabel)
 	if err != nil {
 		return nil, err
 	}

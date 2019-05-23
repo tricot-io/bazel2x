@@ -13,7 +13,8 @@ type Context struct {
 	build *Build
 
 	label    core.Label
-	FileType core.FileType
+	fileType core.FileType
+
 	Thread   *starlark.Thread
 
 	BuiltinsImpl Builtins
@@ -21,6 +22,10 @@ type Context struct {
 
 func (ctx *Context) Label() core.Label {
 	return ctx.label
+}
+
+func (ctx *Context) FileType() core.FileType {
+	return ctx.fileType
 }
 
 func (ctx *Context) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
@@ -41,7 +46,7 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 	ctx := &Context{
 		build:        build,
 		label:        label,
-		FileType:     fileType,
+		fileType:     fileType,
 		Thread:       thread,
 	}
 	ctx.BuiltinsImpl = NewBuiltinsImpl(ctx)

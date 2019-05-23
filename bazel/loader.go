@@ -22,17 +22,17 @@ type Loader struct {
 	cache            map[string]*loadEntry
 }
 
-func checkFileType(fileType FileType, label core.Label) error {
+func checkFileType(fileType core.FileType, label core.Label) error {
 	switch fileType {
-	case FileTypeBuild:
+	case core.FileTypeBuild:
 		if string(label.Target) != "BUILD" && string(label.Target) != "BUILD.bazel" {
 			return fmt.Errorf("load not allowed: %s is not a BUILD[.bazel] file", label)
 		}
-	case FileTypeBzl:
+	case core.FileTypeBzl:
 		if filepath.Ext(string(label.Target)) != ".bzl" {
 			return fmt.Errorf("load not allowed: %s is not a .bzl file", label)
 		}
-	case FileTypeWorkspace:
+	case core.FileTypeWorkspace:
 		if string(label.Target) != "WORKSPACE" {
 			return fmt.Errorf("load not allowed: %s is not a WORKSPACE file", label)
 		}
@@ -64,7 +64,7 @@ func (self *Loader) Load(ctx *Context, moduleLabel core.Label) (starlark.StringD
 
 	self.cache[moduleLabelString] = nil
 
-	thread := ctx.CreateThread(moduleLabel, FileTypeBzl)
+	thread := ctx.CreateThread(moduleLabel, core.FileTypeBzl)
 	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
 		ctx.MakeInitialGlobals())
 	self.cache[moduleLabelString] = &loadEntry{globals, err}

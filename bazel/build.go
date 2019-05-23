@@ -13,7 +13,7 @@ type Build struct {
 }
 
 func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
-	thread := CreateThread(self, buildFileLabel, FileTypeBuild)
+	thread := CreateThread(self, buildFileLabel, core.FileTypeBuild)
 	_, err := LoadLabel(thread, buildFileLabel)
 	return err
 }

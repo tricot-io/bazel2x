@@ -3,12 +3,16 @@
 
 package bazel
 
+import (
+	"bazel2cmake/bazel/core"
+)
+
 type Build struct {
 	Loader  *Loader
-	Targets BuildTargets
+	Targets core.BuildTargets
 }
 
-func (self *Build) AddBuildFile(buildFileLabel Label) error {
+func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
 	thread := CreateThread(self, buildFileLabel, FileTypeBuild)
 	_, err := LoadLabel(thread, buildFileLabel)
 	return err
@@ -18,6 +22,6 @@ func (self *Build) AddBuildFile(buildFileLabel Label) error {
 func NewBuild(sourceFileReader SourceFileReader) *Build {
 	return &Build{
 		Loader:  NewLoader(sourceFileReader),
-		Targets: make(BuildTargets),
+		Targets: make(core.BuildTargets),
 	}
 }

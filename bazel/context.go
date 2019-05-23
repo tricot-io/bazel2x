@@ -5,6 +5,8 @@ package bazel
 
 import (
 	"go.starlark.net/starlark"
+
+	"bazel2cmake/bazel/core"
 )
 
 type FileType int
@@ -18,14 +20,14 @@ const (
 type Context struct {
 	Build *Build
 
-	Label    Label
+	Label    core.Label
 	FileType FileType
 	Thread   *starlark.Thread
 
 	BuiltinsImpl Builtins
 }
 
-func (ctx *Context) CreateThread(label Label, fileType FileType) *starlark.Thread {
+func (ctx *Context) CreateThread(label core.Label, fileType FileType) *starlark.Thread {
 	return CreateThread(ctx.Build, label, fileType)
 }
 
@@ -35,7 +37,7 @@ func (ctx *Context) MakeInitialGlobals() starlark.StringDict {
 
 const contextKey = "bazel2make-bazel-context"
 
-func CreateThread(build *Build, label Label, fileType FileType) *starlark.Thread {
+func CreateThread(build *Build, label core.Label, fileType FileType) *starlark.Thread {
 	// Create the thread.
 	thread := &starlark.Thread{Name: "exec " + label.String(), Load: Load}
 

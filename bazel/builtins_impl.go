@@ -7,6 +7,8 @@ import (
 	"fmt"
 
 	"go.starlark.net/starlark"
+
+	"bazel2cmake/bazel/core"
 )
 
 // BuiltinsImpl implements Builtins.
@@ -104,7 +106,11 @@ func (self *BuiltinsImpl) CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple
 		return starlark.None, err
 	}
 
-	nameLabel := Label{self.ctx.Label.Workspace, self.ctx.Label.Package, TargetName(name)}
+	nameLabel := core.Label{
+		Workspace: self.ctx.Label.Workspace,
+		Package:   self.ctx.Label.Package,
+		Target:    core.TargetName(name),
+	}
 	if !nameLabel.IsValid() {
 		return starlark.None, fmt.Errorf("invalid target name %v", name)
 	}

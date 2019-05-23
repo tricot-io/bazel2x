@@ -6,13 +6,15 @@ package bazel
 import (
 	"io/ioutil"
 	"path/filepath"
+
+	"bazel2cmake/bazel/core"
 )
 
-type SourceFileReader func(sourceFileLabel Label) ([]byte, error)
+type SourceFileReader func(sourceFileLabel core.Label) ([]byte, error)
 
 func GetSourceFileReader(workspaceDir string, projectName string) SourceFileReader {
 	externalDir := filepath.Join(workspaceDir, "bazel-"+projectName, "external")
-	return func(sourceFileLabel Label) ([]byte, error) {
+	return func(sourceFileLabel core.Label) ([]byte, error) {
 		sourceFilePath := sourceFileLabel.SourcePath(workspaceDir, externalDir)
 		return ioutil.ReadFile(sourceFilePath)
 	}

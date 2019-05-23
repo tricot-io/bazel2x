@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	"bazel2cmake/bazel"
+	"bazel2cmake/bazel/core"
 	"bazel2cmake/utils"
 )
 
@@ -41,7 +42,7 @@ func main() {
 
 	// Preprocess all the arguments to get relative paths to the workspace dir, since we'll
 	// Chdir to the workspace dir.
-	buildFileLabels := make([]bazel.Label, len(args))
+	buildFileLabels := make([]core.Label, len(args))
 	for i, arg := range args {
 		wsDir, relDir, err := utils.FindWorkspaceDir(filepath.Dir(arg))
 		if err != nil {
@@ -54,10 +55,10 @@ func main() {
 			os.Exit(1)
 		}
 
-		buildFileLabels[i] = bazel.Label{
+		buildFileLabels[i] = core.Label{
 			Workspace: "",
-			Package:   bazel.PackageName(relDir),
-			Target:    bazel.TargetName(filepath.Base(arg)),
+			Package:   core.PackageName(relDir),
+			Target:    core.TargetName(filepath.Base(arg)),
 		}
 
 		fmt.Printf("Input BUILD file: %s\n", buildFileLabels[i])

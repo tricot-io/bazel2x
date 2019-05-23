@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 
 	"go.starlark.net/starlark"
+
+	"bazel2cmake/bazel/core"
 )
 
 type loadEntry struct {
@@ -20,7 +22,7 @@ type Loader struct {
 	cache            map[string]*loadEntry
 }
 
-func checkFileType(fileType FileType, label Label) error {
+func checkFileType(fileType FileType, label core.Label) error {
 	switch fileType {
 	case FileTypeBuild:
 		if string(label.Target) != "BUILD" && string(label.Target) != "BUILD.bazel" {
@@ -40,7 +42,7 @@ func checkFileType(fileType FileType, label Label) error {
 	return nil
 }
 
-func (self *Loader) Load(ctx *Context, moduleLabel Label) (starlark.StringDict, error) {
+func (self *Loader) Load(ctx *Context, moduleLabel core.Label) (starlark.StringDict, error) {
 	err := checkFileType(ctx.FileType, moduleLabel)
 	if err != nil {
 		return nil, err
@@ -69,14 +71,14 @@ func (self *Loader) Load(ctx *Context, moduleLabel Label) (starlark.StringDict, 
 	return globals, err
 }
 
-func LoadLabel(thread *starlark.Thread, moduleLabel Label) (starlark.StringDict, error) {
+func LoadLabel(thread *starlark.Thread, moduleLabel core.Label) (starlark.StringDict, error) {
 	ctx := GetContext(thread)
 	return ctx.Build.Loader.Load(ctx, moduleLabel)
 }
 
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContext(thread)
-	moduleLabel, err := ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
+	moduleLabel, err := core.ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
 	if err != nil {
 		return nil, err
 	}

@@ -245,7 +245,8 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Workspace(args, kwargs)
 			}),
-		// Build functions
+
+		// Functions
 		// https://docs.bazel.build/versions/master/be/functions.html
 		"package": starlark.NewBuiltin("package",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
@@ -267,6 +268,8 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Glob(args, kwargs)
 			}),
+		// Note: Select and Workspace are under "globals".
+
 		// Android Rules
 		// https://docs.bazel.build/versions/master/be/android.html
 		"android_binary": starlark.NewBuiltin("android_binary",
@@ -310,6 +313,7 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).AndroidSdkRepository(args, kwargs)
 			}),
+
 		// C/C++ Rules
 		// https://docs.bazel.build/versions/master/be/c-cpp.html
 		"cc_binary": starlark.NewBuiltin("cc_binary", rules.CcBinary),
@@ -323,6 +327,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 		"cc_toolchain": starlark.NewBuiltin("cc_toolchain", rules.NotImplemented),
 		"cc_toolchain_suite": starlark.NewBuiltin("cc_toolchain_suite",
 			rules.NotImplemented),
+
+		// Java Rules
+		// https://docs.bazel.build/versions/master/be/java.html
 		"java_binary": starlark.NewBuiltin("java_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -374,6 +381,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).JavaToolchain(args, kwargs)
 			}),
+
+		// Objective-C Rules
+		// https://docs.bazel.build/versions/master/be/objective-c.html
 		"apple_binary": starlark.NewBuiltin("apple_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -404,6 +414,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ObjcProtoLibrary(args, kwargs)
 			}),
+
+		// Protocol Buffer Rules
+		// https://docs.bazel.build/versions/master/be/protocol-buffer.html
 		"proto_lang_toolchain": starlark.NewBuiltin("proto_lang_toolchain",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -414,6 +427,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ProtoLibrary(args, kwargs)
 			}),
+
+		// Python Rules
+		// https://docs.bazel.build/versions/master/be/python.html
 		"py_binary": starlark.NewBuiltin("py_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -434,6 +450,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).PyRuntime(args, kwargs)
 			}),
+
+		// Shell Rules
+		// https://docs.bazel.build/versions/master/be/shell.html
 		"sh_binary": starlark.NewBuiltin("sh_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -449,6 +468,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ShTest(args, kwargs)
 			}),
+
+		// Extra Actions Rules
+		// https://docs.bazel.build/versions/master/be/extra-actions.html
 		"action_listener": starlark.NewBuiltin("action_listener",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -459,6 +481,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).ExtraAction(args, kwargs)
 			}),
+
+		// General Rules
+		// https://docs.bazel.build/versions/master/be/general.html
 		"filegroup": starlark.NewBuiltin("filegroup",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -489,6 +514,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Genrule(args, kwargs)
 			}),
+
+		// Platform Rules
+		// https://docs.bazel.build/versions/master/be/platform.html
 		"constraint_setting": starlark.NewBuiltin("constraint_setting",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -509,6 +537,10 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Toolchain(args, kwargs)
 			}),
+
+		// Workspace Rules
+		// https://docs.bazel.build/versions/master/be/workspace.html
+		// Note: Bind is under "Globals" (above).
 		"local_repository": starlark.NewBuiltin("local_repository",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

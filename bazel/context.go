@@ -15,8 +15,6 @@ type Context struct {
 	label    core.Label
 	fileType core.FileType
 
-	Thread   *starlark.Thread
-
 	BuiltinsImpl Builtins
 }
 
@@ -47,7 +45,6 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 		build:        build,
 		label:        label,
 		fileType:     fileType,
-		Thread:       thread,
 	}
 	ctx.BuiltinsImpl = NewBuiltinsImpl(ctx)
 	// And attach it to the thread.

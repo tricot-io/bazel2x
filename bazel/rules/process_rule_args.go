@@ -6,6 +6,7 @@ package rules
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"go.starlark.net/starlark"
 
@@ -55,24 +56,51 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 		boolValue := bool(value.Truth())
 		dest.Set(reflect.ValueOf(&boolValue))
 	case *string:
-		if s, ok := value.(starlark.String); ok {
-			stringValue := string(s)
-			dest.Set(reflect.ValueOf(&stringValue))
-		} else {
+		s, ok := value.(starlark.String)
+		if !ok {
 			return fmt.Errorf("argument %s invalid: value is not a string", argName)
 		}
+		stringValue := string(s)
+		dest.Set(reflect.ValueOf(&stringValue))
 	case *core.Label:
 		labelValue, err := toLabel(value, ctx)
 		if err != nil {
 			return fmt.Errorf("argument %s invalid: %s", argName, err)
 		}
 		dest.Set(reflect.ValueOf(&labelValue))
+	case *[]string:
+		l, ok := value.(*starlark.List)
+		if !ok {
+			return fmt.Errorf("argument %s invalid: value is not a list", argName)
+		}
+		listValue := make([]string, l.Len())
+		for i := 0; i < l.Len(); i++ {
+			s, ok := l.Index(i).(starlark.String)
+			if !ok {
+				return fmt.Errorf("argument %s invalid: invalid element: value is "+
+					"not a string", argName)
+			}
+			listValue[i] = string(s)
+		}
+		dest.Set(reflect.ValueOf(&listValue))
+	case *[]core.Label:
+		l, ok := value.(*starlark.List)
+		if !ok {
+			return fmt.Errorf("argument %s invalid: value is not a list", argName)
+		}
+		listValue := make([]core.Label, l.Len())
+		for i := 0; i < l.Len(); i++ {
+			labelValue, err := toLabel(l.Index(i), ctx)
+			if err != nil {
+				return fmt.Errorf("argument %s invalid: invalid element: %s",
+					argName, err)
+			}
+			listValue[i] = labelValue
+		}
+		dest.Set(reflect.ValueOf(&listValue))
 	default:
-		// TODO
-
+		panic(dest)
 	}
-	// TODO(vtl)
-//	fmt.Printf("Want to set %v to %v\n", argName, value)
 	return nil
 }
 
@@ -143,4 +171,79 @@ func ProcessRuleArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Cont
 	}
 
 	return target.Process(ctx)
+}
+
+func getAttr(attrName string, src reflect.Value) string {
+	var attrValue string
+	v := src.Interface()
+	switch v.(type) {
+	case bool:
+		if v.(bool) {
+			attrValue = "True"
+		} else {
+			attrValue = "False"
+		}
+	case string:
+		attrValue = fmt.Sprintf("%q", v.(string))
+	case core.Label:
+		attrValue = fmt.Sprintf("%q", v.(core.Label).String())
+	case []string:
+		attrValue = "["
+		vs := v.([]core.Label)
+		for i := range vs {
+			if i > 0 {
+				attrValue += ", "
+			}
+			attrValue += fmt.Sprintf("%q", vs[i])
+		}
+		attrValue += "]"
+	case []core.Label:
+		attrValue = "["
+		vl := v.([]core.Label)
+		for i := range vl {
+			if i > 0 {
+				attrValue += ", "
+			}
+			attrValue += fmt.Sprintf("%q", vl[i].String())
+		}
+		attrValue += "]"
+	default:
+		panic(v)
+	}
+	return attrName + " = " + attrValue
+}
+
+func getAttrs(targetVp reflect.Value, attrs *[]string) {
+	v := targetVp.Elem()
+	if v.Kind() != reflect.Struct {
+		panic(v)
+	}
+	typ := v.Type()
+
+	for i := 0; i < typ.NumField(); i++ {
+		typf := typ.Field(i)
+		vf := v.Field(i)
+		if argName, ok := typf.Tag.Lookup("bazel"); ok {
+			if argName[len(argName)-1] == '!' {
+				argName = argName[:len(argName)-1]
+			}
+
+			if !vf.IsNil() {
+				*attrs = append(*attrs, getAttr(argName, vf.Elem()))
+			}
+		} else if vf.Kind() == reflect.Struct {
+			getAttrs(vf.Addr(), attrs)
+		}
+	}
+}
+
+func TargetToString(ruleName string, target ProcessRuleArgsTargetStruct) string {
+	targetVp := reflect.ValueOf(target)
+	if targetVp.Kind() != reflect.Ptr {
+		panic(targetVp)
+	}
+
+	attrs := []string{}
+	getAttrs(targetVp, &attrs)
+	return ruleName + "(" + strings.Join(attrs, ", ") + ")"
 }

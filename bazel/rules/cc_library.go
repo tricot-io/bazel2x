@@ -115,7 +115,7 @@ func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple
 	if err != nil {
 		return starlark.None, err
 	}
-fmt.Printf("--> %v\n", target)
+fmt.Printf("--> %v\n", TargetToString("cc_library", &target))
 
 	nameLabel := core.Label{ctx.Label().Workspace, ctx.Label().Package, core.TargetName(name)}
 	if !nameLabel.IsValid() {

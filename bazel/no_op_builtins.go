@@ -107,56 +107,6 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
-// NoOpBuiltinsObjCRulesImpl is a no-op implementation of BuiltinsObjCRules.
-type NoOpBuiltinsObjCRulesImpl struct{}
-
-func (self *NoOpBuiltinsObjCRulesImpl) AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsObjCRulesImpl) AppleStaticLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsObjCRulesImpl) J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsObjCRulesImpl) ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsObjCRulesImpl) ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsObjCRulesImpl) ObjcProtoLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsObjCRules = (*NoOpBuiltinsObjCRulesImpl)(nil)
-
-// NoOpBuiltinsProtoBufRulesImpl is a no-op implementation of BuiltinsProtoBufRules.
-type NoOpBuiltinsProtoBufRulesImpl struct{}
-
-func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLangToolchain(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsProtoBufRulesImpl) ProtoLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsProtoBufRules = (*NoOpBuiltinsProtoBufRulesImpl)(nil)
-
 // NoOpBuiltinsPythonRulesImpl is a no-op implementation of BuiltinsPythonRules.
 type NoOpBuiltinsPythonRulesImpl struct{}
 

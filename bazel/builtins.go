@@ -42,24 +42,6 @@ type BuiltinsFunctions interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Objective-C Rules
-// https://docs.bazel.build/versions/master/be/objective-c.html
-type BuiltinsObjCRules interface {
-	AppleBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AppleStaticLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	J2objcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ObjcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ObjcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ObjcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
-// Protocol Buffer Rules
-// https://docs.bazel.build/versions/master/be/protocol-buffer.html
-type BuiltinsProtoBufRules interface {
-	ProtoLangToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // Python Rules
 // https://docs.bazel.build/versions/master/be/python.html
 type BuiltinsPythonRules interface {
@@ -120,8 +102,6 @@ type BuiltinsWorkspaceRules interface {
 type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
-	BuiltinsObjCRules
-	BuiltinsProtoBufRules
 	BuiltinsPythonRules
 	BuiltinsShellRules
 	BuiltinsExtraActionsRules
@@ -285,49 +265,20 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Objective-C Rules
 		// https://docs.bazel.build/versions/master/be/objective-c.html
-		"apple_binary": starlark.NewBuiltin("apple_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AppleBinary(args, kwargs)
-			}),
+		"apple_binary": starlark.NewBuiltin("apple_binary", rules.NotImplemented),
 		"apple_static_library": starlark.NewBuiltin("apple_static_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AppleStaticLibrary(args, kwargs)
-			}),
-		"j2objc_library": starlark.NewBuiltin("j2objc_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).J2objcLibrary(args, kwargs)
-			}),
-		"objc_import": starlark.NewBuiltin("objc_import",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ObjcImport(args, kwargs)
-			}),
-		"objc_library": starlark.NewBuiltin("objc_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ObjcLibrary(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"j2objc_library": starlark.NewBuiltin("j2objc_library", rules.NotImplemented),
+		"objc_import": starlark.NewBuiltin("objc_import", rules.NotImplemented),
+		"objc_library": starlark.NewBuiltin("objc_library", rules.NotImplemented),
 		"objc_proto_library": starlark.NewBuiltin("objc_proto_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ObjcProtoLibrary(args, kwargs)
-			}),
+			rules.NotImplemented),
 
 		// Protocol Buffer Rules
 		// https://docs.bazel.build/versions/master/be/protocol-buffer.html
 		"proto_lang_toolchain": starlark.NewBuiltin("proto_lang_toolchain",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ProtoLangToolchain(args, kwargs)
-			}),
-		"proto_library": starlark.NewBuiltin("proto_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ProtoLibrary(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"proto_library": starlark.NewBuiltin("proto_library", rules.NotImplemented),
 
 		// Python Rules
 		// https://docs.bazel.build/versions/master/be/python.html

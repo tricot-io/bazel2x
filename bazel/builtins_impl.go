@@ -11,8 +11,6 @@ import (
 type BuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
-	NoOpBuiltinsObjCRulesImpl
-	NoOpBuiltinsProtoBufRulesImpl
 	NoOpBuiltinsPythonRulesImpl
 	NoOpBuiltinsShellRulesImpl
 	NoOpBuiltinsExtraActionsRulesImpl

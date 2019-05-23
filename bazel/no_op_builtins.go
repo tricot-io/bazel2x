@@ -165,11 +165,6 @@ func (self *NoOpBuiltinsCcRulesImpl) CcImport(args starlark.Tuple, kwargs []star
 	return starlark.None, nil
 }
 
-func (self *NoOpBuiltinsCcRulesImpl) CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
 func (self *NoOpBuiltinsCcRulesImpl) CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil

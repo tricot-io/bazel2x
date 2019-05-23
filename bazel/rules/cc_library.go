@@ -11,9 +11,36 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
-var CcLibrary = func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
+type CcLibraryTarget struct {
+	TargetCommon
+	Srcs               []core.Label `bazel:"srcs"`
+	Hdrs               []core.Label `bazel:"hdrs"`
+	Alwayslink         bool         `bazel:"alwayslink"`
+	Copts              []string     `bazel:"copts"`
+	Defines            []string     `bazel:"defines"`
+	IncludePrefix      string       `bazel:"include_prefix"`
+	Includes           []string     `bazel:"includes"`
+	Linkopts           []string     `bazel:"linkopts"`
+	Linkstatic         bool         `bazel:"linkstatic"`
+	Nocopts            []string     `bazel:"nocopts"`
+	StripIncludePrefix string       `bazel:"strip_include_prefix"`
+	TextualHdrs        []core.Label `bazel:"textual_hdrs"`
+	WinDefFile         core.Label   `bazel:"win_def_file"`
+}
+
+func (self *CcLibraryTarget) Process(ctx core.Context) error {
+	if err := self.TargetCommon.Process(ctx); err != nil {
+		return nil
+	}
+	// TODO(vtl)
+	return nil
+}
+
+// CcLibrary implements the Bazel cc_library rule.
+func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
 
+	// TODO(vtl): Factor out common attributes.
 	// cc_library
 	// Required:
 	var name string
@@ -49,31 +76,31 @@ var CcLibrary = func(thread *starlark.Thread, _ *starlark.Builtin, args starlark
 		"cc_library", args, kwargs,
 		"name", &name,
 		"deps?", &deps,
-		"srcs", &srcs,
-		"data", &data,
-		"hdrs", &hdrs,
-		"alwayslink", &alwayslink,
-		"compatible_with", &compatible_with,
-		"copts", &copts,
-		"defines", &defines,
-		"deprecation", &deprecation,
-		"distribs", &distribs,
-		"exec_compatible_with", &exec_compatible_with,
-		"features", &features,
-		"include_prefix", &include_prefix,
-		"includes", &includes,
-		"licenses", &licenses,
-		"linkopts", &linkopts,
-		"linkstatic", &linkstatic,
-		"nocopts", &nocopts,
-		"restricted_to", &restricted_to,
-		"strip_include_prefix", &strip_include_prefix,
-		"tags", &tags,
-		"testonly", &testonly,
-		"textual_hdrs", &textual_hdrs,
-		"toolchains", &toolchains,
-		"visibility", &visibility,
-		"win_def_file", &win_def_file)
+		"srcs?", &srcs,
+		"data?", &data,
+		"hdrs?", &hdrs,
+		"alwayslink?", &alwayslink,
+		"compatible_with?", &compatible_with,
+		"copts?", &copts,
+		"defines?", &defines,
+		"deprecation?", &deprecation,
+		"distribs?", &distribs,
+		"exec_compatible_with?", &exec_compatible_with,
+		"features?", &features,
+		"include_prefix?", &include_prefix,
+		"includes?", &includes,
+		"licenses?", &licenses,
+		"linkopts?", &linkopts,
+		"linkstatic?", &linkstatic,
+		"nocopts?", &nocopts,
+		"restricted_to?", &restricted_to,
+		"strip_include_prefix?", &strip_include_prefix,
+		"tags?", &tags,
+		"testonly?", &testonly,
+		"textual_hdrs?", &textual_hdrs,
+		"toolchains?", &toolchains,
+		"visibility?", &visibility,
+		"win_def_file?", &win_def_file)
 	if err != nil {
 		return starlark.None, err
 	}

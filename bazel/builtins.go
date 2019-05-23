@@ -7,8 +7,7 @@ import (
 	"go.starlark.net/starlark"
 
 	"bazel2cmake/bazel/core"
-	// TODO(vtl)
-	// "bazel2cmake/bazel/rules"
+	"bazel2cmake/bazel/rules"
 )
 
 // Globals
@@ -62,7 +61,7 @@ type BuiltinsAndroidRules interface {
 type BuiltinsCcRules interface {
 	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	// CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -332,13 +331,7 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).CcImport(args, kwargs)
 			}),
-		// TODO(vtl)
-		// "cc_library": rules.CcLibrary,
-		"cc_library": starlark.NewBuiltin("cc_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcLibrary(args, kwargs)
-			}),
+		"cc_library": starlark.NewBuiltin("cc_library", rules.CcLibrary),
 		"cc_proto_library": starlark.NewBuiltin("cc_proto_library",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

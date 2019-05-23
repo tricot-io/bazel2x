@@ -42,53 +42,10 @@ type BuiltinsFunctions interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Extra Actions Rules
-// https://docs.bazel.build/versions/master/be/extra-actions.html
-type BuiltinsExtraActionsRules interface {
-	ActionListener(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ExtraAction(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
-// General Rules
-// https://docs.bazel.build/versions/master/be/general.html
-type BuiltinsGeneralRules interface {
-	Filegroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Genquery(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	TestSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Alias(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ConfigSetting(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Genrule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
-// Platform Rules
-// https://docs.bazel.build/versions/master/be/platform.html
-type BuiltinsPlatformRules interface {
-	ConstraintSetting(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ConstraintValue(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Platform(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Toolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
-// Workspace Rules
-// https://docs.bazel.build/versions/master/be/workspace.html
-type BuiltinsWorkspaceRules interface {
-	// Note: Bind is under "globals".
-	LocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	MavenJar(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	MavenServer(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	NewLocalRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	XcodeConfig(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	XcodeVersion(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // TODO(vtl): Probably should split this into rules and non-rules.
 type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
-	BuiltinsExtraActionsRules
-	BuiltinsGeneralRules
-	BuiltinsPlatformRules
-	BuiltinsWorkspaceRules
 }
 
 func getBuiltinsImpl(thread *starlark.Thread) Builtins {
@@ -276,105 +233,37 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Extra Actions Rules
 		// https://docs.bazel.build/versions/master/be/extra-actions.html
-		"action_listener": starlark.NewBuiltin("action_listener",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ActionListener(args, kwargs)
-			}),
-		"extra_action": starlark.NewBuiltin("extra_action",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ExtraAction(args, kwargs)
-			}),
+		"action_listener": starlark.NewBuiltin("action_listener", rules.NotImplemented),
+		"extra_action": starlark.NewBuiltin("extra_action", rules.NotImplemented),
 
 		// General Rules
 		// https://docs.bazel.build/versions/master/be/general.html
-		"filegroup": starlark.NewBuiltin("filegroup",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Filegroup(args, kwargs)
-			}),
-		"genquery": starlark.NewBuiltin("genquery",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Genquery(args, kwargs)
-			}),
-		"test_suite": starlark.NewBuiltin("test_suite",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).TestSuite(args, kwargs)
-			}),
-		"alias": starlark.NewBuiltin("alias",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Alias(args, kwargs)
-			}),
-		"config_setting": starlark.NewBuiltin("config_setting",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ConfigSetting(args, kwargs)
-			}),
-		"genrule": starlark.NewBuiltin("genrule",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Genrule(args, kwargs)
-			}),
+		"filegroup": starlark.NewBuiltin("filegroup", rules.NotImplemented),
+		"genquery": starlark.NewBuiltin("genquery", rules.NotImplemented),
+		"test_suite": starlark.NewBuiltin("test_suite", rules.NotImplemented),
+		"alias": starlark.NewBuiltin("alias", rules.NotImplemented),
+		"config_setting": starlark.NewBuiltin("config_setting", rules.NotImplemented),
+		"genrule": starlark.NewBuiltin("genrule", rules.NotImplemented),
 
 		// Platform Rules
 		// https://docs.bazel.build/versions/master/be/platform.html
 		"constraint_setting": starlark.NewBuiltin("constraint_setting",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ConstraintSetting(args, kwargs)
-			}),
-		"constraint_value": starlark.NewBuiltin("constraint_value",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ConstraintValue(args, kwargs)
-			}),
-		"platform": starlark.NewBuiltin("platform",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Platform(args, kwargs)
-			}),
-		"toolchain": starlark.NewBuiltin("toolchain",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Toolchain(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"constraint_value": starlark.NewBuiltin("constraint_value", rules.NotImplemented),
+		"platform": starlark.NewBuiltin("platform", rules.NotImplemented),
+		"toolchain": starlark.NewBuiltin("toolchain", rules.NotImplemented),
 
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html
+		// TODO(vtl): Not sure if we should be using the rules module here, since workspace
+		// rules are different.
 		// Note: Bind is under "Globals" (above).
-		"local_repository": starlark.NewBuiltin("local_repository",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).LocalRepository(args, kwargs)
-			}),
-		"maven_jar": starlark.NewBuiltin("maven_jar",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).MavenJar(args, kwargs)
-			}),
-		"maven_server": starlark.NewBuiltin("maven_server",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).MavenServer(args, kwargs)
-			}),
+		"local_repository": starlark.NewBuiltin("local_repository", rules.NotImplemented),
+		"maven_jar": starlark.NewBuiltin("maven_jar", rules.NotImplemented),
+		"maven_server": starlark.NewBuiltin("maven_server", rules.NotImplemented),
 		"new_local_repository": starlark.NewBuiltin("new_local_repository",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).NewLocalRepository(args, kwargs)
-			}),
-		"xcode_config": starlark.NewBuiltin("xcode_config",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).XcodeConfig(args, kwargs)
-			}),
-		"xcode_version": starlark.NewBuiltin("xcode_version",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).XcodeVersion(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"xcode_config": starlark.NewBuiltin("xcode_config", rules.NotImplemented),
+		"xcode_version": starlark.NewBuiltin("xcode_version", rules.NotImplemented),
 	}
 }

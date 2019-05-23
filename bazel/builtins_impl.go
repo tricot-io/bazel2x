@@ -11,10 +11,6 @@ import (
 type BuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
-	NoOpBuiltinsExtraActionsRulesImpl
-	NoOpBuiltinsGeneralRulesImpl
-	NoOpBuiltinsPlatformRulesImpl
-	NoOpBuiltinsWorkspaceRulesImpl
 
 	ctx core.Context
 }

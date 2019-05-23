@@ -152,46 +152,6 @@ func (self *NoOpBuiltinsAndroidRulesImpl) AndroidSdkRepository(args starlark.Tup
 
 var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
 
-// NoOpBuiltinsCcRulesImpl is a no-op implementation of BuiltinsCcRules.
-type NoOpBuiltinsCcRulesImpl struct{}
-
-func (self *NoOpBuiltinsCcRulesImpl) CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) CcTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) CcToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsCcRulesImpl) CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsCcRules = (*NoOpBuiltinsCcRulesImpl)(nil)
-
 // NoOpBuiltinsJavaRulesImpl is a no-op implementation of BuiltinsJavaRules.
 type NoOpBuiltinsJavaRulesImpl struct{}
 

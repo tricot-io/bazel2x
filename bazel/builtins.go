@@ -56,20 +56,6 @@ type BuiltinsAndroidRules interface {
 	AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 }
 
-// C/C++ Rules
-// https://docs.bazel.build/versions/master/be/c-cpp.html
-type BuiltinsCcRules interface {
-	// CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	// CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	FdoPrefetchHints(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	FdoProfile(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	CcToolchainSuite(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // Java Rules
 // https://docs.bazel.build/versions/master/be/java.html
 type BuiltinsJavaRules interface {
@@ -165,7 +151,6 @@ type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
 	BuiltinsAndroidRules
-	BuiltinsCcRules
 	BuiltinsJavaRules
 	BuiltinsObjCRules
 	BuiltinsProtoBufRules
@@ -183,6 +168,8 @@ func getBuiltinsImpl(thread *starlark.Thread) Builtins {
 
 func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 	return starlark.StringDict{
+		// Globals
+		// https://docs.bazel.build/versions/master/skylark/lib/globals.html
 		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -280,6 +267,8 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Glob(args, kwargs)
 			}),
+		// Android Rules
+		// https://docs.bazel.build/versions/master/be/android.html
 		"android_binary": starlark.NewBuiltin("android_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -321,43 +310,19 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).AndroidSdkRepository(args, kwargs)
 			}),
+		// C/C++ Rules
+		// https://docs.bazel.build/versions/master/be/c-cpp.html
 		"cc_binary": starlark.NewBuiltin("cc_binary", rules.CcBinary),
-		"cc_import": starlark.NewBuiltin("cc_import",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcImport(args, kwargs)
-			}),
+		"cc_import": starlark.NewBuiltin("cc_import", rules.NotImplemented),
 		"cc_library": starlark.NewBuiltin("cc_library", rules.CcLibrary),
-		"cc_proto_library": starlark.NewBuiltin("cc_proto_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcProtoLibrary(args, kwargs)
-			}),
+		"cc_proto_library": starlark.NewBuiltin("cc_proto_library", rules.NotImplemented),
 		"fdo_prefetch_hints": starlark.NewBuiltin("fdo_prefetch_hints",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).FdoPrefetchHints(args, kwargs)
-			}),
-		"fdo_profile": starlark.NewBuiltin("fdo_profile",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).FdoProfile(args, kwargs)
-			}),
-		"cc_test": starlark.NewBuiltin("cc_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcTest(args, kwargs)
-			}),
-		"cc_toolchain": starlark.NewBuiltin("cc_toolchain",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcToolchain(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"fdo_profile": starlark.NewBuiltin("fdo_profile", rules.NotImplemented),
+		"cc_test": starlark.NewBuiltin("cc_test", rules.NotImplemented),
+		"cc_toolchain": starlark.NewBuiltin("cc_toolchain", rules.NotImplemented),
 		"cc_toolchain_suite": starlark.NewBuiltin("cc_toolchain_suite",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcToolchainSuite(args, kwargs)
-			}),
+			rules.NotImplemented),
 		"java_binary": starlark.NewBuiltin("java_binary",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

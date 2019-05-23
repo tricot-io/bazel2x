@@ -12,7 +12,6 @@ type BuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
 	NoOpBuiltinsAndroidRulesImpl
-	NoOpBuiltinsCcRulesImpl
 	NoOpBuiltinsJavaRulesImpl
 	NoOpBuiltinsObjCRulesImpl
 	NoOpBuiltinsProtoBufRulesImpl

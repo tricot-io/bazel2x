@@ -175,7 +175,7 @@ func ProcessRuleArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Cont
 
 	// This is a conditional posing as a loop.
 	// TODO(vtl): Map iteration order isn't deterministic, so it's weird.
-	for k, _ := range kwargs2 {
+	for k := range kwargs2 {
 		return fmt.Errorf("unknown rule argument %s", k)
 	}
 

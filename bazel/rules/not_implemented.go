@@ -9,7 +9,7 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
-type NotImplementedTarget struct {}
+type NotImplementedTarget struct{}
 
 var _ core.Target = (*NotImplementedTarget)(nil)
 

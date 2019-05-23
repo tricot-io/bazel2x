@@ -51,9 +51,9 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 
 	// Create a new context (with the same loader).
 	ctx := &ContextImpl{
-		build:        build,
-		label:        label,
-		fileType:     fileType,
+		build:    build,
+		label:    label,
+		fileType: fileType,
 	}
 	ctx.builtinsImpl = NewBuiltinsImpl(ctx)
 	// And attach it to the thread.

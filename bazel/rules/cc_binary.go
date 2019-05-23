@@ -57,4 +57,3 @@ func CcBinary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 	ctx.BuildTargets().Add(target)
 	return starlark.None, nil
 }
-

@@ -3,4 +3,3 @@
 
 // Package rules contains implementations of Bazel rules.
 package rules
-

@@ -4,7 +4,8 @@
 package bazel
 
 type Build struct {
-	Loader *Loader
+	Loader  *Loader
+	Targets BuildTargets
 }
 
 func (self *Build) AddBuildFile(buildFileLabel Label) error {
@@ -16,6 +17,7 @@ func (self *Build) AddBuildFile(buildFileLabel Label) error {
 // TODO(vtl): More, including impls.
 func NewBuild(sourceFileReader SourceFileReader) *Build {
 	return &Build{
-		Loader: NewLoader(sourceFileReader),
+		Loader:  NewLoader(sourceFileReader),
+		Targets: make(BuildTargets),
 	}
 }

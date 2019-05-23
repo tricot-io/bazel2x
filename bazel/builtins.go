@@ -42,22 +42,6 @@ type BuiltinsFunctions interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Java Rules
-// https://docs.bazel.build/versions/master/be/java.html
-type BuiltinsJavaRules interface {
-	JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaLiteProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaPackageConfiguration(args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-	JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // Objective-C Rules
 // https://docs.bazel.build/versions/master/be/objective-c.html
 type BuiltinsObjCRules interface {
@@ -136,7 +120,6 @@ type BuiltinsWorkspaceRules interface {
 type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
-	BuiltinsJavaRules
 	BuiltinsObjCRules
 	BuiltinsProtoBufRules
 	BuiltinsPythonRules
@@ -286,57 +269,19 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Java Rules
 		// https://docs.bazel.build/versions/master/be/java.html
-		"java_binary": starlark.NewBuiltin("java_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaBinary(args, kwargs)
-			}),
-		"java_import": starlark.NewBuiltin("java_import",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaImport(args, kwargs)
-			}),
-		"java_library": starlark.NewBuiltin("java_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaLibrary(args, kwargs)
-			}),
+		"java_binary": starlark.NewBuiltin("java_binary", rules.NotImplemented),
+		"java_import": starlark.NewBuiltin("java_import", rules.NotImplemented),
+		"java_library": starlark.NewBuiltin("java_library", rules.NotImplemented),
 		"java_lite_proto_library": starlark.NewBuiltin("java_lite_proto_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaLiteProtoLibrary(args, kwargs)
-			}),
+			rules.NotImplemented),
 		"java_proto_library": starlark.NewBuiltin("java_proto_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaProtoLibrary(args, kwargs)
-			}),
-		"java_test": starlark.NewBuiltin("java_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaTest(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"java_test": starlark.NewBuiltin("java_test", rules.NotImplemented),
 		"java_package_configuration": starlark.NewBuiltin("java_package_configuration",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaPackageConfiguration(args,
-					kwargs)
-			}),
-		"java_plugin": starlark.NewBuiltin("java_plugin",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaPlugin(args, kwargs)
-			}),
-		"java_runtime": starlark.NewBuiltin("java_runtime",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaRuntime(args, kwargs)
-			}),
-		"java_toolchain": starlark.NewBuiltin("java_toolchain",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).JavaToolchain(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"java_plugin": starlark.NewBuiltin("java_plugin", rules.NotImplemented),
+		"java_runtime": starlark.NewBuiltin("java_runtime", rules.NotImplemented),
+		"java_toolchain": starlark.NewBuiltin("java_toolchain", rules.NotImplemented),
 
 		// Objective-C Rules
 		// https://docs.bazel.build/versions/master/be/objective-c.html

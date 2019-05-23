@@ -107,61 +107,6 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
-// NoOpBuiltinsJavaRulesImpl is a no-op implementation of BuiltinsJavaRules.
-type NoOpBuiltinsJavaRulesImpl struct{}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaLiteProtoLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaProtoLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaPackageConfiguration(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaPlugin(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaRuntime(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsJavaRulesImpl) JavaToolchain(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsJavaRules = (*NoOpBuiltinsJavaRulesImpl)(nil)
-
 // NoOpBuiltinsObjCRulesImpl is a no-op implementation of BuiltinsObjCRules.
 type NoOpBuiltinsObjCRulesImpl struct{}
 

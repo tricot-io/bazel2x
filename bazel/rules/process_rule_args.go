@@ -16,36 +16,57 @@ type ProcessRuleArgsTargetStruct interface {
 	Process(ctx core.Context) error
 }
 
+func toLabel(value starlark.Value, ctx core.Context) (core.Label, error) {
+	s, ok := value.(starlark.String)
+	if !ok {
+		return core.Label{}, fmt.Errorf("label value is not a string")
+	}
+
+	// If it's a valid target name (e.g., a filename), then we accept it as such.
+	// TODO(vtl): This means that we always accept filenames as labels, which is too lax.
+	if core.TargetName(s).IsValid() {
+		label := core.Label{
+			Workspace: ctx.Label().Workspace,
+			Package:   ctx.Label().Package,
+			Target:    core.TargetName(s),
+		}
+		if !label.IsValid() {
+			panic(label)
+		}
+		return label, nil
+	}
+
+	label, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package, string(s))
+	if err != nil {
+		return core.Label{}, err
+	}
+	return label, nil
+}
+
 func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect.Value) error {
 	if !dest.CanSet() {
 		panic(dest)
 	}
 
 	switch dest.Interface().(type) {
-	case bool:
+	case *bool:
 		// TODO(vtl): This means we accept anything for bool arguments; is this what we
 		// want? (Bazel accepts at least True/False and 1/0; I'm not sure what else.)
-		dest.SetBool(bool(value.Truth()))
-	case string:
+		boolValue := bool(value.Truth())
+		dest.Set(reflect.ValueOf(&boolValue))
+	case *string:
 		if s, ok := value.(starlark.String); ok {
-			dest.SetString(string(s))
+			stringValue := string(s)
+			dest.Set(reflect.ValueOf(&stringValue))
 		} else {
-			return fmt.Errorf("argument %s should be a string", argName)
+			return fmt.Errorf("argument %s invalid: value is not a string", argName)
 		}
-	case core.Label:
-		if s, ok := value.(starlark.String); ok {
-			// For single labels, we don't accept filenames, which may not be right.
-			label, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package,
-				string(s))
-			if err != nil {
-				return err
-			}
-//FIXME
-_ = label
-		} else {
-			return fmt.Errorf("argument %s should be a string (label)", argName)
+	case *core.Label:
+		labelValue, err := toLabel(value, ctx)
+		if err != nil {
+			return fmt.Errorf("argument %s invalid: %s", argName, err)
 		}
-
+		dest.Set(reflect.ValueOf(&labelValue))
 	default:
 		// TODO
 

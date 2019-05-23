@@ -13,19 +13,19 @@ import (
 
 type CcLibraryTarget struct {
 	TargetCommon
-	Srcs               []core.Label `bazel:"srcs"`
-	Hdrs               []core.Label `bazel:"hdrs"`
-	Alwayslink         bool         `bazel:"alwayslink"`
-	Copts              []string     `bazel:"copts"`
-	Defines            []string     `bazel:"defines"`
-	IncludePrefix      string       `bazel:"include_prefix"`
-	Includes           []string     `bazel:"includes"`
-	Linkopts           []string     `bazel:"linkopts"`
-	Linkstatic         bool         `bazel:"linkstatic"`
-	Nocopts            []string     `bazel:"nocopts"`
-	StripIncludePrefix string       `bazel:"strip_include_prefix"`
-	TextualHdrs        []core.Label `bazel:"textual_hdrs"`
-	WinDefFile         core.Label   `bazel:"win_def_file"`
+	Srcs               *[]core.Label `bazel:"srcs"`
+	Hdrs               *[]core.Label `bazel:"hdrs"`
+	Alwayslink         *bool         `bazel:"alwayslink"`
+	Copts              *[]string     `bazel:"copts"`
+	Defines            *[]string     `bazel:"defines"`
+	IncludePrefix      *string       `bazel:"include_prefix"`
+	Includes           *[]string     `bazel:"includes"`
+	Linkopts           *[]string     `bazel:"linkopts"`
+	Linkstatic         *bool         `bazel:"linkstatic"`
+	Nocopts            *[]string     `bazel:"nocopts"`
+	StripIncludePrefix *string       `bazel:"strip_include_prefix"`
+	TextualHdrs        *[]core.Label `bazel:"textual_hdrs"`
+	WinDefFile         *core.Label   `bazel:"win_def_file"`
 }
 
 var _ ProcessRuleArgsTargetStruct = (*CcLibraryTarget)(nil)

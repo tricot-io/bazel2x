@@ -107,51 +107,6 @@ func (self *NoOpBuiltinsFunctionsImpl) Glob(args starlark.Tuple, kwargs []starla
 
 var _ BuiltinsFunctions = (*NoOpBuiltinsFunctionsImpl)(nil)
 
-// NoOpBuiltinsAndroidRulesImpl is a no-op implementation of BuiltinsAndroidRules.
-type NoOpBuiltinsAndroidRulesImpl struct{}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidBinary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidLibrary(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidInstrumentationTest(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidLocalTest(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidDevice(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidNdkRepository(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-func (self *NoOpBuiltinsAndroidRulesImpl) AndroidSdkRepository(args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-	return starlark.None, nil
-}
-
-var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
-
 // NoOpBuiltinsJavaRulesImpl is a no-op implementation of BuiltinsJavaRules.
 type NoOpBuiltinsJavaRulesImpl struct{}
 

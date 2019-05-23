@@ -11,7 +11,6 @@ import (
 type BuiltinsImpl struct {
 	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
-	NoOpBuiltinsAndroidRulesImpl
 	NoOpBuiltinsJavaRulesImpl
 	NoOpBuiltinsObjCRulesImpl
 	NoOpBuiltinsProtoBufRulesImpl

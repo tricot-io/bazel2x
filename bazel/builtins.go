@@ -42,20 +42,6 @@ type BuiltinsFunctions interface {
 	// Note: Select and Workspace are under "globals".
 }
 
-// Android Rules
-// https://docs.bazel.build/versions/master/be/android.html
-type BuiltinsAndroidRules interface {
-	AndroidBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AarImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AndroidLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AndroidInstrumentationTest(args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-	AndroidLocalTest(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AndroidDevice(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AndroidNdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	AndroidSdkRepository(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
-
 // Java Rules
 // https://docs.bazel.build/versions/master/be/java.html
 type BuiltinsJavaRules interface {
@@ -150,7 +136,6 @@ type BuiltinsWorkspaceRules interface {
 type Builtins interface {
 	BuiltinsGlobals
 	BuiltinsFunctions
-	BuiltinsAndroidRules
 	BuiltinsJavaRules
 	BuiltinsObjCRules
 	BuiltinsProtoBufRules
@@ -272,47 +257,18 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Android Rules
 		// https://docs.bazel.build/versions/master/be/android.html
-		"android_binary": starlark.NewBuiltin("android_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidBinary(args, kwargs)
-			}),
-		"aar_import": starlark.NewBuiltin("aar_import",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AarImport(args, kwargs)
-			}),
-		"android_library": starlark.NewBuiltin("android_library",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidLibrary(args, kwargs)
-			}),
+		"android_binary": starlark.NewBuiltin("android_binary", rules.NotImplemented),
+		"aar_import": starlark.NewBuiltin("aar_import", rules.NotImplemented),
+		"android_library": starlark.NewBuiltin("android_library", rules.NotImplemented),
 		"android_instrumentation_test": starlark.NewBuiltin("android_instrumentation_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidInstrumentationTest(args,
-					kwargs)
-			}),
+			rules.NotImplemented),
 		"android_local_test": starlark.NewBuiltin("android_local_test",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidLocalTest(args, kwargs)
-			}),
-		"android_device": starlark.NewBuiltin("android_device",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidDevice(args, kwargs)
-			}),
+			rules.NotImplemented),
+		"android_device": starlark.NewBuiltin("android_device", rules.NotImplemented),
 		"android_ndk_repository": starlark.NewBuiltin("android_ndk_repository",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidNdkRepository(args, kwargs)
-			}),
+			rules.NotImplemented),
 		"android_sdk_repository": starlark.NewBuiltin("android_sdk_repository",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AndroidSdkRepository(args, kwargs)
-			}),
+			rules.NotImplemented),
 
 		// C/C++ Rules
 		// https://docs.bazel.build/versions/master/be/c-cpp.html

@@ -41,13 +41,12 @@ func CreateThread(build *Build, label Label, fileType FileType) *starlark.Thread
 
 	// Create a new context (with the same loader).
 	ctx := &Context{
-		Build:    build,
-		Label:    label,
-		FileType: fileType,
-		Thread:   thread,
-		// TODO(vtl): Choose BuiltinsImpl based on fileType.
-		BuiltinsImpl: &NoOpBuiltinsImpl{},
+		Build:        build,
+		Label:        label,
+		FileType:     fileType,
+		Thread:       thread,
 	}
+	ctx.BuiltinsImpl = &BuiltinsImpl{Context: ctx}
 	// And attach it to the thread.
 	thread.SetLocal(contextKey, ctx)
 

@@ -1,0 +1,25 @@
+// Copyright 2019 Tricot Inc.
+// Use of this source code is governed by the license in the LICENSE file.
+
+package bazel
+
+// BuiltinsImpl implements Builtins.
+type BuiltinsImpl struct {
+	NoOpBuiltinsGlobalsImpl
+	NoOpBuiltinsFunctionsImpl
+	NoOpBuiltinsAndroidRulesImpl
+	NoOpBuiltinsCcRulesImpl
+	NoOpBuiltinsJavaRulesImpl
+	NoOpBuiltinsObjCRulesImpl
+	NoOpBuiltinsProtoBufRulesImpl
+	NoOpBuiltinsPythonRulesImpl
+	NoOpBuiltinsShellRulesImpl
+	NoOpBuiltinsExtraActionsRulesImpl
+	NoOpBuiltinsGeneralRulesImpl
+	NoOpBuiltinsPlatformRulesImpl
+	NoOpBuiltinsWorkspaceRulesImpl
+
+	Context *Context
+}
+
+var _ Builtins = (*BuiltinsImpl)(nil)

@@ -9,55 +9,66 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
-type Context struct {
+type Context interface {
+	Label() core.Label
+	FileType() core.FileType
+}
+
+const contextKey = "bazel2make-bazel-context"
+
+func SetContext(thread *starlark.Thread, ctx Context) {
+	thread.SetLocal(contextKey, ctx)
+}
+
+func GetContext(thread *starlark.Thread) Context {
+	return thread.Local(contextKey).(Context)
+}
+
+type ContextImpl struct {
 	build *Build
 
 	label    core.Label
 	fileType core.FileType
 
-	BuiltinsImpl Builtins
+	// TODO(vtl): Remove this.
+	builtinsImpl Builtins
 }
 
-func (ctx *Context) Label() core.Label {
-	return ctx.label
+var _ Context = (*ContextImpl)(nil)
+
+func (self *ContextImpl) Label() core.Label {
+	return self.label
 }
 
-func (ctx *Context) FileType() core.FileType {
-	return ctx.fileType
+func (self *ContextImpl) FileType() core.FileType {
+	return self.fileType
 }
 
-func (ctx *Context) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
-	return CreateThread(ctx.build, label, fileType)
+func (self *ContextImpl) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
+	return CreateThread(self.build, label, fileType)
 }
 
-func (ctx *Context) MakeInitialGlobals() starlark.StringDict {
-	return MakeInitialGlobals(ctx)
+func (self *ContextImpl) MakeInitialGlobals() starlark.StringDict {
+	return MakeInitialGlobals(self)
 }
 
-const contextKey = "bazel2make-bazel-context"
+func GetContextImpl(thread *starlark.Thread) *ContextImpl {
+	return GetContext(thread).(*ContextImpl)
+}
 
 func CreateThread(build *Build, label core.Label, fileType core.FileType) *starlark.Thread {
 	// Create the thread.
 	thread := &starlark.Thread{Name: "exec " + label.String(), Load: Load}
 
 	// Create a new context (with the same loader).
-	ctx := &Context{
+	ctx := &ContextImpl{
 		build:        build,
 		label:        label,
 		fileType:     fileType,
 	}
-	ctx.BuiltinsImpl = NewBuiltinsImpl(ctx)
+	ctx.builtinsImpl = NewBuiltinsImpl(ctx)
 	// And attach it to the thread.
-	thread.SetLocal(contextKey, ctx)
+	SetContext(thread, ctx)
 
 	return thread
-}
-
-func GetContext(thread *starlark.Thread) *Context {
-	return thread.Local(contextKey).(*Context)
-}
-
-// TODO(vtl): This will make more sense once Context becomes an interface.
-func GetContextImpl(thread *starlark.Thread) *Context {
-	return GetContext(thread)
 }

@@ -178,10 +178,10 @@ type Builtins interface {
 }
 
 func getBuiltinsImpl(thread *starlark.Thread) Builtins {
-	return GetContext(thread).BuiltinsImpl
+	return GetContextImpl(thread).builtinsImpl
 }
 
-func MakeInitialGlobals(ctx *Context) starlark.StringDict {
+func MakeInitialGlobals(ctx Context) starlark.StringDict {
 	return starlark.StringDict{
 		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,

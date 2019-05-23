@@ -27,7 +27,7 @@ type BuiltinsImpl struct {
 	NoOpBuiltinsPlatformRulesImpl
 	NoOpBuiltinsWorkspaceRulesImpl
 
-	ctx *Context
+	ctx Context
 }
 
 func (self *BuiltinsImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
@@ -153,6 +153,6 @@ func (self *BuiltinsImpl) CcToolchainSuite(args starlark.Tuple, kwargs []starlar
 
 var _ Builtins = (*BuiltinsImpl)(nil)
 
-func NewBuiltinsImpl(ctx *Context) *BuiltinsImpl {
+func NewBuiltinsImpl(ctx Context) *BuiltinsImpl {
 	return &BuiltinsImpl{ctx: ctx}
 }

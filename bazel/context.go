@@ -46,7 +46,7 @@ func CreateThread(build *Build, label Label, fileType FileType) *starlark.Thread
 		FileType:     fileType,
 		Thread:       thread,
 	}
-	ctx.BuiltinsImpl = &BuiltinsImpl{Context: ctx}
+	ctx.BuiltinsImpl = NewBuiltinsImpl(ctx)
 	// And attach it to the thread.
 	thread.SetLocal(contextKey, ctx)
 

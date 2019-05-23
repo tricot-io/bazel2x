@@ -8,8 +8,8 @@ import (
 )
 
 type Build struct {
-	Loader  *Loader
-	Targets core.BuildTargets
+	Loader       *Loader
+	BuildTargets core.BuildTargets
 }
 
 func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
@@ -21,7 +21,7 @@ func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
 // TODO(vtl): More, including impls.
 func NewBuild(sourceFileReader SourceFileReader) *Build {
 	return &Build{
-		Loader:  NewLoader(sourceFileReader),
-		Targets: make(core.BuildTargets),
+		Loader:       NewLoader(sourceFileReader),
+		BuildTargets: make(core.BuildTargets),
 	}
 }

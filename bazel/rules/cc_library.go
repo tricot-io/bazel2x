@@ -4,8 +4,6 @@
 package rules
 
 import (
-	"fmt"
-
 	"go.starlark.net/starlark"
 
 	"bazel2cmake/bazel/core"
@@ -39,20 +37,20 @@ func (self *CcLibraryTarget) Process(ctx core.Context) error {
 	return nil
 }
 
+func (self *CcLibraryTarget) String() string {
+	return targetToString("cc_library", self)
+}
+
 // CcLibrary implements the Bazel cc_library rule.
 func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 	kwargs []starlark.Tuple) (starlark.Value, error) {
 
 	ctx := core.GetContext(thread)
-	target := CcLibraryTarget{}
-	err := ProcessRuleArgs(args, kwargs, ctx, &target)
+	target := &CcLibraryTarget{}
+	err := ProcessRuleArgs(args, kwargs, ctx, target)
 	if err != nil {
 		return starlark.None, err
 	}
-
-	// fmt.Printf("Got target %s: %s\n", target.Label(), TargetToString("cc_library", &target))
-
-	// TODO(vtl): Add target to build.
-
+	ctx.BuildTargets().Add(target)
 	return starlark.None, nil
 }

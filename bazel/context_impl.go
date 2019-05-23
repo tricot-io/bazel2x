@@ -29,6 +29,10 @@ func (self *ContextImpl) FileType() core.FileType {
 	return self.fileType
 }
 
+func (self *ContextImpl) BuildTargets() core.BuildTargets {
+	return self.build.BuildTargets
+}
+
 func (self *ContextImpl) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
 	return CreateThread(self.build, label, fileType)
 }

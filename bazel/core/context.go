@@ -14,6 +14,8 @@ type Context interface {
 
 	// FileType returns the build file's type.
 	FileType() FileType
+
+	BuildTargets() BuildTargets
 }
 
 const contextKey = "bazel2make-bazel-context"

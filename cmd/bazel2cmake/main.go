@@ -13,6 +13,7 @@ import (
 
 	"bazel2cmake/bazel"
 	"bazel2cmake/bazel/core"
+	//"bazel2cmake/bazel/rules"
 	"bazel2cmake/utils"
 )
 
@@ -76,6 +77,21 @@ func main() {
 		if err != nil {
 			fmt.Printf("ERROR: %s\n", err)
 			os.Exit(1)
+		}
+	}
+
+	for workspaceName, workspaceTargets := range build.BuildTargets {
+		wn := string(workspaceName)
+		if wn == "" {
+			wn = "@"
+		}
+		fmt.Printf("Workspace %v\n", wn)
+		for packageName, packageTargets := range workspaceTargets {
+			fmt.Printf("  Package %v\n", packageName)
+			for targetName, target := range packageTargets {
+				fmt.Printf("    Target %v\n", targetName)
+				fmt.Printf("      %v\n", target)
+			}
 		}
 	}
 }

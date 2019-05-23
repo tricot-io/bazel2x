@@ -107,8 +107,8 @@ func (self *BuiltinsImpl) CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple
 	}
 
 	nameLabel := core.Label{
-		Workspace: self.ctx.Label.Workspace,
-		Package:   self.ctx.Label.Package,
+		Workspace: self.ctx.Label().Workspace,
+		Package:   self.ctx.Label().Package,
 		Target:    core.TargetName(name),
 	}
 	if !nameLabel.IsValid() {

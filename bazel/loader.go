@@ -78,7 +78,7 @@ func LoadLabel(thread *starlark.Thread, moduleLabel core.Label) (starlark.String
 
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContextImpl(thread)
-	moduleLabel, err := core.ParseLabel(ctx.Label.Workspace, ctx.Label.Package, module)
+	moduleLabel, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package, module)
 	if err != nil {
 		return nil, err
 	}

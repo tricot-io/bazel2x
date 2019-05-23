@@ -12,11 +12,15 @@ import (
 type Context struct {
 	build *Build
 
-	Label    core.Label
+	label    core.Label
 	FileType core.FileType
 	Thread   *starlark.Thread
 
 	BuiltinsImpl Builtins
+}
+
+func (ctx *Context) Label() core.Label {
+	return ctx.label
 }
 
 func (ctx *Context) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
@@ -36,7 +40,7 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 	// Create a new context (with the same loader).
 	ctx := &Context{
 		build:        build,
-		Label:        label,
+		label:        label,
 		FileType:     fileType,
 		Thread:       thread,
 	}

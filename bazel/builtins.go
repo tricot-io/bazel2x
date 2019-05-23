@@ -6,6 +6,7 @@ package bazel
 import (
 	"go.starlark.net/starlark"
 
+	"bazel2cmake/bazel/core"
 	// TODO(vtl)
 	// "bazel2cmake/bazel/rules"
 )
@@ -181,7 +182,7 @@ func getBuiltinsImpl(thread *starlark.Thread) Builtins {
 	return GetContextImpl(thread).builtinsImpl
 }
 
-func MakeInitialGlobals(ctx Context) starlark.StringDict {
+func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 	return starlark.StringDict{
 		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,

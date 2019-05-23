@@ -8,7 +8,6 @@ import (
 
 	"go.starlark.net/starlark"
 
-	"bazel2cmake/bazel"
 	"bazel2cmake/bazel/core"
 )
 
@@ -79,7 +78,7 @@ var CcLibrary = func(thread *starlark.Thread, _ *starlark.Builtin, args starlark
 		return starlark.None, err
 	}
 
-	ctx := bazel.GetContext(thread)
+	ctx := core.GetContext(thread)
 
 	nameLabel := core.Label{ctx.Label().Workspace, ctx.Label().Package, core.TargetName(name)}
 	if !nameLabel.IsValid() {

@@ -21,12 +21,14 @@ type TargetCommon struct {
 	Features           []string     `bazel:"features"`
 	Licenses           []string     `bazel:"licenses"`
 	CompatibleWith     []core.Label `bazel:"compatible_with"`
-	Distribs           []string     `bazel"distribs"`
+	Distribs           []string     `bazel:"distribs"`
 	ExecCompatibleWith []core.Label `bazel:"exec_compatible_with"`
 	RestrictedTo       []core.Label `bazel:"restricted_to"`
 
 	nameLabel core.Label
 }
+
+var _ ProcessRuleArgsTargetStruct = (*TargetCommon)(nil)
 
 func (self *TargetCommon) Process(ctx core.Context) error {
 	self.nameLabel = core.Label{
@@ -40,4 +42,3 @@ func (self *TargetCommon) Process(ctx core.Context) error {
 	// TODO(vtl)
 	return nil
 }
-

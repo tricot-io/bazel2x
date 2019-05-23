@@ -28,6 +28,8 @@ type CcLibraryTarget struct {
 	WinDefFile         core.Label   `bazel:"win_def_file"`
 }
 
+var _ ProcessRuleArgsTargetStruct = (*CcLibraryTarget)(nil)
+
 func (self *CcLibraryTarget) Process(ctx core.Context) error {
 	if err := self.TargetCommon.Process(ctx); err != nil {
 		return nil
@@ -106,6 +108,14 @@ func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple
 	}
 
 	ctx := core.GetContext(thread)
+
+//FIXME
+	target := CcLibraryTarget{}
+	err = ProcessRuleArgs(args, kwargs, ctx, &target)
+	if err != nil {
+		return starlark.None, err
+	}
+fmt.Printf("--> %v\n", target)
 
 	nameLabel := core.Label{ctx.Label().Workspace, ctx.Label().Package, core.TargetName(name)}
 	if !nameLabel.IsValid() {

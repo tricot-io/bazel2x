@@ -29,6 +29,7 @@ type CcLibraryTarget struct {
 }
 
 var _ ProcessRuleArgsTargetStruct = (*CcLibraryTarget)(nil)
+var _ core.Target = (*CcLibraryTarget)(nil)
 
 func (self *CcLibraryTarget) Process(ctx core.Context) error {
 	if err := self.TargetCommon.Process(ctx); err != nil {
@@ -49,7 +50,7 @@ func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple
 		return starlark.None, err
 	}
 
-	// fmt.Printf("Got target %s: %s\n", target.Label, TargetToString("cc_library", &target))
+	// fmt.Printf("Got target %s: %s\n", target.Label(), TargetToString("cc_library", &target))
 
 	// TODO(vtl): Add target to build.
 

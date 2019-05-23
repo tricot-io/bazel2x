@@ -25,20 +25,24 @@ type TargetCommon struct {
 	ExecCompatibleWith *[]core.Label `bazel:"exec_compatible_with"`
 	RestrictedTo       *[]core.Label `bazel:"restricted_to"`
 
-	Label core.Label
+	label core.Label
 }
 
 var _ ProcessRuleArgsTargetStruct = (*TargetCommon)(nil)
 
 func (self *TargetCommon) Process(ctx core.Context) error {
-	self.Label = core.Label{
+	self.label = core.Label{
 		Workspace: ctx.Label().Workspace,
 		Package:   ctx.Label().Package,
 		Target:    core.TargetName(*self.Name),
 	}
-	if !self.Label.IsValid() {
+	if !self.label.IsValid() {
 		return fmt.Errorf("invalid target name %v", self.Name)
 	}
 	// TODO(vtl): Check other fields.
 	return nil
+}
+
+func (self *TargetCommon) Label() core.Label {
+	return self.label
 }

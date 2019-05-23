@@ -14,10 +14,10 @@ type Target interface {
 	Label() Label
 }
 
-// TODO(vtl): Move the below to another file?
-
+// PackageTargets contains the targets in a package.
 type PackageTargets map[TargetName]Target
 
+// AddTarget adds a target to the package.
 func (self PackageTargets) AddTarget(label Label, target Target) error {
 	if target == nil {
 		panic("invaild target")
@@ -31,8 +31,10 @@ func (self PackageTargets) AddTarget(label Label, target Target) error {
 	return nil
 }
 
+// WorkspaceTargets contains all the targets in a workspace.
 type WorkspaceTargets map[PackageName]PackageTargets
 
+// AddTarget adds a target to the workspace.
 func (self WorkspaceTargets) AddTarget(label Label, target Target) error {
 	packageTargets, ok := self[label.Package]
 	if !ok {
@@ -43,8 +45,10 @@ func (self WorkspaceTargets) AddTarget(label Label, target Target) error {
 	return packageTargets.AddTarget(label, target)
 }
 
+// BuildTargets contains all the targets in a build.
 type BuildTargets map[WorkspaceName]WorkspaceTargets
 
+// AddTarget adds a target to the build.
 func (self BuildTargets) AddTarget(label Label, target Target) error {
 	workspaceTargets, ok := self[label.Workspace]
 	if !ok {

@@ -54,6 +54,16 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 		// want? (Bazel accepts at least True/False and 1/0; I'm not sure what else.)
 		boolValue := bool(value.Truth())
 		dest.Set(reflect.ValueOf(&boolValue))
+	case *int64:
+		n, ok := value.(starlark.Int)
+		if !ok {
+			return fmt.Errorf("argument %s invalid: value is not an integer", argName)
+		}
+		intValue, ok := n.Int64()
+		if !ok {
+			return fmt.Errorf("argument %s invalid: integer out of range", argName)
+		}
+		dest.Set(reflect.ValueOf(&intValue))
 	case *string:
 		s, ok := value.(starlark.String)
 		if !ok {

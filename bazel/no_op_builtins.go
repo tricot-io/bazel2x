@@ -155,11 +155,6 @@ var _ BuiltinsAndroidRules = (*NoOpBuiltinsAndroidRulesImpl)(nil)
 // NoOpBuiltinsCcRulesImpl is a no-op implementation of BuiltinsCcRules.
 type NoOpBuiltinsCcRulesImpl struct{}
 
-func (self *NoOpBuiltinsCcRulesImpl) CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (
-	starlark.Value, error) {
-	return starlark.None, nil
-}
-
 func (self *NoOpBuiltinsCcRulesImpl) CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (
 	starlark.Value, error) {
 	return starlark.None, nil

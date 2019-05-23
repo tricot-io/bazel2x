@@ -59,7 +59,7 @@ type BuiltinsAndroidRules interface {
 // C/C++ Rules
 // https://docs.bazel.build/versions/master/be/c-cpp.html
 type BuiltinsCcRules interface {
-	CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
+	// CcBinary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcImport(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	// CcLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
 	CcProtoLibrary(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
@@ -321,11 +321,7 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).AndroidSdkRepository(args, kwargs)
 			}),
-		"cc_binary": starlark.NewBuiltin("cc_binary",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).CcBinary(args, kwargs)
-			}),
+		"cc_binary": starlark.NewBuiltin("cc_binary", rules.CcBinary),
 		"cc_import": starlark.NewBuiltin("cc_import",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {

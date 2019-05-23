@@ -21,6 +21,8 @@ func getAttr(attrName string, src reflect.Value) string {
 		} else {
 			attrValue = "False"
 		}
+	case int64:
+		attrValue = fmt.Sprintf("%v", v.(int64))
 	case string:
 		attrValue = fmt.Sprintf("%q", v.(string))
 	case core.Label:

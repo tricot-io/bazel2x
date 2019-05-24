@@ -113,7 +113,7 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 	return nil
 }
 
-func processRuleArgs(kwargs map[string]starlark.Value, ctx core.Context,
+func processRuleArgsHelper(kwargs map[string]starlark.Value, ctx core.Context,
 	targetVp reflect.Value) error {
 
 	v := targetVp.Elem()
@@ -143,7 +143,7 @@ func processRuleArgs(kwargs map[string]starlark.Value, ctx core.Context,
 				return fmt.Errorf("target argument %v required", argName)
 			}
 		} else if vf.Kind() == reflect.Struct {
-			if err := processRuleArgs(kwargs, ctx, vf.Addr()); err != nil {
+			if err := processRuleArgsHelper(kwargs, ctx, vf.Addr()); err != nil {
 				return err
 			}
 		}
@@ -152,12 +152,9 @@ func processRuleArgs(kwargs map[string]starlark.Value, ctx core.Context,
 
 }
 
-func ProcessRuleArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Context,
+func processRuleArgs(kwargs []starlark.Tuple, ctx core.Context,
 	target ProcessRuleArgsTargetStruct) error {
 
-	if len(args) > 0 {
-		return fmt.Errorf("rule arguments should be passed as kwargs")
-	}
 	kwargs2 := make(map[string]starlark.Value)
 	for _, elem := range kwargs {
 		kwargs2[string(elem[0].(starlark.String))] = elem[1]
@@ -168,7 +165,7 @@ func ProcessRuleArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Cont
 		panic(targetVp)
 	}
 
-	err := processRuleArgs(kwargs2, ctx, targetVp)
+	err := processRuleArgsHelper(kwargs2, ctx, targetVp)
 	if err != nil {
 		return err
 	}

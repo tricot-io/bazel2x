@@ -174,9 +174,9 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// C/C++ Rules
 		// https://docs.bazel.build/versions/master/be/c-cpp.html
-		"cc_binary":        starlark.NewBuiltin("cc_binary", rules.CcBinary),
+		"cc_binary":        rules.CcBinary,
 		"cc_import":        starlark.NewBuiltin("cc_import", rules.NotImplemented),
-		"cc_library":       starlark.NewBuiltin("cc_library", rules.CcLibrary),
+		"cc_library":       rules.CcLibrary,
 		"cc_proto_library": starlark.NewBuiltin("cc_proto_library", rules.NotImplemented),
 		"fdo_prefetch_hints": starlark.NewBuiltin("fdo_prefetch_hints",
 			rules.NotImplemented),

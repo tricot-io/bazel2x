@@ -42,15 +42,11 @@ func (self *CcLibraryTarget) String() string {
 }
 
 // CcLibrary implements the Bazel cc_library rule.
-func CcLibrary(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-	kwargs []starlark.Tuple) (starlark.Value, error) {
-
-	ctx := core.GetContext(thread)
+var CcLibrary = NewRule("cc_library", func(ctx core.Context, kwargs []starlark.Tuple) error {
 	target := &CcLibraryTarget{}
-	err := ProcessRuleArgs(args, kwargs, ctx, target)
-	if err != nil {
-		return starlark.None, err
+	if err := processRuleArgs(kwargs, ctx, target); err != nil {
+		return err
 	}
 	ctx.BuildTargets().Add(target)
-	return starlark.None, nil
-}
+	return nil
+})

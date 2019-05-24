@@ -7,31 +7,10 @@ import (
 	"go.starlark.net/starlark"
 
 	"bazel2cmake/bazel/core"
+	"bazel2cmake/bazel/functions"
 	"bazel2cmake/bazel/rules"
 	"bazel2cmake/bazel/workspace_rules"
 )
-
-// Globals
-// https://docs.bazel.build/versions/master/skylark/lib/globals.html
-type BuiltinsGlobals interface {
-	AnalysisTestTransition(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Aspect(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Bind(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ConfigurationField(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Depset(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ExistingRules(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Fail(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	// TODO(vtl): Helper for PACKAGE_NAME?
-	Provider(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	RegisterExecutionPlatforms(args starlark.Tuple, kwargs []starlark.Tuple) (
-		starlark.Value, error)
-	RegisterToolchains(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	// TODO(vtl): Helper for REPOSITORY_NAME?
-	RepositoryRule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Rule(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Select(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Workspace(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-}
 
 // Functions
 // https://docs.bazel.build/versions/master/be/functions.html
@@ -45,7 +24,6 @@ type BuiltinsFunctions interface {
 
 // TODO(vtl): Probably should split this into rules and non-rules.
 type Builtins interface {
-	BuiltinsGlobals
 	BuiltinsFunctions
 }
 
@@ -57,77 +35,25 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 	return starlark.StringDict{
 		// Globals
 		// https://docs.bazel.build/versions/master/skylark/lib/globals.html
-		"analysis_test_transition": starlark.NewBuiltin("analysis_test_transition",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).AnalysisTestTransition(args, kwargs)
-			}),
-		"aspect": starlark.NewBuiltin("aspect",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Aspect(args, kwargs)
-			}),
+		"analysis_test_transition": functions.NotImplemented("analysis_test_transition"),
+		"aspect":                   functions.NotImplemented("aspect"),
 		// Note: bind is under workspace rules (below).
-		"configuration_field": starlark.NewBuiltin("configuration_field",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ConfigurationField(args, kwargs)
-			}),
-		"depset": starlark.NewBuiltin("depset",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Provider(args, kwargs)
-			}),
-		"existing_rules": starlark.NewBuiltin("existing_rules",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ExistingRules(args, kwargs)
-			}),
-		"fail": starlark.NewBuiltin("fail",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Fail(args, kwargs)
-			}),
+		"configuration_field": functions.NotImplemented("configuration_field"),
+		"depset":              functions.NotImplemented("depset"),
+		"existing_rules":      functions.NotImplemented("existing_rules"),
+		"fail":                functions.NotImplemented("fail"),
 		// TODO(vtl): Maybe this should be delegated somehow.
 		"PACKAGE_NAME": starlark.String(string(ctx.Label().Package)),
-		"provider": starlark.NewBuiltin("provider",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Provider(args, kwargs)
-			}),
-		"register_execution_platforms": starlark.NewBuiltin("register_execution_platforms",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).RegisterExecutionPlatforms(args,
-					kwargs)
-			}),
-		"register_toolchains": starlark.NewBuiltin("register_toolchains",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).RegisterToolchains(args, kwargs)
-			}),
+		"provider":     functions.NotImplemented("provider"),
+		"register_execution_platforms": functions.NotImplemented(
+			"register_execution_platforms"),
+		"register_toolchains": functions.NotImplemented("register_toolchains"),
 		// TODO(vtl): Maybe this should be delegated somehow.
 		"REPOSITORY_NAME": starlark.String("@" + string(ctx.Label().Workspace)),
-		"repository_rule": starlark.NewBuiltin("repository_rule",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).RepositoryRule(args, kwargs)
-			}),
-		"rule": starlark.NewBuiltin("rule",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Rule(args, kwargs)
-			}),
-		"select": starlark.NewBuiltin("select",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Select(args, kwargs)
-			}),
-		"workspace": starlark.NewBuiltin("workspace",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Workspace(args, kwargs)
-			}),
+		"repository_rule": functions.NotImplemented("repository_rule"),
+		"rule":            functions.NotImplemented("rule"),
+		"select":          functions.NotImplemented("select"),
+		"workspace":       functions.NotImplemented("workspace"),
 
 		// Functions
 		// https://docs.bazel.build/versions/master/be/functions.html

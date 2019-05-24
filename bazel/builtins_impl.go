@@ -9,7 +9,6 @@ import (
 
 // BuiltinsImpl implements Builtins.
 type BuiltinsImpl struct {
-	NoOpBuiltinsGlobalsImpl
 	NoOpBuiltinsFunctionsImpl
 
 	ctx core.Context

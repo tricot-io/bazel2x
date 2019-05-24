@@ -42,7 +42,7 @@ func (self *CcLibraryTarget) String() string {
 }
 
 // CcLibrary implements the Bazel cc_library rule.
-var CcLibrary = NewRule("cc_library", func(ctx core.Context, kwargs []starlark.Tuple) error {
+var CcLibrary = newRule("cc_library", func(ctx core.Context, kwargs []starlark.Tuple) error {
 	target := &CcLibraryTarget{}
 	if err := processRuleArgs(kwargs, ctx, target); err != nil {
 		return err

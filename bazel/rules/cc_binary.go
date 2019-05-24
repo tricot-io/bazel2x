@@ -45,7 +45,7 @@ func (self *CcBinaryTarget) String() string {
 }
 
 // CcBinary implements the Bazel cc_binary rule.
-var CcBinary = NewRule("cc_binary", func(ctx core.Context, kwargs []starlark.Tuple) error {
+var CcBinary = newRule("cc_binary", func(ctx core.Context, kwargs []starlark.Tuple) error {
 	target := &CcBinaryTarget{}
 	if err := processRuleArgs(kwargs, ctx, target); err != nil {
 		return err

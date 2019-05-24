@@ -13,7 +13,7 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
-func NewRule(ruleName string,
+func newRule(ruleName string,
 	impl func(ctx core.Context, kwargs []starlark.Tuple) error) *starlark.Builtin {
 
 	return starlark.NewBuiltin(ruleName, func(thread *starlark.Thread, _ *starlark.Builtin,

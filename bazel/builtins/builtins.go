@@ -66,7 +66,7 @@ func InitialGlobals(ctx core.Context) starlark.StringDict {
 		"cc_proto_library":   rules.NotImplemented("cc_proto_library"),
 		"fdo_prefetch_hints": rules.NotImplemented("fdo_prefetch_hints"),
 		"fdo_profile":        rules.NotImplemented("fdo_profile"),
-		"cc_test":            rules.NotImplemented("cc_test"),
+		"cc_test":            rules.CcTest,
 		"cc_toolchain":       rules.NotImplemented("cc_toolchain"),
 		"cc_toolchain_suite": rules.NotImplemented("cc_toolchain_suite"),
 

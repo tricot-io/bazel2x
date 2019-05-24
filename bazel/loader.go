@@ -71,11 +71,6 @@ func (self *Loader) Load(ctx *ContextImpl, moduleLabel core.Label) (starlark.Str
 	return globals, err
 }
 
-func LoadLabel(thread *starlark.Thread, moduleLabel core.Label) (starlark.StringDict, error) {
-	ctx := GetContextImpl(thread)
-	return ctx.build.Loader.Load(ctx, moduleLabel)
-}
-
 func Load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContextImpl(thread)
 	moduleLabel, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package, module)

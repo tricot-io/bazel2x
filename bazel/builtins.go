@@ -6,10 +6,10 @@ package bazel
 import (
 	"go.starlark.net/starlark"
 
+	"bazel2cmake/bazel/builtins/functions"
+	"bazel2cmake/bazel/builtins/rules"
+	"bazel2cmake/bazel/builtins/workspace_rules"
 	"bazel2cmake/bazel/core"
-	"bazel2cmake/bazel/functions"
-	"bazel2cmake/bazel/rules"
-	"bazel2cmake/bazel/workspace_rules"
 )
 
 func MakeInitialGlobals(ctx core.Context) starlark.StringDict {

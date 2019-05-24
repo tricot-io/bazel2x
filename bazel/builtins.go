@@ -12,20 +12,8 @@ import (
 	"bazel2cmake/bazel/workspace_rules"
 )
 
-// Functions
-// https://docs.bazel.build/versions/master/be/functions.html
-type BuiltinsFunctions interface {
-	Package(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	PackageGroup(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	ExportsFiles(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	Glob(args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error)
-	// Note: Select and Workspace are under "globals".
-}
-
-// TODO(vtl): Probably should split this into rules and non-rules.
-type Builtins interface {
-	BuiltinsFunctions
-}
+// TODO(vtl): Delete.
+type Builtins interface {}
 
 func getBuiltinsImpl(thread *starlark.Thread) Builtins {
 	return GetContextImpl(thread).builtinsImpl
@@ -57,26 +45,10 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Functions
 		// https://docs.bazel.build/versions/master/be/functions.html
-		"package": starlark.NewBuiltin("package",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Package(args, kwargs)
-			}),
-		"package_group": starlark.NewBuiltin("package_group",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).PackageGroup(args, kwargs)
-			}),
-		"exports_files": starlark.NewBuiltin("exports_files",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).ExportsFiles(args, kwargs)
-			}),
-		"glob": starlark.NewBuiltin("glob",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Glob(args, kwargs)
-			}),
+		"package":       functions.NotImplemented("package"),
+		"package_group": functions.NotImplemented("package_group"),
+		"exports_files": functions.NotImplemented("exports_files"),
+		"glob":          functions.NotImplemented("glob"),
 		// Note: Select and Workspace are under "globals".
 
 		// Android Rules

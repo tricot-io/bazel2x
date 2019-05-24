@@ -17,6 +17,19 @@ import (
 	"bazel2cmake/utils"
 )
 
+func printTargets(build *bazel.Build) {
+	for workspaceName, workspaceTargets := range build.BuildTargets {
+		fmt.Printf("Workspace @%v\n", string(workspaceName))
+		for packageName, packageTargets := range workspaceTargets {
+			fmt.Printf("  Package %v\n", packageName)
+			for targetName, target := range packageTargets {
+				fmt.Printf("    Target %v\n", targetName)
+				fmt.Printf("      %v\n", target)
+			}
+		}
+	}
+}
+
 func main() {
 	flag.Parse()
 
@@ -80,14 +93,5 @@ func main() {
 		}
 	}
 
-	for workspaceName, workspaceTargets := range build.BuildTargets {
-		fmt.Printf("Workspace @%v\n", string(workspaceName))
-		for packageName, packageTargets := range workspaceTargets {
-			fmt.Printf("  Package %v\n", packageName)
-			for targetName, target := range packageTargets {
-				fmt.Printf("    Target %v\n", targetName)
-				fmt.Printf("      %v\n", target)
-			}
-		}
-	}
+	printTargets(build)
 }

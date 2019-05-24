@@ -5,6 +5,7 @@ package bazel
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"go.starlark.net/starlark"
 
@@ -12,18 +13,37 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
+type loadCacheEntry struct {
+	globals starlark.StringDict
+	err     error
+}
+
 type Build struct {
-	Loader       *Loader
+	sourceFileReader SourceFileReader
+
+	// loadCache caches the result of load statements. Its keys are labels (as strings).
+	loadCache map[string]*loadCacheEntry
+
+	// BuildTargets contains the output build targets.
 	BuildTargets core.BuildTargets
 }
 
-func (self *Build) Exec(moduleLabel core.Label, fileType core.FileType) error {
+// AddBuildFile executes the BUILD[.bazel] file specified by buildFileLabel.
+func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
+	return self.exec(buildFileLabel, core.FileTypeBuild)
+}
+
+// TODO(vtl): Should also have an AddWorkspaceFile or something like that? Or maybe that should be
+// executed on initialization?
+
+// exec executes the file specified by moduleLabel, of the given file type (which should be
+// core.FileTypeBuild or perhaps core.FileTypeWorkspace).
+func (self *Build) exec(moduleLabel core.Label, fileType core.FileType) error {
 	thread := CreateThread(self, moduleLabel, fileType)
 
-	// TODO(vtl): We need to make Loader vs Build sane. (Maybe get rid of Loader.)
-	sourceData, err := self.Loader.sourceFileReader(moduleLabel)
+	sourceData, err := self.sourceFileReader(moduleLabel)
 	if err != nil {
-		return fmt.Errorf("failed to read %v: %v", moduleLabel, err)
+		return fmt.Errorf("failed to execute %v: read failed: %v", moduleLabel, err)
 	}
 
 	ctx := core.GetContext(thread)
@@ -32,14 +52,57 @@ func (self *Build) Exec(moduleLabel core.Label, fileType core.FileType) error {
 	return err
 }
 
-func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
-	return self.Exec(buildFileLabel, core.FileTypeBuild)
+// load loads the .bzl file specified by moduleLabel and caches the result (subsequent loads of the
+// same file will return the cached result).
+//
+// This is mainly used by the free load function, which is given to the starlark.Thread.
+func (self *Build) load(ctx *ContextImpl, moduleLabel core.Label) (starlark.StringDict, error) {
+	// Only .bzl files can ever be loaded.
+	if filepath.Ext(string(moduleLabel.Target)) != ".bzl" {
+		return nil, fmt.Errorf("%v: load not allowed: %v is not a .bzl file", ctx.Label(),
+			moduleLabel)
+	}
+	moduleLabelString := moduleLabel.String()
+
+	e, ok := self.loadCache[moduleLabelString]
+	if ok {
+		if e == nil {
+			return nil, fmt.Errorf("%v: load of %v failed: cycle in load graph",
+				ctx.Label(), moduleLabel)
+		}
+		return e.globals, e.err
+	}
+
+	sourceData, err := self.sourceFileReader(moduleLabel)
+	if err != nil {
+		return nil, fmt.Errorf("%v: load of %v failed: read failed: %v", ctx.Label(),
+			moduleLabel, err)
+	}
+
+	self.loadCache[moduleLabelString] = nil
+
+	thread := ctx.CreateThread(moduleLabel, core.FileTypeBzl)
+	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
+		builtins.InitialGlobals(ctx))
+	self.loadCache[moduleLabelString] = &loadCacheEntry{globals, err}
+	return globals, err
 }
 
 // TODO(vtl): More, including impls.
 func NewBuild(sourceFileReader SourceFileReader) *Build {
 	return &Build{
-		Loader:       NewLoader(sourceFileReader),
-		BuildTargets: make(core.BuildTargets),
+		sourceFileReader: sourceFileReader,
+		loadCache:        make(map[string]*loadCacheEntry),
+		BuildTargets:     make(core.BuildTargets),
 	}
+}
+
+func load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
+	ctx := GetContextImpl(thread)
+	moduleLabel, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package, module)
+	if err != nil {
+		return nil, fmt.Errorf("%v: load of %v failed: invalid label: %v", ctx.Label(),
+			module, err)
+	}
+	return ctx.build.load(ctx, moduleLabel)
 }

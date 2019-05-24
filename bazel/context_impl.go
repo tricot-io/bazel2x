@@ -40,7 +40,7 @@ func GetContextImpl(thread *starlark.Thread) *ContextImpl {
 
 func CreateThread(build *Build, label core.Label, fileType core.FileType) *starlark.Thread {
 	// Create the thread.
-	thread := &starlark.Thread{Name: "exec " + label.String(), Load: Load}
+	thread := &starlark.Thread{Name: "exec " + label.String(), Load: load}
 
 	// Create a new context (with the same loader) and attach it to the thread.
 	ctx := &ContextImpl{

@@ -14,9 +14,6 @@ type ContextImpl struct {
 
 	label    core.Label
 	fileType core.FileType
-
-	// TODO(vtl): Remove this.
-	builtinsImpl Builtins
 }
 
 var _ core.Context = (*ContextImpl)(nil)
@@ -49,14 +46,12 @@ func CreateThread(build *Build, label core.Label, fileType core.FileType) *starl
 	// Create the thread.
 	thread := &starlark.Thread{Name: "exec " + label.String(), Load: Load}
 
-	// Create a new context (with the same loader).
+	// Create a new context (with the same loader) and attach it to the thread.
 	ctx := &ContextImpl{
 		build:    build,
 		label:    label,
 		fileType: fileType,
 	}
-	ctx.builtinsImpl = NewBuiltinsImpl(ctx)
-	// And attach it to the thread.
 	core.SetContext(thread, ctx)
 
 	return thread

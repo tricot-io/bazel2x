@@ -12,13 +12,6 @@ import (
 	"bazel2cmake/bazel/workspace_rules"
 )
 
-// TODO(vtl): Delete.
-type Builtins interface {}
-
-func getBuiltinsImpl(thread *starlark.Thread) Builtins {
-	return GetContextImpl(thread).builtinsImpl
-}
-
 func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 	return starlark.StringDict{
 		// Globals

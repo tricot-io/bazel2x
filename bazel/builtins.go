@@ -8,6 +8,7 @@ import (
 
 	"bazel2cmake/bazel/core"
 	"bazel2cmake/bazel/rules"
+	"bazel2cmake/bazel/workspace_rules"
 )
 
 // Globals
@@ -255,15 +256,15 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html
-		// TODO(vtl): Not sure if we should be using the rules module here, since workspace
-		// rules are different.
 		// Note: Bind is under "Globals" (above).
-		"local_repository": starlark.NewBuiltin("local_repository", rules.NotImplemented),
-		"maven_jar": starlark.NewBuiltin("maven_jar", rules.NotImplemented),
-		"maven_server": starlark.NewBuiltin("maven_server", rules.NotImplemented),
+		"local_repository": starlark.NewBuiltin("local_repository",
+			workspace_rules.NotImplemented),
+		"maven_jar": starlark.NewBuiltin("maven_jar", workspace_rules.NotImplemented),
+		"maven_server": starlark.NewBuiltin("maven_server", workspace_rules.NotImplemented),
 		"new_local_repository": starlark.NewBuiltin("new_local_repository",
-			rules.NotImplemented),
-		"xcode_config": starlark.NewBuiltin("xcode_config", rules.NotImplemented),
-		"xcode_version": starlark.NewBuiltin("xcode_version", rules.NotImplemented),
+			workspace_rules.NotImplemented),
+		"xcode_config": starlark.NewBuiltin("xcode_config", workspace_rules.NotImplemented),
+		"xcode_version": starlark.NewBuiltin("xcode_version",
+			workspace_rules.NotImplemented),
 	}
 }

@@ -57,36 +57,36 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 	case *int64:
 		n, ok := value.(starlark.Int)
 		if !ok {
-			return fmt.Errorf("argument %s invalid: value is not an integer", argName)
+			return fmt.Errorf("argument %v invalid: value is not an integer", argName)
 		}
 		intValue, ok := n.Int64()
 		if !ok {
-			return fmt.Errorf("argument %s invalid: integer out of range", argName)
+			return fmt.Errorf("argument %v invalid: integer out of range", argName)
 		}
 		dest.Set(reflect.ValueOf(&intValue))
 	case *string:
 		s, ok := value.(starlark.String)
 		if !ok {
-			return fmt.Errorf("argument %s invalid: value is not a string", argName)
+			return fmt.Errorf("argument %v invalid: value is not a string", argName)
 		}
 		stringValue := string(s)
 		dest.Set(reflect.ValueOf(&stringValue))
 	case *core.Label:
 		labelValue, err := toLabel(value, ctx)
 		if err != nil {
-			return fmt.Errorf("argument %s invalid: %s", argName, err)
+			return fmt.Errorf("argument %v invalid: %v", argName, err)
 		}
 		dest.Set(reflect.ValueOf(&labelValue))
 	case *[]string:
 		l, ok := value.(*starlark.List)
 		if !ok {
-			return fmt.Errorf("argument %s invalid: value is not a list", argName)
+			return fmt.Errorf("argument %v invalid: value is not a list", argName)
 		}
 		listValue := make([]string, l.Len())
 		for i := 0; i < l.Len(); i++ {
 			s, ok := l.Index(i).(starlark.String)
 			if !ok {
-				return fmt.Errorf("argument %s invalid: invalid element: value is "+
+				return fmt.Errorf("argument %v invalid: invalid element: value is "+
 					"not a string", argName)
 			}
 			listValue[i] = string(s)
@@ -95,13 +95,13 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 	case *[]core.Label:
 		l, ok := value.(*starlark.List)
 		if !ok {
-			return fmt.Errorf("argument %s invalid: value is not a list", argName)
+			return fmt.Errorf("argument %v invalid: value is not a list", argName)
 		}
 		listValue := make([]core.Label, l.Len())
 		for i := 0; i < l.Len(); i++ {
 			labelValue, err := toLabel(l.Index(i), ctx)
 			if err != nil {
-				return fmt.Errorf("argument %s invalid: invalid element: %s",
+				return fmt.Errorf("argument %v invalid: invalid element: %v",
 					argName, err)
 			}
 			listValue[i] = labelValue
@@ -173,7 +173,7 @@ func processRuleArgs(kwargs []starlark.Tuple, ctx core.Context,
 	// This is a conditional posing as a loop.
 	// TODO(vtl): Map iteration order isn't deterministic, so it's weird.
 	for k := range kwargs2 {
-		return fmt.Errorf("unknown rule argument %s", k)
+		return fmt.Errorf("unknown rule argument %v", k)
 	}
 
 	return target.Process(ctx)

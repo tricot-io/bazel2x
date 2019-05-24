@@ -26,15 +26,15 @@ func checkFileType(fileType core.FileType, label core.Label) error {
 	switch fileType {
 	case core.FileTypeBuild:
 		if string(label.Target) != "BUILD" && string(label.Target) != "BUILD.bazel" {
-			return fmt.Errorf("load not allowed: %s is not a BUILD[.bazel] file", label)
+			return fmt.Errorf("load not allowed: %v is not a BUILD[.bazel] file", label)
 		}
 	case core.FileTypeBzl:
 		if filepath.Ext(string(label.Target)) != ".bzl" {
-			return fmt.Errorf("load not allowed: %s is not a .bzl file", label)
+			return fmt.Errorf("load not allowed: %v is not a .bzl file", label)
 		}
 	case core.FileTypeWorkspace:
 		if string(label.Target) != "WORKSPACE" {
-			return fmt.Errorf("load not allowed: %s is not a WORKSPACE file", label)
+			return fmt.Errorf("load not allowed: %v is not a WORKSPACE file", label)
 		}
 	default:
 		panic(fileType)
@@ -43,23 +43,23 @@ func checkFileType(fileType core.FileType, label core.Label) error {
 }
 
 func (self *Loader) Load(ctx *ContextImpl, moduleLabel core.Label) (starlark.StringDict, error) {
-	err := checkFileType(ctx.FileType(), moduleLabel)
-	if err != nil {
-		return nil, err
+	// Only .bzl files can ever be loaded.
+	if filepath.Ext(string(moduleLabel.Target)) != ".bzl" {
+		return nil, fmt.Errorf("load not allowed: %v is not a .bzl file", moduleLabel)
 	}
 	moduleLabelString := moduleLabel.String()
 
 	e, ok := self.cache[moduleLabelString]
 	if ok {
 		if e == nil {
-			return nil, fmt.Errorf("cycle in load graph (involving %s)", moduleLabel)
+			return nil, fmt.Errorf("cycle in load graph (involving %v)", moduleLabel)
 		}
 		return e.globals, e.err
 	}
 
 	sourceData, err := self.sourceFileReader(moduleLabel)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read %s: %s", moduleLabel, err)
+		return nil, fmt.Errorf("failed to read %v: %v", moduleLabel, err)
 	}
 
 	self.cache[moduleLabelString] = nil

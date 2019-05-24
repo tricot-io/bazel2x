@@ -4,6 +4,10 @@
 package bazel
 
 import (
+	"fmt"
+
+	"go.starlark.net/starlark"
+
 	"bazel2cmake/bazel/core"
 )
 
@@ -12,10 +16,23 @@ type Build struct {
 	BuildTargets core.BuildTargets
 }
 
-func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
-	thread := CreateThread(self, buildFileLabel, core.FileTypeBuild)
-	_, err := LoadLabel(thread, buildFileLabel)
+func (self *Build) Exec(moduleLabel core.Label, fileType core.FileType) error {
+	thread := CreateThread(self, moduleLabel, fileType)
+
+	// TODO(vtl): We need to make Loader vs Build sane. (Maybe get rid of Loader.)
+	sourceData, err := self.Loader.sourceFileReader(moduleLabel)
+	if err != nil {
+		return fmt.Errorf("failed to read %v: %v", moduleLabel, err)
+	}
+
+	ctx := core.GetContext(thread)
+	_, err = starlark.ExecFile(thread, moduleLabel.String(), sourceData,
+		ctx.(*ContextImpl).MakeInitialGlobals())
 	return err
+}
+
+func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
+	return self.Exec(buildFileLabel, core.FileTypeBuild)
 }
 
 // TODO(vtl): More, including impls.

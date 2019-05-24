@@ -27,14 +27,11 @@ func NewRule(name string,
 				name)
 		}
 
-		// TODO(vtl): This isn't working for whatever reason.
-		/*
 		if ctx.FileType() != core.FileTypeBuild {
 			return starlark.None, fmt.Errorf(
 				"%v: %v: rule can only be called from a BUILD[.bazel] file",
 				ctx.Label(), name)
 		}
-		*/
 
 		err := impl(ctx, kwargs)
 		if err != nil {

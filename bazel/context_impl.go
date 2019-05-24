@@ -34,10 +34,6 @@ func (self *ContextImpl) CreateThread(label core.Label, fileType core.FileType) 
 	return CreateThread(self.build, label, fileType)
 }
 
-func (self *ContextImpl) MakeInitialGlobals() starlark.StringDict {
-	return MakeInitialGlobals(self)
-}
-
 func GetContextImpl(thread *starlark.Thread) *ContextImpl {
 	return core.GetContext(thread).(*ContextImpl)
 }

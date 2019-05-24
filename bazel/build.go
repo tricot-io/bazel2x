@@ -27,7 +27,7 @@ func (self *Build) Exec(moduleLabel core.Label, fileType core.FileType) error {
 
 	ctx := core.GetContext(thread)
 	_, err = starlark.ExecFile(thread, moduleLabel.String(), sourceData,
-		ctx.(*ContextImpl).MakeInitialGlobals())
+		MakeInitialGlobals(ctx))
 	return err
 }
 

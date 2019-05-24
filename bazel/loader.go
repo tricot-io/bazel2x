@@ -66,7 +66,7 @@ func (self *Loader) Load(ctx *ContextImpl, moduleLabel core.Label) (starlark.Str
 
 	thread := ctx.CreateThread(moduleLabel, core.FileTypeBzl)
 	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
-		ctx.MakeInitialGlobals())
+		MakeInitialGlobals(ctx))
 	self.cache[moduleLabelString] = &loadEntry{globals, err}
 	return globals, err
 }

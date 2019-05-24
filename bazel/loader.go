@@ -9,6 +9,7 @@ import (
 
 	"go.starlark.net/starlark"
 
+	"bazel2cmake/bazel/builtins"
 	"bazel2cmake/bazel/core"
 )
 
@@ -66,7 +67,7 @@ func (self *Loader) Load(ctx *ContextImpl, moduleLabel core.Label) (starlark.Str
 
 	thread := ctx.CreateThread(moduleLabel, core.FileTypeBzl)
 	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
-		MakeInitialGlobals(ctx))
+		builtins.InitialGlobals(ctx))
 	self.cache[moduleLabelString] = &loadEntry{globals, err}
 	return globals, err
 }

@@ -8,6 +8,7 @@ import (
 
 	"go.starlark.net/starlark"
 
+	"bazel2cmake/bazel/builtins"
 	"bazel2cmake/bazel/core"
 )
 
@@ -27,7 +28,7 @@ func (self *Build) Exec(moduleLabel core.Label, fileType core.FileType) error {
 
 	ctx := core.GetContext(thread)
 	_, err = starlark.ExecFile(thread, moduleLabel.String(), sourceData,
-		MakeInitialGlobals(ctx))
+		builtins.InitialGlobals(ctx))
 	return err
 }
 

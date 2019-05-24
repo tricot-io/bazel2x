@@ -1,7 +1,8 @@
 // Copyright 2019 Tricot Inc.
 // Use of this source code is governed by the license in the LICENSE file.
 
-package bazel
+// Package builtins provides the initial globals (builtins) for executing a Bazel file.
+package builtins
 
 import (
 	"go.starlark.net/starlark"
@@ -12,7 +13,8 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
-func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
+// InitialGlobals returns the initial globals (builtins) for executing a Bazel file.
+func InitialGlobals(ctx core.Context) starlark.StringDict {
 	return starlark.StringDict{
 		// Globals
 		// https://docs.bazel.build/versions/master/skylark/lib/globals.html

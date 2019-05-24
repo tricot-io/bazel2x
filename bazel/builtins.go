@@ -245,14 +245,11 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html
 		// Note: Bind is under "Globals" (above).
-		"local_repository": starlark.NewBuiltin("local_repository",
-			workspace_rules.NotImplemented),
-		"maven_jar":    starlark.NewBuiltin("maven_jar", workspace_rules.NotImplemented),
-		"maven_server": starlark.NewBuiltin("maven_server", workspace_rules.NotImplemented),
-		"new_local_repository": starlark.NewBuiltin("new_local_repository",
-			workspace_rules.NotImplemented),
-		"xcode_config": starlark.NewBuiltin("xcode_config", workspace_rules.NotImplemented),
-		"xcode_version": starlark.NewBuiltin("xcode_version",
-			workspace_rules.NotImplemented),
+		"local_repository":     workspace_rules.NotImplemented("local_repository"),
+		"maven_jar":            workspace_rules.NotImplemented("maven_jar"),
+		"maven_server":         workspace_rules.NotImplemented("maven_server"),
+		"new_local_repository": workspace_rules.NotImplemented("new_local_repository"),
+		"xcode_config":         workspace_rules.NotImplemented("xcode_config"),
+		"xcode_version":        workspace_rules.NotImplemented("xcode_version"),
 	}
 }

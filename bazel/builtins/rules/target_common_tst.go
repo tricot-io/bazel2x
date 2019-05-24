@@ -23,4 +23,3 @@ var _ ProcessRuleArgsTargetStruct = (*TargetCommonTest)(nil)
 func (self *TargetCommonTest) Process(ctx core.Context) error {
 	return nil
 }
-

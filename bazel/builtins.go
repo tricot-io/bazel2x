@@ -67,11 +67,7 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 				kwargs []starlark.Tuple) (starlark.Value, error) {
 				return getBuiltinsImpl(thread).Aspect(args, kwargs)
 			}),
-		"bind": starlark.NewBuiltin("bind",
-			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
-				kwargs []starlark.Tuple) (starlark.Value, error) {
-				return getBuiltinsImpl(thread).Bind(args, kwargs)
-			}),
+		// Note: bind is under workspace rules (below).
 		"configuration_field": starlark.NewBuiltin("configuration_field",
 			func(thread *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple,
 				kwargs []starlark.Tuple) (starlark.Value, error) {
@@ -244,7 +240,7 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html
-		// Note: Bind is under "Globals" (above).
+		"bind":                 workspace_rules.NotImplemented("bind"),
 		"local_repository":     workspace_rules.NotImplemented("local_repository"),
 		"maven_jar":            workspace_rules.NotImplemented("maven_jar"),
 		"maven_server":         workspace_rules.NotImplemented("maven_server"),

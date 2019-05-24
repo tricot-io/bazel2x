@@ -29,17 +29,17 @@ func main() {
 	// Use the first arg to determine the workspace root.
 	workspaceDir, _, err := utils.FindWorkspaceDir(filepath.Dir(args[0]))
 	if err != nil {
-		fmt.Printf("ERROR: %s\n", err)
+		fmt.Printf("ERROR: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("Workspace root: %s\n", workspaceDir)
+	fmt.Printf("Workspace root: %v\n", workspaceDir)
 
 	projectName := filepath.Base(workspaceDir)
 	if projectName == string(filepath.Separator) {
 		fmt.Printf("ERROR: unable to determine project name\n")
 		os.Exit(1)
 	}
-	fmt.Printf("Project name: %s\n", projectName)
+	fmt.Printf("Project name: %v\n", projectName)
 
 	// Preprocess all the arguments to get relative paths to the workspace dir, since we'll
 	// Chdir to the workspace dir.
@@ -47,12 +47,12 @@ func main() {
 	for i, arg := range args {
 		wsDir, relDir, err := utils.FindWorkspaceDir(filepath.Dir(arg))
 		if err != nil {
-			fmt.Printf("ERROR: %s\n", err)
+			fmt.Printf("ERROR: %v\n", err)
 			os.Exit(1)
 		}
 
 		if wsDir != workspaceDir {
-			fmt.Printf("ERROR: %s not in same workspace as %s\n", arg, args[0])
+			fmt.Printf("ERROR: %v not in same workspace as %v\n", arg, args[0])
 			os.Exit(1)
 		}
 
@@ -62,12 +62,12 @@ func main() {
 			Target:    core.TargetName(filepath.Base(arg)),
 		}
 
-		fmt.Printf("Input BUILD file: %s\n", buildFileLabels[i])
+		fmt.Printf("Input BUILD file: %v\n", buildFileLabels[i])
 	}
 
 	err = os.Chdir(workspaceDir)
 	if err != nil {
-		fmt.Printf("ERROR: %s\n", err)
+		fmt.Printf("ERROR: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -75,17 +75,13 @@ func main() {
 	for _, buildFileLabel := range buildFileLabels {
 		err := build.AddBuildFile(buildFileLabel)
 		if err != nil {
-			fmt.Printf("ERROR: %s\n", err)
+			fmt.Printf("ERROR: %v\n", err)
 			os.Exit(1)
 		}
 	}
 
 	for workspaceName, workspaceTargets := range build.BuildTargets {
-		wn := string(workspaceName)
-		if wn == "" {
-			wn = "@"
-		}
-		fmt.Printf("Workspace %v\n", wn)
+		fmt.Printf("Workspace @%v\n", string(workspaceName))
 		for packageName, packageTargets := range workspaceTargets {
 			fmt.Printf("  Package %v\n", packageName)
 			for targetName, target := range packageTargets {

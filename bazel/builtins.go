@@ -159,100 +159,87 @@ func MakeInitialGlobals(ctx core.Context) starlark.StringDict {
 
 		// Android Rules
 		// https://docs.bazel.build/versions/master/be/android.html
-		"android_binary": starlark.NewBuiltin("android_binary", rules.NotImplemented),
-		"aar_import": starlark.NewBuiltin("aar_import", rules.NotImplemented),
-		"android_library": starlark.NewBuiltin("android_library", rules.NotImplemented),
-		"android_instrumentation_test": starlark.NewBuiltin("android_instrumentation_test",
-			rules.NotImplemented),
-		"android_local_test": starlark.NewBuiltin("android_local_test",
-			rules.NotImplemented),
-		"android_device": starlark.NewBuiltin("android_device", rules.NotImplemented),
-		"android_ndk_repository": starlark.NewBuiltin("android_ndk_repository",
-			rules.NotImplemented),
-		"android_sdk_repository": starlark.NewBuiltin("android_sdk_repository",
-			rules.NotImplemented),
+		"android_binary": rules.NotImplemented("android_binary"),
+		"aar_import": rules.NotImplemented("aar_import"),
+		"android_library": rules.NotImplemented("android_library"),
+		"android_instrumentation_test": rules.NotImplemented("android_instrumentation_test"),
+		"android_local_test": rules.NotImplemented("android_local_test"),
+		"android_device": rules.NotImplemented("android_device"),
+		"android_ndk_repository": rules.NotImplemented("android_ndk_repository"),
+		"android_sdk_repository": rules.NotImplemented("android_sdk_repository"),
 
 		// C/C++ Rules
 		// https://docs.bazel.build/versions/master/be/c-cpp.html
 		"cc_binary":        rules.CcBinary,
-		"cc_import":        starlark.NewBuiltin("cc_import", rules.NotImplemented),
+		"cc_import":        rules.NotImplemented("cc_import"),
 		"cc_library":       rules.CcLibrary,
-		"cc_proto_library": starlark.NewBuiltin("cc_proto_library", rules.NotImplemented),
-		"fdo_prefetch_hints": starlark.NewBuiltin("fdo_prefetch_hints",
-			rules.NotImplemented),
-		"fdo_profile":  starlark.NewBuiltin("fdo_profile", rules.NotImplemented),
-		"cc_test":      starlark.NewBuiltin("cc_test", rules.NotImplemented),
-		"cc_toolchain": starlark.NewBuiltin("cc_toolchain", rules.NotImplemented),
-		"cc_toolchain_suite": starlark.NewBuiltin("cc_toolchain_suite",
-			rules.NotImplemented),
+		"cc_proto_library": rules.NotImplemented("cc_proto_library"),
+		"fdo_prefetch_hints": rules.NotImplemented("fdo_prefetch_hints"),
+		"fdo_profile":  rules.NotImplemented("fdo_profile"),
+		"cc_test":      rules.NotImplemented("cc_test"),
+		"cc_toolchain": rules.NotImplemented("cc_toolchain"),
+		"cc_toolchain_suite": rules.NotImplemented("cc_toolchain_suite"),
 
 		// Java Rules
 		// https://docs.bazel.build/versions/master/be/java.html
-		"java_binary": starlark.NewBuiltin("java_binary", rules.NotImplemented),
-		"java_import": starlark.NewBuiltin("java_import", rules.NotImplemented),
-		"java_library": starlark.NewBuiltin("java_library", rules.NotImplemented),
-		"java_lite_proto_library": starlark.NewBuiltin("java_lite_proto_library",
-			rules.NotImplemented),
-		"java_proto_library": starlark.NewBuiltin("java_proto_library",
-			rules.NotImplemented),
-		"java_test": starlark.NewBuiltin("java_test", rules.NotImplemented),
-		"java_package_configuration": starlark.NewBuiltin("java_package_configuration",
-			rules.NotImplemented),
-		"java_plugin": starlark.NewBuiltin("java_plugin", rules.NotImplemented),
-		"java_runtime": starlark.NewBuiltin("java_runtime", rules.NotImplemented),
-		"java_toolchain": starlark.NewBuiltin("java_toolchain", rules.NotImplemented),
+		"java_binary": rules.NotImplemented("java_binary"),
+		"java_import": rules.NotImplemented("java_import"),
+		"java_library": rules.NotImplemented("java_library"),
+		"java_lite_proto_library": rules.NotImplemented("java_lite_proto_library"),
+		"java_proto_library": rules.NotImplemented("java_proto_library"),
+		"java_test": rules.NotImplemented("java_test"),
+		"java_package_configuration": rules.NotImplemented("java_package_configuration"),
+		"java_plugin": rules.NotImplemented("java_plugin"),
+		"java_runtime": rules.NotImplemented("java_runtime"),
+		"java_toolchain": rules.NotImplemented("java_toolchain"),
 
 		// Objective-C Rules
 		// https://docs.bazel.build/versions/master/be/objective-c.html
-		"apple_binary": starlark.NewBuiltin("apple_binary", rules.NotImplemented),
-		"apple_static_library": starlark.NewBuiltin("apple_static_library",
-			rules.NotImplemented),
-		"j2objc_library": starlark.NewBuiltin("j2objc_library", rules.NotImplemented),
-		"objc_import": starlark.NewBuiltin("objc_import", rules.NotImplemented),
-		"objc_library": starlark.NewBuiltin("objc_library", rules.NotImplemented),
-		"objc_proto_library": starlark.NewBuiltin("objc_proto_library",
-			rules.NotImplemented),
+		"apple_binary": rules.NotImplemented("apple_binary"),
+		"apple_static_library": rules.NotImplemented("apple_static_library"),
+		"j2objc_library": rules.NotImplemented("j2objc_library"),
+		"objc_import": rules.NotImplemented("objc_import"),
+		"objc_library": rules.NotImplemented("objc_library"),
+		"objc_proto_library": rules.NotImplemented("objc_proto_library"),
 
 		// Protocol Buffer Rules
 		// https://docs.bazel.build/versions/master/be/protocol-buffer.html
-		"proto_lang_toolchain": starlark.NewBuiltin("proto_lang_toolchain",
-			rules.NotImplemented),
-		"proto_library": starlark.NewBuiltin("proto_library", rules.NotImplemented),
+		"proto_lang_toolchain": rules.NotImplemented("proto_lang_toolchain"),
+		"proto_library": rules.NotImplemented("proto_library"),
 
 		// Python Rules
 		// https://docs.bazel.build/versions/master/be/python.html
-		"py_binary": starlark.NewBuiltin("py_binary", rules.NotImplemented),
-		"py_library": starlark.NewBuiltin("py_library", rules.NotImplemented),
-		"py_test": starlark.NewBuiltin("py_test", rules.NotImplemented),
-		"py_runtime": starlark.NewBuiltin("py_runtime", rules.NotImplemented),
+		"py_binary": rules.NotImplemented("py_binary"),
+		"py_library": rules.NotImplemented("py_library"),
+		"py_test": rules.NotImplemented("py_test"),
+		"py_runtime": rules.NotImplemented("py_runtime"),
 
 		// Shell Rules
 		// https://docs.bazel.build/versions/master/be/shell.html
-		"sh_binary": starlark.NewBuiltin("sh_binary", rules.NotImplemented),
-		"sh_library": starlark.NewBuiltin("sh_library", rules.NotImplemented),
-		"sh_test": starlark.NewBuiltin("sh_test", rules.NotImplemented),
+		"sh_binary": rules.NotImplemented("sh_binary"),
+		"sh_library": rules.NotImplemented("sh_library"),
+		"sh_test": rules.NotImplemented("sh_test"),
 
 		// Extra Actions Rules
 		// https://docs.bazel.build/versions/master/be/extra-actions.html
-		"action_listener": starlark.NewBuiltin("action_listener", rules.NotImplemented),
-		"extra_action": starlark.NewBuiltin("extra_action", rules.NotImplemented),
+		"action_listener": rules.NotImplemented("action_listener"),
+		"extra_action": rules.NotImplemented("extra_action"),
 
 		// General Rules
 		// https://docs.bazel.build/versions/master/be/general.html
-		"filegroup": starlark.NewBuiltin("filegroup", rules.NotImplemented),
-		"genquery": starlark.NewBuiltin("genquery", rules.NotImplemented),
-		"test_suite": starlark.NewBuiltin("test_suite", rules.NotImplemented),
-		"alias": starlark.NewBuiltin("alias", rules.NotImplemented),
-		"config_setting": starlark.NewBuiltin("config_setting", rules.NotImplemented),
-		"genrule": starlark.NewBuiltin("genrule", rules.NotImplemented),
+		"filegroup": rules.NotImplemented("filegroup"),
+		"genquery": rules.NotImplemented("genquery"),
+		"test_suite": rules.NotImplemented("test_suite"),
+		"alias": rules.NotImplemented("alias"),
+		"config_setting": rules.NotImplemented("config_setting"),
+		"genrule": rules.NotImplemented("genrule"),
 
 		// Platform Rules
 		// https://docs.bazel.build/versions/master/be/platform.html
-		"constraint_setting": starlark.NewBuiltin("constraint_setting",
-			rules.NotImplemented),
-		"constraint_value": starlark.NewBuiltin("constraint_value", rules.NotImplemented),
-		"platform": starlark.NewBuiltin("platform", rules.NotImplemented),
-		"toolchain": starlark.NewBuiltin("toolchain", rules.NotImplemented),
+		"constraint_setting": rules.NotImplemented("constraint_setting"),
+		"constraint_value": rules.NotImplemented("constraint_value"),
+		"platform": rules.NotImplemented("platform"),
+		"toolchain": rules.NotImplemented("toolchain"),
 
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html

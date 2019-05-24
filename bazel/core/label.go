@@ -17,6 +17,8 @@ import (
 // '_', and must begin with a letter.
 type WorkspaceName string
 
+const MainWorkspaceName WorkspaceName = ""
+
 var workspaceNameRegexp = regexp.MustCompile(`^([A-Za-z][A-Za-z0-9_]*)?$`)
 
 // IsValid returns whether the given WorkspaceName is valid.
@@ -24,9 +26,14 @@ func (w WorkspaceName) IsValid() bool {
 	return workspaceNameRegexp.MatchString(string(w))
 }
 
+// IsExternal returns whether the given WorkspaceName is external (i.e., not the main workspace).
+func (w WorkspaceName) IsExternal() bool {
+	return w != MainWorkspaceName
+}
+
 // String formats a workspace name as a string ("" if empty, "@<workspace name>" otherwise).
 func (w WorkspaceName) String() string {
-	if w == "" {
+	if !w.IsExternal() {
 		return ""
 	}
 	return "@" + string(w)
@@ -94,6 +101,11 @@ type Label struct {
 // IsValid returns whether the given Label is valid.
 func (l Label) IsValid() bool {
 	return l.Workspace.IsValid() && l.Package.IsValid() && l.Target.IsValid()
+}
+
+// IsExternal returns whether the given Label is external (i.e., not in the main workspace).
+func (l Label) IsExternal() bool {
+	return l.Workspace.IsExternal()
 }
 
 // String formats a label as a string. Note that it does not abbreviate "//foo/bar:bar" as

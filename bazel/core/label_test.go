@@ -27,6 +27,15 @@ func TestWorkspaceName_IsValid(t *testing.T) {
 	}
 }
 
+func TestWorkspaceName_IsExternal(t *testing.T) {
+	if w := WorkspaceName(""); w.IsExternal() {
+		t.Errorf("%q should not be external", w)
+	}
+	if w := WorkspaceName("foo"); !w.IsExternal() {
+		t.Errorf("%q should be external", w)
+	}
+}
+
 func TestWorkspaceName_String(t *testing.T) {
 	testCases := []struct {
 		in  WorkspaceName
@@ -172,6 +181,15 @@ func TestLabel_IsValid(t *testing.T) {
 		if invalid.IsValid() {
 			t.Error(invalid, " should be invalid")
 		}
+	}
+}
+
+func TestLabel_IsExternal(t *testing.T) {
+	if l := (Label{"", "foo/bar", "baz"}); l.IsExternal() {
+		t.Errorf("%q should not be external", l)
+	}
+	if l := (Label{"quux", "foo/bar", "baz"}); !l.IsExternal() {
+		t.Errorf("%q should be external", l)
 	}
 }
 

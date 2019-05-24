@@ -30,15 +30,14 @@ func (self *ContextImpl) BuildTargets() core.BuildTargets {
 	return self.build.BuildTargets
 }
 
-func (self *ContextImpl) CreateThread(label core.Label, fileType core.FileType) *starlark.Thread {
-	return CreateThread(self.build, label, fileType)
-}
-
+// TODO(vtl): Maybe get rid of this. We only need this when we need to access the Build, which is
+// when we need it to do a load, but maybe that should be a part of Context.
 func GetContextImpl(thread *starlark.Thread) *ContextImpl {
 	return core.GetContext(thread).(*ContextImpl)
 }
 
-func CreateThread(build *Build, label core.Label, fileType core.FileType) *starlark.Thread {
+// TODO(vtl): Move this?
+func createThread(build *Build, label core.Label, fileType core.FileType) *starlark.Thread {
 	// Create the thread.
 	thread := &starlark.Thread{Name: "exec " + label.String(), Load: load}
 

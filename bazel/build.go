@@ -39,7 +39,7 @@ func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
 // exec executes the file specified by moduleLabel, of the given file type (which should be
 // core.FileTypeBuild or perhaps core.FileTypeWorkspace).
 func (self *Build) exec(moduleLabel core.Label, fileType core.FileType) error {
-	thread := CreateThread(self, moduleLabel, fileType)
+	thread := createThread(self, moduleLabel, fileType)
 
 	sourceData, err := self.sourceFileReader(moduleLabel)
 	if err != nil {
@@ -56,7 +56,7 @@ func (self *Build) exec(moduleLabel core.Label, fileType core.FileType) error {
 // same file will return the cached result).
 //
 // This is mainly used by the free load function, which is given to the starlark.Thread.
-func (self *Build) load(ctx *ContextImpl, moduleLabel core.Label) (starlark.StringDict, error) {
+func (self *Build) load(ctx core.Context, moduleLabel core.Label) (starlark.StringDict, error) {
 	// Only .bzl files can ever be loaded.
 	if filepath.Ext(string(moduleLabel.Target)) != ".bzl" {
 		return nil, fmt.Errorf("%v: load not allowed: %v is not a .bzl file", ctx.Label(),
@@ -81,14 +81,13 @@ func (self *Build) load(ctx *ContextImpl, moduleLabel core.Label) (starlark.Stri
 
 	self.loadCache[moduleLabelString] = nil
 
-	thread := ctx.CreateThread(moduleLabel, core.FileTypeBzl)
+	thread := createThread(self, moduleLabel, core.FileTypeBzl)
 	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
 		builtins.InitialGlobals(ctx))
 	self.loadCache[moduleLabelString] = &loadCacheEntry{globals, err}
 	return globals, err
 }
 
-// TODO(vtl): More, including impls.
 func NewBuild(sourceFileReader SourceFileReader) *Build {
 	return &Build{
 		sourceFileReader: sourceFileReader,
@@ -97,6 +96,8 @@ func NewBuild(sourceFileReader SourceFileReader) *Build {
 	}
 }
 
+// load loads the given (.bzl) file specified by module. This is meant to be given to the
+// starlark.Thread.
 func load(thread *starlark.Thread, module string) (starlark.StringDict, error) {
 	ctx := GetContextImpl(thread)
 	moduleLabel, err := core.ParseLabel(ctx.Label().Workspace, ctx.Label().Package, module)

@@ -71,6 +71,7 @@ func writeCMakeListsHeader(packageName core.PackageName, w io.Writer) error {
 }
 
 const cmakeCcLibraryName = "bazel2cmake_cc_library"
+const cmakeCcTestName = "bazel2cmake_cc_test"
 
 func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Writer) error {
 	switch target.(type) {
@@ -137,8 +138,46 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 			return err
 		}
 	case *rules.CcTestTarget:
-		if _, err := fmt.Fprintf(w, "\n# TODO: cc_test %v\n",
-			string(targetName)); err != nil {
+		t := target.(*rules.CcTestTarget)
+
+		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcTestName); err != nil {
+			return err
+		}
+
+		if t.Srcs != nil {
+			if _, err := fmt.Fprintf(w, "    SRCS\n"); err != nil {
+				return err
+			}
+			for _, l := range *t.Srcs {
+				// Assume that it's just a simple filename, so just use the target
+				// part of the label.
+				if _, err := fmt.Fprintf(w, "        %v\n",
+					string(l.Target)); err != nil {
+					return err
+				}
+			}
+		}
+
+		if t.Deps != nil {
+			if _, err := fmt.Fprintf(w, "    DEPS\n"); err != nil {
+				return err
+			}
+			for _, l := range *t.Deps {
+				var depName string
+				if !l.IsExternal() {
+					depName = dashJoin(cmakeProjectPrefix,
+						toDashes(string(l.Package)),
+						toDashes(string(l.Target)))
+				} else {
+					depName = "# TODO (external dep)"
+				}
+				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
+					return err
+				}
+			}
+		}
+
+		if _, err := fmt.Fprintf(w, ")\n"); err != nil {
 			return err
 		}
 	}

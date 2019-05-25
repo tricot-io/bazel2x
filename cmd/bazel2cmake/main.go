@@ -24,8 +24,8 @@ func printTargets(build *bazel.Build) {
 		fmt.Printf("Workspace @%v\n", string(workspaceName))
 		for packageName, packageTargets := range workspaceTargets {
 			fmt.Printf("  Package %v\n", packageName)
-			for targetName, target := range packageTargets {
-				fmt.Printf("    Target %v\n", targetName)
+			for _, target := range packageTargets.TargetList {
+				fmt.Printf("    Target %v\n", target.Label().Target)
 				fmt.Printf("      %v\n", target)
 			}
 		}
@@ -74,6 +74,15 @@ func writeCMakeListsHeader(packageName core.PackageName, w io.Writer) error {
 	return nil
 }
 
+func cMakeTargetName(l core.Label) string {
+	if !l.IsExternal() {
+		return dashJoin(cmakeProjectPrefix, toDashes(string(l.Package)),
+			toDashes(string(l.Target)))
+	} else {
+		return fmt.Sprintf("# TODO (external dep): %v", l)
+	}
+}
+
 //FIXME
 //const cmakeCcLibraryName = "bazel2cmake_cc_library"
 //const cmakeCcTestName = "bazel2cmake_cc_test"
@@ -86,6 +95,11 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 		t := target.(*rules.CcLibraryTarget)
 
 		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcLibraryName); err != nil {
+			return err
+		}
+
+		if _, err := fmt.Fprintf(w, "    %v\n",
+			cMakeTargetName(target.Label())); err != nil {
 			return err
 		}
 
@@ -122,14 +136,7 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 				return err
 			}
 			for _, l := range *t.Deps {
-				var depName string
-				if !l.IsExternal() {
-					depName = dashJoin(cmakeProjectPrefix,
-						toDashes(string(l.Package)),
-						toDashes(string(l.Target)))
-				} else {
-					depName = "# TODO (external dep)"
-				}
+				depName := cMakeTargetName(l)
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
@@ -148,6 +155,11 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 		t := target.(*rules.CcTestTarget)
 
 		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcTestName); err != nil {
+			return err
+		}
+
+		if _, err := fmt.Fprintf(w, "    %v\n",
+			cMakeTargetName(target.Label())); err != nil {
 			return err
 		}
 
@@ -170,14 +182,7 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 				return err
 			}
 			for _, l := range *t.Deps {
-				var depName string
-				if !l.IsExternal() {
-					depName = dashJoin(cmakeProjectPrefix,
-						toDashes(string(l.Package)),
-						toDashes(string(l.Target)))
-				} else {
-					depName = "# TODO (external dep)"
-				}
+				depName := cMakeTargetName(l)
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
@@ -192,7 +197,7 @@ func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Wr
 	return nil
 }
 
-func makeCMakeLists(packageName core.PackageName, packageTargets core.PackageTargets,
+func makeCMakeLists(packageName core.PackageName, packageTargets *core.PackageTargets,
 	packagePath string) error {
 
 	outputPath := filepath.Join(packagePath, "CMakeLists.txt")
@@ -206,8 +211,8 @@ func makeCMakeLists(packageName core.PackageName, packageTargets core.PackageTar
 		return err
 	}
 
-	for targetName, target := range packageTargets {
-		if err := writeCMakeListsBody(targetName, target, f); err != nil {
+	for _, target := range packageTargets.TargetList {
+		if err := writeCMakeListsBody(target.Label().Target, target, f); err != nil {
 			return err
 		}
 	}

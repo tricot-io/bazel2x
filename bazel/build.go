@@ -30,6 +30,7 @@ type Build struct {
 
 // AddBuildFile executes the BUILD[.bazel] file specified by buildFileLabel.
 func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
+	self.BuildTargets.AddPackage(buildFileLabel.Workspace, buildFileLabel.Package)
 	return self.exec(buildFileLabel, core.FileTypeBuild)
 }
 

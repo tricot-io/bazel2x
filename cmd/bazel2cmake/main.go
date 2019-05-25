@@ -33,10 +33,14 @@ func printTargets(build *bazel.Build) {
 }
 
 const cmakeMinimumVersion = "3.10.0"
-var cmakeIncludes = []string{"Bazel2cmakeCommon"}
+//FIXME
+//var cmakeIncludes = []string{"Bazel2cmakeCommon"}
+var cmakeIncludes = []string{"TricotCommon"}
 // TODO(vtl): my_project should come from the workspace name (which would mean we'd have to exec the
 // WORKSPACE).
-const cmakeProjectPrefix = "bazel2cmake-my_project"
+//FIXME
+//const cmakeProjectPrefix = "bazel2cmake-my_project"
+const cmakeProjectPrefix = "tricot-cpp_public"
 
 func toDashes(s string) string {
 	return strings.ReplaceAll(s, "/", "-")
@@ -70,8 +74,11 @@ func writeCMakeListsHeader(packageName core.PackageName, w io.Writer) error {
 	return nil
 }
 
-const cmakeCcLibraryName = "bazel2cmake_cc_library"
-const cmakeCcTestName = "bazel2cmake_cc_test"
+//FIXME
+//const cmakeCcLibraryName = "bazel2cmake_cc_library"
+//const cmakeCcTestName = "bazel2cmake_cc_test"
+const cmakeCcLibraryName = "tricot_cc_library"
+const cmakeCcTestName = "tricot_cc_test"
 
 func writeCMakeListsBody(targetName core.TargetName, target core.Target, w io.Writer) error {
 	switch target.(type) {

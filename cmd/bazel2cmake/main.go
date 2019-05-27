@@ -16,7 +16,7 @@ import (
 	"bazel2cmake/bazel"
 	"bazel2cmake/bazel/builtins/rules"
 	"bazel2cmake/bazel/core"
-	"bazel2cmake/utils"
+	"bazel2cmake/bazel/utils"
 )
 
 func printTargets(build *bazel.Build) {

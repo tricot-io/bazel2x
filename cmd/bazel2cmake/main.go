@@ -19,6 +19,8 @@ import (
 	"bazel2cmake/bazel/utils"
 )
 
+var outDirFlag = flag.String("out-dir", "", "(root) output directory")
+
 func printTargets(build *bazel.Build) {
 	for workspaceName, workspaceTargets := range build.BuildTargets {
 		fmt.Printf("Workspace @%v\n", string(workspaceName))
@@ -309,8 +311,11 @@ func main() {
 
 	// printTargets(build)
 
-	//FIXME replace /tmp/foo with workspaceDir presumably
-	err = makeAllCMakeLists(build, "/tmp/foo")
+	outDir := workspaceDir
+	if *outDirFlag != "" {
+		outDir = *outDirFlag
+	}
+	err = makeAllCMakeLists(build, outDir)
 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		os.Exit(1)

@@ -28,13 +28,13 @@ type Build struct {
 	BuildTargets core.BuildTargets
 }
 
-// AddBuildFile executes the BUILD[.bazel] file specified by buildFileLabel.
-func (self *Build) AddBuildFile(buildFileLabel core.Label) error {
+// ExecBuildFile executes the BUILD[.bazel] file specified by buildFileLabel.
+func (self *Build) ExecBuildFile(buildFileLabel core.Label) error {
 	self.BuildTargets.AddPackage(buildFileLabel.Workspace, buildFileLabel.Package)
 	return self.exec(buildFileLabel, core.FileTypeBuild)
 }
 
-// TODO(vtl): Should also have an AddWorkspaceFile or something like that? Or maybe that should be
+// TODO(vtl): Should also have an ExecWorkspaceFile or something like that? Or maybe that should be
 // executed on initialization?
 
 // exec executes the file specified by moduleLabel, of the given file type (which should be

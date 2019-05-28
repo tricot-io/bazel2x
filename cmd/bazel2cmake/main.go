@@ -305,7 +305,7 @@ func main() {
 
 	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))
 	for _, buildFileLabel := range buildFileLabels {
-		err := build.AddBuildFile(buildFileLabel)
+		err := build.ExecBuildFile(buildFileLabel)
 		if err != nil {
 			fmt.Printf("ERROR: %v\n", err)
 			os.Exit(1)

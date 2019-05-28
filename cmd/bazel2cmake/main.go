@@ -263,6 +263,10 @@ func main() {
 	}
 	fmt.Printf("Workspace root: %v\n", workspaceDir)
 
+	bazelIgnore := utils.ReadBazelIgnore(workspaceDir)
+	// TODO(vtl)
+	_ = bazelIgnore
+
 	projectName := filepath.Base(workspaceDir)
 	if projectName == string(filepath.Separator) {
 		fmt.Printf("ERROR: unable to determine project name\n")

@@ -15,7 +15,14 @@ func ReadBazelIgnore(workspaceDir string) []string {
 		return []string{}
 	}
 
-	return strings.FieldsFunc(string(contents), func(c rune) bool {
+	result := strings.FieldsFunc(string(contents), func(c rune) bool {
 		return c == '\n' || c == '\r';
 	})
+
+	// Be nice and clean the results (e.g., in case there are trailing slashes).
+	for i := range result {
+		result[i] = filepath.Clean(result[i])
+	}
+
+	return result
 }

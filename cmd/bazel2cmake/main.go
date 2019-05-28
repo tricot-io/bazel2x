@@ -280,6 +280,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	// The "project name" is the name of the directory. This is a bit odd, but Bazel seems to
+	// prefer to put things in bazel-<project name>, instead of bazel-<workspace-name>.
 	projectName := filepath.Base(workspaceDir)
 	if projectName == string(filepath.Separator) {
 		fmt.Printf("ERROR: unable to determine project name\n")
@@ -299,15 +301,23 @@ func main() {
 			Package:   core.PackageName(dir),
 			Target:    core.TargetName(filepath.Base(buildFile)),
 		}
-
-		fmt.Printf("Input BUILD file: %v\n", buildFileLabels[i])
 	}
 
 	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))
+
+	/*
+	err = build.ExecWorkspaceFile()
+	if err != nil {
+		fmt.Printf("ERROR: failed to execute WORKSPACE file: %v\n", err)
+		os.Exit(1)
+	}
+	*/
+
 	for _, buildFileLabel := range buildFileLabels {
 		err := build.ExecBuildFile(buildFileLabel)
 		if err != nil {
-			fmt.Printf("ERROR: %v\n", err)
+			fmt.Printf("ERROR: failed to execute BUILD[.bzel] file %v: %v\n",
+				buildFileLabel, err)
 			os.Exit(1)
 		}
 	}

@@ -28,14 +28,23 @@ type Build struct {
 	BuildTargets core.BuildTargets
 }
 
-// ExecBuildFile executes the BUILD[.bazel] file specified by buildFileLabel.
+// ExecWorkspaceFile executes the WORKSPACE file (which always has label //:WORKSPACE). It should be
+// called exactly once, before ExecBuildFile is called.
+func (self *Build) ExecWorkspaceFile() error {
+	workspaceFileLabel := core.Label{
+		Workspace: "",
+		Package:   "",
+		Target:    "WORKSPACE",
+	}
+	return self.exec(workspaceFileLabel, core.FileTypeWorkspace)
+}
+
+// ExecBuildFile executes the BUILD[.bazel] file specified by buildFileLabel. It should be called at
+// most once for each BUILD[.bazel] file.
 func (self *Build) ExecBuildFile(buildFileLabel core.Label) error {
 	self.BuildTargets.AddPackage(buildFileLabel.Workspace, buildFileLabel.Package)
 	return self.exec(buildFileLabel, core.FileTypeBuild)
 }
-
-// TODO(vtl): Should also have an ExecWorkspaceFile or something like that? Or maybe that should be
-// executed on initialization?
 
 // exec executes the file specified by moduleLabel, of the given file type (which should be
 // core.FileTypeBuild or perhaps core.FileTypeWorkspace).

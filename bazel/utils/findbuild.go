@@ -28,7 +28,11 @@ func FindBuildFiles(workspaceDir string, ignorePaths []string) ([]string, error)
 			return nil
 		}
 		if info.Name() == "BUILD" || info.Name() == "BUILD.bazel" {
-			rv = append(rv, path)
+			relpath, err2 := filepath.Rel(workspaceDir, path)
+			if err2 != nil {
+				panic(err2)
+			}
+			rv = append(rv, relpath)
 		}
 		return nil
 

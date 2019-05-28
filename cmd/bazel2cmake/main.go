@@ -249,18 +249,28 @@ func makeAllCMakeLists(build *bazel.Build, outputPath string) error {
 func main() {
 	flag.Parse()
 
+	var workspaceDir string
 	args := flag.Args()
-	if len(args) < 1 {
-		fmt.Print("ERROR: BUILD[.bazel] argument(s) required\n")
+	switch {
+	case len(args) == 0:
+		// The default is to find the workspace root at or above the working directory.
+		cwd, err := os.Getwd()
+		if err != nil {
+			fmt.Printf("ERROR: failed to get working directory: %v\n", err)
+			os.Exit(1)
+		}
+		workspaceDir, _, err = utils.FindWorkspaceDir(cwd)
+		if err != nil {
+			fmt.Printf("ERROR: failed to find workspace root: %v\n", err)
+			os.Exit(1)
+		}
+	case len(args) == 1:
+		workspaceDir = args[0]
+	default:
+		fmt.Printf("ERROR: usage: %v [workspace-dir]\n", os.Args[0])
 		os.Exit(1)
 	}
 
-	// Use the first arg to determine the workspace root.
-	workspaceDir, _, err := utils.FindWorkspaceDir(filepath.Dir(args[0]))
-	if err != nil {
-		fmt.Printf("ERROR: failed to find workspace root: %v\n", err)
-		os.Exit(1)
-	}
 	fmt.Printf("Workspace root: %v\n", workspaceDir)
 
 	bazelIgnore := utils.ReadBazelIgnore(workspaceDir)
@@ -269,8 +279,6 @@ func main() {
 		fmt.Printf("ERROR: failed to find BUILD[.bazel] files: %v\n", err)
 		os.Exit(1)
 	}
-	// TODO(vtl)
-	_ = buildFiles
 
 	projectName := filepath.Base(workspaceDir)
 	if projectName == string(filepath.Separator) {
@@ -279,34 +287,20 @@ func main() {
 	}
 	fmt.Printf("Project name: %v\n", projectName)
 
-	// Preprocess all the arguments to get relative paths to the workspace dir, since we'll
-	// Chdir to the workspace dir.
-	buildFileLabels := make([]core.Label, len(args))
-	for i, arg := range args {
-		wsDir, relDir, err := utils.FindWorkspaceDir(filepath.Dir(arg))
-		if err != nil {
-			fmt.Printf("ERROR: %v\n", err)
-			os.Exit(1)
-		}
-
-		if wsDir != workspaceDir {
-			fmt.Printf("ERROR: %v not in same workspace as %v\n", arg, args[0])
-			os.Exit(1)
+	buildFileLabels := make([]core.Label, len(buildFiles))
+	for i, buildFile := range buildFiles {
+		dir := filepath.Dir(buildFile)
+		if dir == "." {
+			dir = ""
 		}
 
 		buildFileLabels[i] = core.Label{
 			Workspace: "",
-			Package:   core.PackageName(relDir),
-			Target:    core.TargetName(filepath.Base(arg)),
+			Package:   core.PackageName(dir),
+			Target:    core.TargetName(filepath.Base(buildFile)),
 		}
 
 		fmt.Printf("Input BUILD file: %v\n", buildFileLabels[i])
-	}
-
-	err = os.Chdir(workspaceDir)
-	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
-		os.Exit(1)
 	}
 
 	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))

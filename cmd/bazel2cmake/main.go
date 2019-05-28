@@ -258,14 +258,19 @@ func main() {
 	// Use the first arg to determine the workspace root.
 	workspaceDir, _, err := utils.FindWorkspaceDir(filepath.Dir(args[0]))
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
+		fmt.Printf("ERROR: failed to find workspace root: %v\n", err)
 		os.Exit(1)
 	}
 	fmt.Printf("Workspace root: %v\n", workspaceDir)
 
 	bazelIgnore := utils.ReadBazelIgnore(workspaceDir)
+	buildFiles, err := utils.FindBuildFiles(workspaceDir, bazelIgnore)
+	if err != nil {
+		fmt.Printf("ERROR: failed to find BUILD[.bazel] files: %v\n", err)
+		os.Exit(1)
+	}
 	// TODO(vtl)
-	_ = bazelIgnore
+	_ = buildFiles
 
 	projectName := filepath.Base(workspaceDir)
 	if projectName == string(filepath.Separator) {

@@ -172,13 +172,13 @@ func processRuleArgsHelper(kwargs map[string]starlark.Value, ctx core.Context,
 	return errorValue.Interface().(error)
 }
 
-// ProcessArgs processes kwargs for the given "target". Currently, it always requires that all
+// ProcessArgs processes kwargs for the given target. Currently, it always requires that all
 // arguments be kwargs.
 func ProcessArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Context,
 	target ProcessArgsTarget) error {
 
 	if len(args) > 0 {
-		return fmt.Errorf("all arguments should be passed as kwargs")
+		return fmt.Errorf("all arguments should be passed as keyword arguments")
 	}
 
 	kwargs2 := make(map[string]starlark.Value)
@@ -199,7 +199,7 @@ func ProcessArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Context,
 	// This is a conditional posing as a loop.
 	// TODO(vtl): Map iteration order isn't deterministic, so it's weird.
 	for k := range kwargs2 {
-		return fmt.Errorf("unknown rule argument %v", k)
+		return fmt.Errorf("unknown keyword argument %v", k)
 	}
 
 	return nil

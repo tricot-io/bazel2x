@@ -12,7 +12,7 @@ type TargetCommonBinary struct {
 	OutputLicenses *[]string `bazel:"output_licenses"`
 }
 
-var _ ProcessRuleArgsTargetStruct = (*TargetCommonBinary)(nil)
+var _ ProcessArgsTarget = (*TargetCommonBinary)(nil)
 
 func (self *TargetCommonBinary) Process(ctx core.Context) error {
 	return nil

@@ -28,7 +28,7 @@ type TargetCommon struct {
 	label core.Label
 }
 
-var _ ProcessRuleArgsTargetStruct = (*TargetCommon)(nil)
+var _ ProcessArgsTarget = (*TargetCommon)(nil)
 
 func (self *TargetCommon) Process(ctx core.Context) error {
 	self.label = core.Label{

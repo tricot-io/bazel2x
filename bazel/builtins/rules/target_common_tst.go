@@ -18,7 +18,7 @@ type TargetCommonTest struct {
 	ShardCount *int64    `bazel:"shard_count"`
 }
 
-var _ ProcessRuleArgsTargetStruct = (*TargetCommonTest)(nil)
+var _ ProcessArgsTarget = (*TargetCommonTest)(nil)
 
 func (self *TargetCommonTest) Process(ctx core.Context) error {
 	return nil

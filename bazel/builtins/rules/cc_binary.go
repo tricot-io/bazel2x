@@ -26,7 +26,7 @@ type CcBinaryTarget struct {
 	WinDefFile             *core.Label   `bazel:"win_def_file"`
 }
 
-var _ ProcessRuleArgsTargetStruct = (*CcBinaryTarget)(nil)
+var _ ProcessArgsTarget = (*CcBinaryTarget)(nil)
 var _ core.Target = (*CcBinaryTarget)(nil)
 
 func (self *CcBinaryTarget) Process(ctx core.Context) error {

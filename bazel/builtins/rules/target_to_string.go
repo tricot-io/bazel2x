@@ -77,7 +77,7 @@ func getAttrs(targetVp reflect.Value, attrs *[]string) {
 	}
 }
 
-func targetToString(ruleName string, target ProcessRuleArgsTargetStruct) string {
+func targetToString(ruleName string, target ProcessArgsTarget) string {
 	targetVp := reflect.ValueOf(target)
 	if targetVp.Kind() != reflect.Ptr {
 		panic(targetVp)

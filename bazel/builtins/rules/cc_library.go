@@ -26,7 +26,7 @@ type CcLibraryTarget struct {
 	WinDefFile         *core.Label   `bazel:"win_def_file"`
 }
 
-var _ ProcessRuleArgsTargetStruct = (*CcLibraryTarget)(nil)
+var _ ProcessArgsTarget = (*CcLibraryTarget)(nil)
 var _ core.Target = (*CcLibraryTarget)(nil)
 
 func (self *CcLibraryTarget) Process(ctx core.Context) error {

@@ -13,6 +13,7 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
+// newRule creates a new rule(-like) starlark.Builtin.
 func newRule(ruleName string,
 	impl func(ctx core.Context, kwargs []starlark.Tuple) error) *starlark.Builtin {
 

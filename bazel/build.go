@@ -56,9 +56,8 @@ func (self *Build) exec(moduleLabel core.Label, fileType core.FileType) error {
 		return fmt.Errorf("failed to execute %v: read failed: %v", moduleLabel, err)
 	}
 
-	ctx := core.GetContext(thread)
 	_, err = starlark.ExecFile(thread, moduleLabel.String(), sourceData,
-		builtins.InitialGlobals(ctx))
+		builtins.InitialGlobals(fileType))
 	return err
 }
 
@@ -93,7 +92,7 @@ func (self *Build) load(ctx core.Context, moduleLabel core.Label) (starlark.Stri
 
 	thread := createThread(self, moduleLabel, core.FileTypeBzl)
 	globals, err := starlark.ExecFile(thread, moduleLabelString, sourceData,
-		builtins.InitialGlobals(ctx))
+		builtins.InitialGlobals(core.FileTypeBzl))
 	self.loadCache[moduleLabelString] = &loadCacheEntry{globals, err}
 	return globals, err
 }

@@ -305,13 +305,11 @@ func main() {
 
 	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))
 
-	/*
 	err = build.ExecWorkspaceFile()
 	if err != nil {
 		fmt.Printf("ERROR: failed to execute WORKSPACE file: %v\n", err)
 		os.Exit(1)
 	}
-	*/
 
 	for _, buildFileLabel := range buildFileLabels {
 		err := build.ExecBuildFile(buildFileLabel)

@@ -143,15 +143,15 @@ var buildAndbzlCommonGlobals = starlark.StringDict{
 
 // buildGlobals are globals for BUILD files.
 //
-// These are variously documented in:
+// These (and others) are variously documented in:
 //   https://docs.bazel.build/versions/master/skylark/lib/globals.html
 //   https://docs.bazel.build/versions/master/be/functions.html
 //   https://docs.bazel.build/versions/master/skylark/lib/native.html
 //
 // Notes:
 //   analysis_test_transition is not supported.
-//   PACKAGE_NAME has actually been "removed" (using it now causes an error).
-//   REPOSITORY_NAME has actually been "removed" (using it now causes an error).
+//   PACKAGE_NAME has actually been "removed" from Bazel (using it now causes an error).
+//   REPOSITORY_NAME has actually been "removed" from Bazel (using it now causes an error).
 var buildGlobals = starlarkUnion(
 	commonGlobals,
 	buildAndbzlCommonGlobals,
@@ -173,8 +173,29 @@ var bzlGlobals = starlarkUnion(
 	starlark.StringDict{
 		"aspect":          functions.NotImplemented("aspect"),
 		"provider":        functions.NotImplemented("provider"),
-		"repository_rule": functions.NotImplemented("repository_rule"),
-		"rule":            functions.NotImplemented("rule"),
+		"repository_rule": functions.NotImplemented2("repository_rule"),
+		"rule":            functions.NotImplemented2("rule"),
+
+		// https://docs.bazel.build/versions/master/skylark/lib/attr.html
+		"attr": &starlarkstruct.Module{
+			Name:    "attr",
+			Members: starlark.StringDict{
+				"bool":     functions.NotImplemented("bool"),
+				"int":      functions.NotImplemented("int"),
+				"int_list": functions.NotImplemented("int_list"),
+				"label":    functions.NotImplemented("label"),
+				"label_keyed_string_dict": functions.NotImplemented(
+					"label_keyed_string_dict"),
+				"label_list":       functions.NotImplemented("label_list"),
+				"license":          functions.NotImplemented("license"),
+				"output":           functions.NotImplemented("output"),
+				"output_list":      functions.NotImplemented("output_list"),
+				"string":           functions.NotImplemented("string"),
+				"string_dict":      functions.NotImplemented("string_dict"),
+				"string_list":      functions.NotImplemented("string_list"),
+				"string_list_dict": functions.NotImplemented("string_list_dict"),
+			},
+		},
 	},
 )
 
@@ -199,8 +220,8 @@ var workspaceGlobals = starlarkUnion(
 )
 
 // InitialGlobals returns the initial globals (builtins) for executing a Bazel file.
-func InitialGlobals(ctx core.Context) starlark.StringDict {
-	switch ctx.FileType() {
+func InitialGlobals(fileType core.FileType) starlark.StringDict {
+	switch fileType {
 	case core.FileTypeBuild:
 		return buildGlobals
 	case core.FileTypeBzl:
@@ -208,6 +229,6 @@ func InitialGlobals(ctx core.Context) starlark.StringDict {
 	case core.FileTypeWorkspace:
 		return workspaceGlobals
 	default:
-		panic(ctx.FileType())
+		panic(fileType)
 	}
 }

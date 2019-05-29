@@ -6,6 +6,7 @@ package rules
 import (
 	"go.starlark.net/starlark"
 
+	builtins_args "bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -26,7 +27,7 @@ type CcLibraryTarget struct {
 	WinDefFile         *core.Label   `bazel:"win_def_file"`
 }
 
-var _ ProcessArgsTarget = (*CcLibraryTarget)(nil)
+var _ builtins_args.ProcessArgsTarget = (*CcLibraryTarget)(nil)
 var _ core.Target = (*CcLibraryTarget)(nil)
 
 func (self *CcLibraryTarget) DidProcessArgs(ctx core.Context) error {
@@ -43,7 +44,7 @@ var CcLibrary = newRule("cc_library",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
 	target := &CcLibraryTarget{}
-	if err := ProcessArgs(args, kwargs, ctx, target); err != nil {
+	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
 		return err
 	}
 	ctx.BuildTargets().Add(target)

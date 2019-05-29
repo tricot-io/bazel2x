@@ -6,6 +6,7 @@
 package rules
 
 import (
+	"bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -18,8 +19,9 @@ type TargetCommonTest struct {
 	ShardCount *int64    `bazel:"shard_count"`
 }
 
-var _ ProcessArgsTarget = (*TargetCommonTest)(nil)
+var _ args.ProcessArgsTarget = (*TargetCommonTest)(nil)
 
 func (self *TargetCommonTest) DidProcessArgs(ctx core.Context) error {
+	// TODO(vtl): Check fields.
 	return nil
 }

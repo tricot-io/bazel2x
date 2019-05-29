@@ -1,7 +1,8 @@
 // Copyright 2019 Tricot Inc.
 // Use of this source code is governed by the license in the LICENSE file.
 
-package rules
+// Package args contains various helpers for extracting/processing starlark arguments.
+package args
 
 import (
 	"fmt"

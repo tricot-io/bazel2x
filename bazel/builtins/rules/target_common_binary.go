@@ -4,6 +4,7 @@
 package rules
 
 import (
+	"bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -12,7 +13,7 @@ type TargetCommonBinary struct {
 	OutputLicenses *[]string `bazel:"output_licenses"`
 }
 
-var _ ProcessArgsTarget = (*TargetCommonBinary)(nil)
+var _ args.ProcessArgsTarget = (*TargetCommonBinary)(nil)
 
 func (self *TargetCommonBinary) DidProcessArgs(ctx core.Context) error {
 	return nil

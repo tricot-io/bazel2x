@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 
+	"bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -77,7 +78,7 @@ func getAttrs(targetVp reflect.Value, attrs *[]string) {
 	}
 }
 
-func targetToString(ruleName string, target ProcessArgsTarget) string {
+func targetToString(ruleName string, target args.ProcessArgsTarget) string {
 	targetVp := reflect.ValueOf(target)
 	if targetVp.Kind() != reflect.Ptr {
 		panic(targetVp)

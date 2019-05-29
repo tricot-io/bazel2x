@@ -6,6 +6,7 @@ package rules
 import (
 	"fmt"
 
+	"bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -28,7 +29,7 @@ type TargetCommon struct {
 	label core.Label
 }
 
-var _ ProcessArgsTarget = (*TargetCommon)(nil)
+var _ args.ProcessArgsTarget = (*TargetCommon)(nil)
 
 func (self *TargetCommon) DidProcessArgs(ctx core.Context) error {
 	self.label = core.Label{

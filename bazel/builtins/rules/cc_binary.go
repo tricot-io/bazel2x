@@ -6,6 +6,7 @@ package rules
 import (
 	"go.starlark.net/starlark"
 
+	builtins_args "bazel2cmake/bazel/builtins/args"
 	"bazel2cmake/bazel/core"
 )
 
@@ -26,7 +27,7 @@ type CcBinaryTarget struct {
 	WinDefFile             *core.Label   `bazel:"win_def_file"`
 }
 
-var _ ProcessArgsTarget = (*CcBinaryTarget)(nil)
+var _ builtins_args.ProcessArgsTarget = (*CcBinaryTarget)(nil)
 var _ core.Target = (*CcBinaryTarget)(nil)
 
 func (self *CcBinaryTarget) DidProcessArgs(ctx core.Context) error {
@@ -43,7 +44,7 @@ var CcBinary = newRule("cc_binary",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
 	target := &CcBinaryTarget{}
-	if err := ProcessArgs(args, kwargs, ctx, target); err != nil {
+	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
 		return err
 	}
 	ctx.BuildTargets().Add(target)

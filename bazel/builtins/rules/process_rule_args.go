@@ -152,9 +152,14 @@ func processRuleArgsHelper(kwargs map[string]starlark.Value, ctx core.Context,
 
 }
 
-// ProcessKwargs processes kwargs for the given "target". Currently, it only handles arguments that
-// are kwargs (and typically arguments are required to be kwargs).
-func ProcessKwargs(kwargs []starlark.Tuple, ctx core.Context, target ProcessArgsTarget) error {
+// ProcessArgs processes kwargs for the given "target". Currently, it always requires that all
+// arguments be kwargs.
+func ProcessArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Context,
+	target ProcessArgsTarget) error {
+
+	if len(args) > 0 {
+		return fmt.Errorf("all arguments should be passed as kwargs")
+	}
 
 	kwargs2 := make(map[string]starlark.Value)
 	for _, elem := range kwargs {

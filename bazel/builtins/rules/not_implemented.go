@@ -11,7 +11,9 @@ import (
 
 // NotImplemented is used for Bazel rules that we haven't implemented (yet).
 func NotImplemented(ruleName string) *starlark.Builtin {
-	return newRule(ruleName, func(ctx core.Context, kwargs []starlark.Tuple) error {
+	return newRule(ruleName,
+		func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
+
 		return nil
 	})
 }

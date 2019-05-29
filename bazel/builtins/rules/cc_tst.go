@@ -47,9 +47,11 @@ func (self *CcTestTarget) String() string {
 }
 
 // CcTest implements the Bazel cc_test rule.
-var CcTest = newRule("cc_test", func(ctx core.Context, kwargs []starlark.Tuple) error {
+var CcTest = newRule("cc_test",
+	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
+
 	target := &CcTestTarget{}
-	if err := ProcessKwargs(kwargs, ctx, target); err != nil {
+	if err := ProcessArgs(args, kwargs, ctx, target); err != nil {
 		return err
 	}
 	ctx.BuildTargets().Add(target)

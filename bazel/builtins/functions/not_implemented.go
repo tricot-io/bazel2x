@@ -19,12 +19,12 @@ func NotImplemented(fnName string) *starlark.Builtin {
 	})
 }
 
-// NotImplemented2 is used for Bazel functions that we haven't implemented (yet), which are required
-// to return a function.
-func NotImplemented2(fnName string) *starlark.Builtin {
+// NotImplementedRv is used for Bazel functions that we haven't implemented (yet), which are
+// required to return a value other than None.
+func NotImplementedRv(fnName string, rv starlark.Value) *starlark.Builtin {
 	return starlark.NewBuiltin(fnName, func(thread *starlark.Thread, _ *starlark.Builtin,
 		args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error) {
 
-		return NotImplemented(fnName + "_result"), nil
+		return rv, nil
 	})
 }

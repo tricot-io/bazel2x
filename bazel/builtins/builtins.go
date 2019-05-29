@@ -128,8 +128,9 @@ var buildAndbzlCommonGlobals = starlark.StringDict{
 			starlark.StringDict{
 				// Non-rule Members
 				// https://docs.bazel.build/versions/master/skylark/lib/native.html
-				"existing_rule":   functions.NotImplemented("existing_rule"),
-				"existing_rules":  functions.NotImplemented("existing_rules"),
+				"existing_rule": functions.NotImplemented("existing_rule"),
+				"existing_rules": functions.NotImplementedRv("existing_rules",
+					&starlark.List{}),
 				"exports_files":   functions.NotImplemented("exports_files"),
 				"glob":            functions.NotImplemented("glob"),
 				"package_group":   functions.NotImplemented("package_group"),
@@ -157,7 +158,7 @@ var buildGlobals = starlarkUnion(
 	buildAndbzlCommonGlobals,
 	rulesGlobals,
 	starlark.StringDict{
-		"existing_rules":  functions.NotImplemented("existing_rules"),
+		"existing_rules":  functions.NotImplementedRv("existing_rules", &starlark.List{}),
 		"exports_files":   functions.NotImplemented("exports_files"),
 		"glob":            functions.NotImplemented("glob"),
 		"package":         functions.NotImplemented("package"),
@@ -171,10 +172,11 @@ var bzlGlobals = starlarkUnion(
 	commonGlobals,
 	buildAndbzlCommonGlobals,
 	starlark.StringDict{
-		"aspect":          functions.NotImplemented("aspect"),
-		"provider":        functions.NotImplemented("provider"),
-		"repository_rule": functions.NotImplemented2("repository_rule"),
-		"rule":            functions.NotImplemented2("rule"),
+		"aspect":   functions.NotImplemented("aspect"),
+		"provider": functions.NotImplemented("provider"),
+		"repository_rule": functions.NotImplementedRv("repository_rule",
+			functions.NotImplemented("repository_rule_rv")),
+		"rule": functions.NotImplementedRv("rule", functions.NotImplemented("rule_rv")),
 
 		// https://docs.bazel.build/versions/master/skylark/lib/attr.html
 		"attr": &starlarkstruct.Module{

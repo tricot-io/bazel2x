@@ -31,14 +31,8 @@ type CcTestTarget struct {
 var _ ProcessArgsTarget = (*CcTestTarget)(nil)
 var _ core.Target = (*CcTestTarget)(nil)
 
-func (self *CcTestTarget) Process(ctx core.Context) error {
-	if err := self.TargetCommon.Process(ctx); err != nil {
-		return nil
-	}
-	if err := self.TargetCommonTest.Process(ctx); err != nil {
-		return nil
-	}
-	// TODO(vtl): Check other fields.
+func (self *CcTestTarget) DidProcessArgs(ctx core.Context) error {
+	// TODO(vtl): Check fields.
 	return nil
 }
 

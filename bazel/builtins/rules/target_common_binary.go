@@ -14,6 +14,6 @@ type TargetCommonBinary struct {
 
 var _ ProcessArgsTarget = (*TargetCommonBinary)(nil)
 
-func (self *TargetCommonBinary) Process(ctx core.Context) error {
+func (self *TargetCommonBinary) DidProcessArgs(ctx core.Context) error {
 	return nil
 }

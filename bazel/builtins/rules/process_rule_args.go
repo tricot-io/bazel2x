@@ -12,9 +12,10 @@ import (
 	"bazel2cmake/bazel/core"
 )
 
+// ProcessArgsTarget is implemented by structs that are targets for ProcessArgs. ProcessArgs will
+// fill in a target's fields based on its field tags, and once complete it will call DidProcessArgs.
 type ProcessArgsTarget interface {
-	// TODO(vtl): Rename this, and stop requiring an impl call its members' Process methods too.
-	Process(ctx core.Context) error
+	DidProcessArgs(ctx core.Context) error
 }
 
 func toLabel(value starlark.Value, ctx core.Context) (core.Label, error) {
@@ -114,8 +115,19 @@ func setArg(argName string, value starlark.Value, ctx core.Context, dest reflect
 	return nil
 }
 
+var processArgsTargetType = reflect.TypeOf((*ProcessArgsTarget)(nil)).Elem()
+
 func processRuleArgsHelper(kwargs map[string]starlark.Value, ctx core.Context,
 	targetVp reflect.Value) error {
+
+	if !targetVp.Type().Implements(processArgsTargetType) {
+		panic(targetVp)
+	}
+
+	didProcessArgs := targetVp.MethodByName("DidProcessArgs")
+	if !didProcessArgs.IsValid() {
+		panic(targetVp)
+	}
 
 	v := targetVp.Elem()
 	if v.Kind() != reflect.Struct {
@@ -144,13 +156,20 @@ func processRuleArgsHelper(kwargs map[string]starlark.Value, ctx core.Context,
 				return fmt.Errorf("target argument %v required", argName)
 			}
 		} else if vf.Kind() == reflect.Struct {
-			if err := processRuleArgsHelper(kwargs, ctx, vf.Addr()); err != nil {
-				return err
+			vfa := vf.Addr()
+			if vfa.Type().Implements(processArgsTargetType) {
+				if err := processRuleArgsHelper(kwargs, ctx, vfa); err != nil {
+					return err
+				}
 			}
 		}
 	}
-	return nil
 
+	errorValue := didProcessArgs.Call([]reflect.Value{reflect.ValueOf(ctx)})[0]
+	if errorValue.IsNil() {
+		return nil
+	}
+	return errorValue.Interface().(error)
 }
 
 // ProcessArgs processes kwargs for the given "target". Currently, it always requires that all
@@ -183,5 +202,5 @@ func ProcessArgs(args starlark.Tuple, kwargs []starlark.Tuple, ctx core.Context,
 		return fmt.Errorf("unknown rule argument %v", k)
 	}
 
-	return target.Process(ctx)
+	return nil
 }

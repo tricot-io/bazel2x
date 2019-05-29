@@ -20,6 +20,6 @@ type TargetCommonTest struct {
 
 var _ ProcessArgsTarget = (*TargetCommonTest)(nil)
 
-func (self *TargetCommonTest) Process(ctx core.Context) error {
+func (self *TargetCommonTest) DidProcessArgs(ctx core.Context) error {
 	return nil
 }

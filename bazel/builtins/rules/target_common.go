@@ -30,7 +30,7 @@ type TargetCommon struct {
 
 var _ ProcessArgsTarget = (*TargetCommon)(nil)
 
-func (self *TargetCommon) Process(ctx core.Context) error {
+func (self *TargetCommon) DidProcessArgs(ctx core.Context) error {
 	self.label = core.Label{
 		Workspace: ctx.Label().Workspace,
 		Package:   ctx.Label().Package,

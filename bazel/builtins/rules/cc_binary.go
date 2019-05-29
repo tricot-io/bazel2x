@@ -29,14 +29,8 @@ type CcBinaryTarget struct {
 var _ ProcessArgsTarget = (*CcBinaryTarget)(nil)
 var _ core.Target = (*CcBinaryTarget)(nil)
 
-func (self *CcBinaryTarget) Process(ctx core.Context) error {
-	if err := self.TargetCommon.Process(ctx); err != nil {
-		return nil
-	}
-	if err := self.TargetCommonBinary.Process(ctx); err != nil {
-		return nil
-	}
-	// TODO(vtl): Check other fields.
+func (self *CcBinaryTarget) DidProcessArgs(ctx core.Context) error {
+	// TODO(vtl): Check fields.
 	return nil
 }
 

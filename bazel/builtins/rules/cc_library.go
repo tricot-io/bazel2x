@@ -29,11 +29,8 @@ type CcLibraryTarget struct {
 var _ ProcessArgsTarget = (*CcLibraryTarget)(nil)
 var _ core.Target = (*CcLibraryTarget)(nil)
 
-func (self *CcLibraryTarget) Process(ctx core.Context) error {
-	if err := self.TargetCommon.Process(ctx); err != nil {
-		return nil
-	}
-	// TODO(vtl): Check other fields.
+func (self *CcLibraryTarget) DidProcessArgs(ctx core.Context) error {
+	// TODO(vtl): Check fields.
 	return nil
 }
 

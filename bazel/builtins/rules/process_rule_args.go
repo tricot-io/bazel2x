@@ -13,6 +13,7 @@ import (
 )
 
 type ProcessArgsTarget interface {
+	// TODO(vtl): Rename this, and stop requiring an impl call its members' Process methods too.
 	Process(ctx core.Context) error
 }
 

@@ -19,6 +19,7 @@ import (
 	"bazel2cmake/bazel/utils"
 )
 
+var onlyPrintTargetsFlag = flag.Bool("only-print-targets", false, "print targets and exit")
 var outDirFlag = flag.String("out-dir", "", "(root) output directory")
 
 func printTargets(build *bazel.Build) {
@@ -320,7 +321,10 @@ func main() {
 		}
 	}
 
-	// printTargets(build)
+	if *onlyPrintTargetsFlag {
+		printTargets(build)
+		os.Exit(0)
+	}
 
 	outDir := workspaceDir
 	if *outDirFlag != "" {

@@ -24,6 +24,9 @@ type Build struct {
 	// loadCache caches the result of load statements. Its keys are labels (as strings).
 	loadCache map[string]*loadCacheEntry
 
+	// WorkspaceName contains the name of the workspace (if any).
+	WorkspaceName core.WorkspaceName
+
 	// BuildTargets contains the output build targets.
 	BuildTargets core.BuildTargets
 }

@@ -207,7 +207,7 @@ var workspaceGlobals = starlarkUnion(
 		"register_execution_platforms": functions.NotImplemented(
 			"register_execution_platforms"),
 		"register_toolchains": functions.NotImplemented("register_toolchains"),
-		"workspace":           functions.NotImplemented("workspace"),
+		"workspace":           workspace_rules.Workspace,
 
 		// Workspace Rules
 		// https://docs.bazel.build/versions/master/be/workspace.html

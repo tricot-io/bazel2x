@@ -9,7 +9,14 @@ import (
 
 // Context contains/makes accessible per-starlark-thread context data.
 type Context interface {
-	// Label returns a label indicating the name of the build file.
+	// WorkspaceName returns the name of the workspace (if any).
+	WorkspaceName() WorkspaceName
+
+	// SetWorkspaceName sets the name of the workspace.
+	SetWorkspaceName(workspaceName WorkspaceName) error
+
+	// Label returns a label indicating the name of the build file (note that it does not
+	// include the workspace name above).
 	Label() Label
 
 	// FileType returns the build file's type.

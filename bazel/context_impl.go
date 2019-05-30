@@ -4,6 +4,8 @@
 package bazel
 
 import (
+	"fmt"
+
 	"go.starlark.net/starlark"
 
 	"bazel2cmake/bazel/core"
@@ -17,6 +19,18 @@ type ContextImpl struct {
 }
 
 var _ core.Context = (*ContextImpl)(nil)
+
+func (self *ContextImpl) WorkspaceName() core.WorkspaceName {
+	return self.build.WorkspaceName
+}
+
+func (self *ContextImpl) SetWorkspaceName(workspaceName core.WorkspaceName) error {
+	if self.build.WorkspaceName != "" {
+		return fmt.Errorf("workspace name can only be set once")
+	}
+	self.build.WorkspaceName = workspaceName
+	return nil
+}
 
 func (self *ContextImpl) Label() core.Label {
 	return self.label

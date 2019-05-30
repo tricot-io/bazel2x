@@ -89,20 +89,8 @@ func (self *CmakeConverter) targetName(l core.Label) (string, error) {
 		return rv, nil
 	}
 
+	// TODO(vtl): Should return an error here.
 	return fmt.Sprintf("# TODO (external dep): %v", l), nil
-}
-
-// TODO(vtl): Remove
-func (self *CmakeConverter) targetName2(l core.Label) string {
-	if !l.IsExternal() {
-		return dashJoin(self.ProjectPrefix, toDashes(string(l.Package)),
-			toDashes(string(l.Target)))
-	}
-	if rv, ok := self.ExternalTargets[l.String()]; ok {
-		return rv
-	}
-
-	return fmt.Sprintf("# TODO (external dep): %v", l)
 }
 
 func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w io.Writer) error {
@@ -182,7 +170,10 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName2(l)
+				depName, err := self.targetName(l)
+				if err != nil {
+					return err
+				}
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
@@ -217,7 +208,10 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName2(l)
+				depName, err := self.targetName(l)
+				if err != nil {
+					return err
+				}
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
@@ -252,7 +246,10 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName2(l)
+				depName, err := self.targetName(l)
+				if err != nil {
+					return err
+				}
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}

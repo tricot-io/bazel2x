@@ -141,6 +141,51 @@ func (self *CmakeConverter) writeCommonIncludes(packageName core.PackageName, w 
 	return nil
 }
 
+func (self *CmakeConverter) writeRootHeader(packageName core.PackageName, w io.Writer) error {
+	if err := self.writeCommonHeaderTop(packageName, w); err != nil {
+		return err
+	}
+
+	if err := self.writeCommonIncludes(packageName, w); err != nil {
+		return err
+	}
+
+	// TODO(vtl): More.
+
+	return nil
+}
+
+// TODO(vtl): More.
+
+func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
+	packageTargets *core.PackageTargets, packagePath string) error {
+
+	outputPath := filepath.Join(packagePath, "CMakeLists.txt")
+	f, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := self.writeRootHeader(packageName, f); err != nil {
+		return err
+	}
+
+	for _, target := range packageTargets.TargetList {
+		// TODO(vtl): FIXME
+		if err := self.writeNonRootBody(target.Label().Target, target, f); err != nil {
+			return err
+		}
+	}
+
+	// TODO(vtl): FIXME
+	if err := self.writeNonRootTrailer(packageName, f); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w io.Writer) error {
 	if err := self.writeCommonHeaderTop(packageName, w); err != nil {
 		return err
@@ -330,8 +375,7 @@ func (self *CmakeConverter) writeCmakeLists(packageName core.PackageName,
 	packageTargets *core.PackageTargets, packagePath string) error {
 
 	if packageName == "" {
-		// TODO(vtl)
-		return self.writeNonRootCmakeLists(packageName, packageTargets, packagePath)
+		return self.writeRootCmakeLists(packageName, packageTargets, packagePath)
 	} else {
 		return self.writeNonRootCmakeLists(packageName, packageTargets, packagePath)
 	}

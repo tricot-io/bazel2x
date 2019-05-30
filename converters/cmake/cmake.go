@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"bazel2cmake/bazel"
@@ -59,6 +60,11 @@ type CmakeConverter struct {
 	// included.
 	Includes []string
 
+	// RootUserHeader is the custom part of the header for the root CMakeLists.txt; it is a list
+	// of lines. If nil, "list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)" will
+	// be added. Typically, you might want to add_subdirectory() external projects here.
+	RootUserHeader []string
+
 	// ExternalTargets are external targets that may appear as dependencies; it is a map from
 	// label to CMake target name. This has precedence over ExternalWorkspaces.
 	ExternalTargets map[string]string
@@ -97,6 +103,11 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 	}
 	if self.Includes == nil {
 		self.Includes = []string{"Bazel2cmakeSupport"}
+	}
+	if self.RootUserHeader == nil {
+		self.RootUserHeader = []string{
+			"list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)",
+		}
 	}
 	return nil
 }
@@ -308,6 +319,30 @@ func (self *CmakeConverter) writeTargets(packageTargets *core.PackageTargets, w 
 	return nil
 }
 
+func (self *CmakeConverter) writeAddSubdirs(w io.Writer) error {
+	workspaceTargets := self.build.BuildTargets[core.MainWorkspaceName]
+	pkgs := make([]string, 0, len(workspaceTargets) - 1)
+	for packageName := range workspaceTargets {
+		if packageName != "" {
+			pkgs = append(pkgs, string(packageName))
+		}
+	}
+	sort.Strings(pkgs)
+
+	if len(pkgs) > 0 {
+		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+			return err
+		}
+		for _, pkg := range pkgs {
+			if _, err := fmt.Fprintf(w, "add_subdirectory(%v)\n", pkg); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 	packageTargets *core.PackageTargets, packagePath string) error {
 
@@ -322,7 +357,16 @@ func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 		return err
 	}
 
-	// TODO(vtl): More.
+	if len(self.RootUserHeader) > 0 {
+		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+			return err
+		}
+		for _, line := range self.RootUserHeader {
+			if _, err := fmt.Fprintf(w, "%v\n", line); err != nil {
+				return err
+			}
+		}
+	}
 
 	if err := self.writeIncludes(packageName, w); err != nil {
 		return err
@@ -332,9 +376,11 @@ func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 		return err
 	}
 
-	// TODO(vtl): More.
-
 	if err := self.writeTargets(packageTargets, w); err != nil {
+		return err
+	}
+
+	if err := self.writeAddSubdirs(w); err != nil {
 		return err
 	}
 
@@ -392,7 +438,6 @@ func (self *CmakeConverter) Convert(outputPath string) error {
 			return err
 		}
 
-		// TODO(vtl): We should do something else for the "root" package.
 		if err := self.writeCmakeLists(packageName, packageTargets,
 			packagePath); err != nil {
 			return err

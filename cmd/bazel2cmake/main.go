@@ -133,6 +133,7 @@ func main() {
 	//	CcBinaryName:       "",  // Use default.
 	//	CcTestName:         "",  // Use default.
 	//	Includes:           nil, // Use default.
+	//	RootUserHeader:     nil, // Use default.
 	//	ExternalTargets:    nil, // Use default.
 	//	ExternalWorkspaces: nil, // Use default.
 	//}
@@ -145,6 +146,17 @@ func main() {
 		CcBinaryName:       "tricot_cc_binary",
 		CcTestName:         "tricot_cc_test",
 		Includes:           []string{"TricotCommon"},
+		RootUserHeader: []string{
+			"list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)",
+			"",
+			"SET(INSTALL_GTEST OFF CACHE BOOL \"\" FORCE)",
+			"add_subdirectory(cmake-external/googletest)",
+			"",
+			"add_subdirectory(cmake-external/mpark_variant)",
+			"add_subdirectory(cmake-external/optional_lite)",
+			"add_subdirectory(cmake-external/string_view_lite)",
+			"add_subdirectory(cmake-external/tricot_tid_public_output_cpp)",
+		},
 		ExternalTargets: map[string]string{
 			"@googletest//:gtest":                  "gtest",
 			"@googletest//:gtest_main":             "gtest_main",

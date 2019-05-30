@@ -142,9 +142,18 @@ func main() {
 		CcBinaryName:   "tricot_cc_binary",
 		CcTestName:     "tricot_cc_test",
 		Includes:       []string{"TricotCommon"},
-		ExternalTargets: map[string]string {
-			"@googletest//:gtest":      "gtest",
-			"@googletest//:gtest_main": "gtest_main",
+		ExternalTargets: map[string]string{
+			"@googletest//:gtest":                  "gtest",
+			"@googletest//:gtest_main":             "gtest_main",
+			"@mpark_variant//:mpark-variant":       "mpark_variant",
+			"@optional_lite//:optional-lite":       "optional-lite",
+			"@string_view_lite//:string_view-lite": "string_view-lite",
+			// TODO(vtl): I just made these up.
+			"@boost//:asio":  "boost-asio",
+			"@boost//:beast": "boost-beast",
+		},
+		ExternalWorkspaces: map[string]string{
+			"tricot_tid_public_output_cpp": "",
 		},
 	}
 

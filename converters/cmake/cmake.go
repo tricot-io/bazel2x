@@ -50,8 +50,13 @@ type CmakeConverter struct {
 	Includes []string
 
 	// ExternalTargets are external targets that may appear as dependencies; it is a map from
-	// label to CMake target name.
+	// label to CMake target name. This has precedence over ExternalWorkspaces.
 	ExternalTargets map[string]string
+
+	// ExternalWorkspaces are external workspaces also converted by bazel2cmake; it is a map
+	// from workspace name (not including the leading '@') to project prefix (if empty, the
+	// workspace name will be used). ExternalTargets has precedence over this.
+	ExternalWorkspaces map[string]string
 
 	build         *bazel.Build
 }
@@ -88,9 +93,14 @@ func (self *CmakeConverter) targetName(l core.Label) (string, error) {
 	if rv, ok := self.ExternalTargets[l.String()]; ok {
 		return rv, nil
 	}
-
-	// TODO(vtl): Should return an error here.
-	return fmt.Sprintf("# TODO (external dep): %v", l), nil
+	if projectPrefix, ok := self.ExternalWorkspaces[string(l.Workspace)]; ok {
+		if projectPrefix == "" {
+			projectPrefix = string(l.Workspace)
+		}
+		return dashJoin(projectPrefix, toDashes(string(l.Package)),
+			toDashes(string(l.Target))), nil
+	}
+	return "", fmt.Errorf("no known CMake target for label %v", l)
 }
 
 func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w io.Writer) error {

@@ -57,13 +57,12 @@ type CmakeConverter struct {
 	// will be used.
 	CcTestName string `json:"ccTestName"`
 
-	// Includes are the includes for CMakeLists.txt files. If nil, "Bazel2cmakeSupport" will be
-	// included.
+	// Includes are the includes for the root CMakeLists.txt. If nil, "cmake/bazel2cmake.cmake"
+	// will be included.
 	Includes []string `json:"includes"`
 
 	// RootUserHeader is the custom part of the header for the root CMakeLists.txt; it is a list
-	// of lines. If nil, "list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)" will
-	// be added. Typically, you might want to add_subdirectory() external projects here.
+	// of lines. If nil, nothing will be added.
 	RootUserHeader []string `json:"rootUserHeader"`
 
 	// ExternalTargets are external targets that may appear as dependencies; it is a map from
@@ -106,12 +105,10 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 		self.CcTestName = "bazel2cmake_cc_test"
 	}
 	if self.Includes == nil {
-		self.Includes = []string{"Bazel2cmakeSupport"}
+		self.Includes = []string{"cmake/bazel2cmake.cmake"}
 	}
 	if self.RootUserHeader == nil {
-		self.RootUserHeader = []string{
-			"list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)",
-		}
+		self.RootUserHeader = []string{}
 	}
 	return nil
 }

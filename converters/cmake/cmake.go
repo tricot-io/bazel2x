@@ -157,21 +157,6 @@ func (self *CmakeConverter) writeHeader(packageName core.PackageName, w io.Write
 	return nil
 }
 
-func (self *CmakeConverter) writeIncludes(packageName core.PackageName, w io.Writer) error {
-	if len(self.Includes) > 0 {
-		if _, err := fmt.Fprintf(w, "\n"); err != nil {
-			return err
-		}
-		for _, inc := range self.Includes {
-			if _, err := fmt.Fprintf(w, "include(%v)\n", inc); err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
 func (self *CmakeConverter) writeTarget(targetName core.TargetName, target core.Target,
 	w io.Writer) error {
 
@@ -372,8 +357,15 @@ func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 		}
 	}
 
-	if err := self.writeIncludes(packageName, w); err != nil {
-		return err
+	if len(self.Includes) > 0 {
+		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+			return err
+		}
+		for _, inc := range self.Includes {
+			if _, err := fmt.Fprintf(w, "include(%v)\n", inc); err != nil {
+				return err
+			}
+		}
 	}
 
 	if _, err := fmt.Fprintf(w, "\n%v()\n", self.StartWorkspaceName); err != nil {
@@ -406,10 +398,6 @@ func (self *CmakeConverter) writeNonRootCmakeLists(packageName core.PackageName,
 	defer w.Close()
 
 	if err := self.writeHeader(packageName, w); err != nil {
-		return err
-	}
-
-	if err := self.writeIncludes(packageName, w); err != nil {
 		return err
 	}
 

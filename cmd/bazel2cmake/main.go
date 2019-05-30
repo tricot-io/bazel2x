@@ -5,8 +5,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -16,8 +18,11 @@ import (
 	"bazel2cmake/converters/cmake"
 )
 
-var onlyPrintTargetsFlag = flag.Bool("only-print-targets", false, "print targets and exit")
-var outDirFlag = flag.String("out-dir", "", "(root) output directory")
+var bazelOutputBaseFlag = flag.String("bazel_output_base", "", "Bazel output base directory")
+var configFileFlag = flag.String("config_file", "", "configuration file (e.g., bazel2cmake.json)")
+
+var onlyPrintTargetsFlag = flag.Bool("only_print_targets", false, "print targets and exit")
+var outDirFlag = flag.String("out_dir", "", "(root) output directory")
 
 func printTargets(build *bazel.Build) {
 	for workspaceName, workspaceTargets := range build.BuildTargets {
@@ -67,14 +72,36 @@ func main() {
 		os.Exit(1)
 	}
 
-	// The "project name" is the name of the directory. This is a bit odd, but Bazel seems to
-	// prefer to put things in bazel-<project name>, instead of bazel-<workspace-name>.
-	projectName := filepath.Base(workspaceDir)
-	if projectName == string(filepath.Separator) {
-		fmt.Printf("ERROR: unable to determine project name\n")
-		os.Exit(1)
+	var outputBase string
+	if *bazelOutputBaseFlag == "" {
+		outputBase = utils.DefaultOutputBaseDir(workspaceDir)
+	} else {
+		outputBase = *bazelOutputBaseFlag
 	}
-	fmt.Printf("Project name: %v\n", projectName)
+	fmt.Printf("Bazel output base directory: %v\n", outputBase)
+
+	var bazel2cmakeConfig []byte
+	if *configFileFlag != "" {
+		// If -config_file was used, then read the config from there.
+		bazel2cmakeConfig, err = ioutil.ReadFile(*configFileFlag)
+		if err != nil {
+			fmt.Printf("ERROR: failed to read configuration file %v: %v\n",
+				*configFileFlag, err)
+			os.Exit(1)
+		}
+	} else {
+		// Otherwise, try <workspaceDir>/bazel2cmake.json.
+		configFile := filepath.Join(workspaceDir, "bazel2cmake.json")
+		bazel2cmakeConfig, err = ioutil.ReadFile(configFile)
+		if err != nil {
+			if !os.IsNotExist(err) {
+				fmt.Printf("ERROR: failed to read configuration file %v: %v\n",
+					configFile, err)
+				os.Exit(1)
+			}
+			bazel2cmakeConfig = nil
+		}
+	}
 
 	buildFileLabels := make([]core.Label, len(buildFiles))
 	for i, buildFile := range buildFiles {
@@ -90,7 +117,7 @@ func main() {
 		}
 	}
 
-	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, projectName))
+	build := bazel.NewBuild(bazel.GetSourceFileReader(workspaceDir, outputBase))
 
 	err = build.ExecWorkspaceFile()
 	if err != nil {
@@ -123,53 +150,12 @@ func main() {
 		outDir = *outDirFlag
 	}
 
-	// TODO(vtl)
-	//converter := &cmake.CmakeConverter{
-	//	MinimumVersion:     "3.10.0",
-	//	ProjectPrefix:      "",  // Use default.
-	//	StartWorkspaceName: "",  // Use default.
-	//	EndWorkspaceName:   "",  // Use default.
-	//	CcLibraryName:      "",  // Use default.
-	//	CcBinaryName:       "",  // Use default.
-	//	CcTestName:         "",  // Use default.
-	//	Includes:           nil, // Use default.
-	//	RootUserHeader:     nil, // Use default.
-	//	ExternalTargets:    nil, // Use default.
-	//	ExternalWorkspaces: nil, // Use default.
-	//}
-	converter := &cmake.CmakeConverter{
-		MinimumVersion:     "3.10.0",
-		ProjectPrefix:      "", // Use default.
-		StartWorkspaceName: "tricot_start_workspace",
-		EndWorkspaceName:   "tricot_end_workspace",
-		CcLibraryName:      "tricot_cc_library",
-		CcBinaryName:       "tricot_cc_binary",
-		CcTestName:         "tricot_cc_test",
-		Includes:           []string{"TricotCommon"},
-		RootUserHeader: []string{
-			"list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)",
-			"",
-			"SET(INSTALL_GTEST OFF CACHE BOOL \"\" FORCE)",
-			"add_subdirectory(cmake-external/googletest)",
-			"",
-			"add_subdirectory(cmake-external/mpark_variant)",
-			"add_subdirectory(cmake-external/optional_lite)",
-			"add_subdirectory(cmake-external/string_view_lite)",
-			"add_subdirectory(cmake-external/tricot_tid_public_output_cpp)",
-		},
-		ExternalTargets: map[string]string{
-			"@googletest//:gtest":                  "gtest",
-			"@googletest//:gtest_main":             "gtest_main",
-			"@mpark_variant//:mpark-variant":       "mpark_variant",
-			"@optional_lite//:optional-lite":       "optional-lite",
-			"@string_view_lite//:string_view-lite": "string_view-lite",
-			// TODO(vtl): I just made these up.
-			"@boost//:asio":  "boost-asio",
-			"@boost//:beast": "boost-beast",
-		},
-		ExternalWorkspaces: map[string]string{
-			"tricot_tid_public_output_cpp": "",
-		},
+	converter := cmake.CmakeConverter{}
+	if bazel2cmakeConfig != nil {
+		if err := json.Unmarshal(bazel2cmakeConfig, &converter); err != nil {
+			fmt.Printf("ERROR: error parsing configuration: %v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	err = converter.Init(build)

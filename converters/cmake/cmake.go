@@ -26,59 +26,63 @@ func dashJoin(parts ...string) string {
 }
 
 type CmakeConverter struct {
-	// MinimumVersion is the minimum CMake version (e.g., "3.10.0").
-	MinimumVersion string
+	// MinimumVersion is the minimum CMake version (e.g., "3.10.0"). If empty, "3.10.0" will be
+	// used.
+	MinimumVersion string `json:"minimumVersion"`
 
 	// ProjectPrefix is the prefix to prepend (not including separating '-') to all project
 	// names (it is also the name of the root project). If empty, the workspace name will be
 	// used.
-	ProjectPrefix string
+	ProjectPrefix string `json:"projectPrefix"`
 
 	// StartWorkspaceName is the CMake name for the macro to call in the root CMakeLists.txt
 	// before emitting any of our own targets (possibly by adding our own subdirectories). If
 	// empty, "bazel2cmake_start_workspace" will be used.
-	StartWorkspaceName string
+	StartWorkspaceName string `json:"startWorkspaceName"`
 
 	// EndWorkspaceName is the CMake name for the macro to call in the root CMakeLists.txt
 	// after emitting all of our own targets (possibly by adding our own subdirectories). If
 	// empty, "bazel2cmake_end_workspace" will be used.
-	EndWorkspaceName string
+	EndWorkspaceName string `json:"endWorkspaceName"`
 
 	// CcLibraryName is the CMake name to use for cc_library targets. If empty,
 	// "bazel2cmake_cc_library" will be used.
-	CcLibraryName string
+	CcLibraryName string `json:"ccLibraryName"`
 
 	// CcBinaryName is the CMake name to use for cc_binary targets. If empty,
 	// "bazel2cmake_cc_binary" will be used.
-	CcBinaryName string
+	CcBinaryName string `json:"ccBinaryName"`
 
 	// CcTestName is the CMake name to use for cc_test targets. If empty, "bazel2cmake_cc_test"
 	// will be used.
-	CcTestName string
+	CcTestName string `json:"ccTestName"`
 
 	// Includes are the includes for CMakeLists.txt files. If nil, "Bazel2cmakeSupport" will be
 	// included.
-	Includes []string
+	Includes []string `json:"includes"`
 
 	// RootUserHeader is the custom part of the header for the root CMakeLists.txt; it is a list
 	// of lines. If nil, "list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)" will
 	// be added. Typically, you might want to add_subdirectory() external projects here.
-	RootUserHeader []string
+	RootUserHeader []string `json:"rootUserHeader"`
 
 	// ExternalTargets are external targets that may appear as dependencies; it is a map from
 	// label to CMake target name. This has precedence over ExternalWorkspaces.
-	ExternalTargets map[string]string
+	ExternalTargets map[string]string `json:"externalTargets"`
 
 	// ExternalWorkspaces are external workspaces also converted by bazel2cmake; it is a map
 	// from workspace name (not including the leading '@') to project prefix (if empty, the
 	// workspace name will be used). ExternalTargets has precedence over this.
-	ExternalWorkspaces map[string]string
+	ExternalWorkspaces map[string]string `json:"externalWorkspaces"`
 
 	build         *bazel.Build
 }
 
 func (self *CmakeConverter) Init(build *bazel.Build) error {
 	self.build = build
+	if self.MinimumVersion == "" {
+		self.MinimumVersion = "3.10.0"
+	}
 	if self.ProjectPrefix == "" {
 		if build.WorkspaceName != "" {
 			self.ProjectPrefix = string(build.WorkspaceName)

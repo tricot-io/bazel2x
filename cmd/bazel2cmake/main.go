@@ -124,24 +124,27 @@ func main() {
 	}
 
 	// TODO(vtl)
-	/*
+	//converter := &cmake.CmakeConverter{
+	//	MinimumVersion:     "3.10.0",
+	//	ProjectPrefix:      "",  // Use default.
+	//	StartWorkspaceName: "",  // Use default.
+	//	EndWorkspaceName:   "",  // Use default.
+	//	CcLibraryName:      "",  // Use default.
+	//	CcBinaryName:       "",  // Use default.
+	//	CcTestName:         "",  // Use default.
+	//	Includes:           nil, // Use default.
+	//	ExternalTargets:    nil, // Use default.
+	//	ExternalWorkspaces: nil, // Use default.
+	//}
 	converter := &cmake.CmakeConverter{
-		MinimumVersion:  "3.10.0",
-		ProjectPrefix:   "",  // Use default.
-		CcLibraryName:   "",  // Use default.
-		CcBinaryName:    "",  // Use default.
-		CcTestName:      "",  // Use default.
-		Includes:        nil, // Use default.
-		ExternalTargets: nil, // Use default.
-	}
-	*/
-	converter := &cmake.CmakeConverter{
-		MinimumVersion: "3.10.0",
-		ProjectPrefix:  "", // Use default.
-		CcLibraryName:  "tricot_cc_library",
-		CcBinaryName:   "tricot_cc_binary",
-		CcTestName:     "tricot_cc_test",
-		Includes:       []string{"TricotCommon"},
+		MinimumVersion:     "3.10.0",
+		ProjectPrefix:      "", // Use default.
+		StartWorkspaceName: "tricot_start_workspace",
+		EndWorkspaceName:   "tricot_end_workspace",
+		CcLibraryName:      "tricot_cc_library",
+		CcBinaryName:       "tricot_cc_binary",
+		CcTestName:         "tricot_cc_test",
+		Includes:           []string{"TricotCommon"},
 		ExternalTargets: map[string]string{
 			"@googletest//:gtest":                  "gtest",
 			"@googletest//:gtest_main":             "gtest_main",

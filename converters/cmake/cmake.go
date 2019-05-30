@@ -49,13 +49,21 @@ type CmakeConverter struct {
 	// included.
 	Includes []string
 
+	// ExternalTargets are external targets that may appear as dependencies; it is a map from
+	// label to CMake target name.
+	ExternalTargets map[string]string
+
 	build         *bazel.Build
 }
 
 func (self *CmakeConverter) Init(build *bazel.Build) error {
 	self.build = build
 	if self.ProjectPrefix == "" {
-		self.ProjectPrefix = string(build.WorkspaceName)
+		if build.WorkspaceName != "" {
+			self.ProjectPrefix = string(build.WorkspaceName)
+		} else {
+			self.ProjectPrefix = "bazel2cmake_project"
+		}
 	}
 	if self.CcLibraryName == "" {
 		self.CcLibraryName = "bazel2cmake_cc_library"
@@ -72,13 +80,29 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 	return nil
 }
 
-func (self *CmakeConverter) targetName(l core.Label) string {
+func (self *CmakeConverter) targetName(l core.Label) (string, error) {
+	if !l.IsExternal() {
+		return dashJoin(self.ProjectPrefix, toDashes(string(l.Package)),
+			toDashes(string(l.Target))), nil
+	}
+	if rv, ok := self.ExternalTargets[l.String()]; ok {
+		return rv, nil
+	}
+
+	return fmt.Sprintf("# TODO (external dep): %v", l), nil
+}
+
+// TODO(vtl): Remove
+func (self *CmakeConverter) targetName2(l core.Label) string {
 	if !l.IsExternal() {
 		return dashJoin(self.ProjectPrefix, toDashes(string(l.Package)),
 			toDashes(string(l.Target)))
-	} else {
-		return fmt.Sprintf("# TODO (external dep): %v", l)
 	}
+	if rv, ok := self.ExternalTargets[l.String()]; ok {
+		return rv
+	}
+
+	return fmt.Sprintf("# TODO (external dep): %v", l)
 }
 
 func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w io.Writer) error {
@@ -113,19 +137,20 @@ func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w i
 func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target core.Target,
 	w io.Writer) error {
 
+	name, err := self.targetName(target.Label())
+	if err != nil {
+		return err
+	}
+
 	switch target.(type) {
 	case *rules.CcLibraryTarget:
 		t := target.(*rules.CcLibraryTarget)
-
 		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcLibraryName); err != nil {
 			return err
 		}
-
-		if _, err := fmt.Fprintf(w, "    %v\n",
-			self.targetName(target.Label())); err != nil {
+		if _, err := fmt.Fprintf(w, "    %v\n", name); err != nil {
 			return err
 		}
-
 		if t.Srcs != nil {
 			if _, err := fmt.Fprintf(w, "    SRCS\n"); err != nil {
 				return err
@@ -139,7 +164,6 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				}
 			}
 		}
-
 		if t.Hdrs != nil {
 			if _, err := fmt.Fprintf(w, "    HDRS\n"); err != nil {
 				return err
@@ -153,34 +177,28 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				}
 			}
 		}
-
 		if t.Deps != nil {
 			if _, err := fmt.Fprintf(w, "    DEPS\n"); err != nil {
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName(l)
+				depName := self.targetName2(l)
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
 			}
 		}
-
 		if _, err := fmt.Fprintf(w, ")\n"); err != nil {
 			return err
 		}
 	case *rules.CcBinaryTarget:
 		t := target.(*rules.CcBinaryTarget)
-
 		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcBinaryName); err != nil {
 			return err
 		}
-
-		if _, err := fmt.Fprintf(w, "    %v\n",
-			self.targetName(target.Label())); err != nil {
+		if _, err := fmt.Fprintf(w, "    %v\n", name); err != nil {
 			return err
 		}
-
 		if t.Srcs != nil {
 			if _, err := fmt.Fprintf(w, "    SRCS\n"); err != nil {
 				return err
@@ -194,34 +212,28 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				}
 			}
 		}
-
 		if t.Deps != nil {
 			if _, err := fmt.Fprintf(w, "    DEPS\n"); err != nil {
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName(l)
+				depName := self.targetName2(l)
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
 			}
 		}
-
 		if _, err := fmt.Fprintf(w, ")\n"); err != nil {
 			return err
 		}
 	case *rules.CcTestTarget:
 		t := target.(*rules.CcTestTarget)
-
 		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcTestName); err != nil {
 			return err
 		}
-
-		if _, err := fmt.Fprintf(w, "    %v\n",
-			self.targetName(target.Label())); err != nil {
+		if _, err := fmt.Fprintf(w, "    %v\n", name); err != nil {
 			return err
 		}
-
 		if t.Srcs != nil {
 			if _, err := fmt.Fprintf(w, "    SRCS\n"); err != nil {
 				return err
@@ -235,19 +247,17 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 				}
 			}
 		}
-
 		if t.Deps != nil {
 			if _, err := fmt.Fprintf(w, "    DEPS\n"); err != nil {
 				return err
 			}
 			for _, l := range *t.Deps {
-				depName := self.targetName(l)
+				depName := self.targetName2(l)
 				if _, err := fmt.Fprintf(w, "        %v\n", depName); err != nil {
 					return err
 				}
 			}
 		}
-
 		if _, err := fmt.Fprintf(w, ")\n"); err != nil {
 			return err
 		}
@@ -288,6 +298,17 @@ func (self *CmakeConverter) writeNonRootCmakeLists(packageName core.PackageName,
 	return nil
 }
 
+func (self *CmakeConverter) writeCmakeLists(packageName core.PackageName,
+	packageTargets *core.PackageTargets, packagePath string) error {
+
+	if packageName == "" {
+		// TODO(vtl)
+		return self.writeNonRootCmakeLists(packageName, packageTargets, packagePath)
+	} else {
+		return self.writeNonRootCmakeLists(packageName, packageTargets, packagePath)
+	}
+}
+
 func (self *CmakeConverter) Convert(outputPath string) error {
 	workspaceTargets, ok := self.build.BuildTargets[core.MainWorkspaceName]
 	if !ok {
@@ -301,7 +322,7 @@ func (self *CmakeConverter) Convert(outputPath string) error {
 		}
 
 		// TODO(vtl): We should do something else for the "root" package.
-		if err := self.writeNonRootCmakeLists(packageName, packageTargets,
+		if err := self.writeCmakeLists(packageName, packageTargets,
 			packagePath); err != nil {
 			return err
 		}

@@ -122,7 +122,7 @@ var commonGlobals = starlark.StringDict{
 var buildAndbzlCommonGlobals = starlark.StringDict{
 	"configuration_field": functions.NotImplemented("configuration_field"),
 	"native": &starlarkstruct.Module{
-		Name:    "native",
+		Name: "native",
 		// Note: Rules will be added separately.
 		Members: starlarkUnion(
 			starlark.StringDict{
@@ -180,7 +180,7 @@ var bzlGlobals = starlarkUnion(
 
 		// https://docs.bazel.build/versions/master/skylark/lib/attr.html
 		"attr": &starlarkstruct.Module{
-			Name:    "attr",
+			Name: "attr",
 			Members: starlark.StringDict{
 				"bool":     functions.NotImplemented("bool"),
 				"int":      functions.NotImplemented("int"),

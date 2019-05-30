@@ -17,8 +17,8 @@ type Target interface {
 
 // PackageTargets contains the targets in a package.
 type PackageTargets struct {
-	TargetList     []Target
-	TargetsByName  map[TargetName]Target
+	TargetList    []Target
+	TargetsByName map[TargetName]Target
 }
 
 // Add adds a target to the package.

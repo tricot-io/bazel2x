@@ -45,10 +45,10 @@ func (self *CcTestTarget) String() string {
 var CcTest = newRule("cc_test",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
-	target := &CcTestTarget{}
-	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
-		return err
-	}
-	ctx.BuildTargets().Add(target)
-	return nil
-})
+		target := &CcTestTarget{}
+		if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
+			return err
+		}
+		ctx.BuildTargets().Add(target)
+		return nil
+	})

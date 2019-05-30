@@ -14,6 +14,6 @@ func NotImplemented(ruleName string) *starlark.Builtin {
 	return newRule(ruleName,
 		func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
-		return nil
-	})
+			return nil
+		})
 }

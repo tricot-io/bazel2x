@@ -30,10 +30,10 @@ func (self *WorkspaceArgs) DidProcessArgs(ctx core.Context) error {
 var Workspace = newWorkspaceRule("workspace",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
-	target := &WorkspaceArgs{}
-	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
-		return err
-	}
-	ctx.SetWorkspaceName(core.WorkspaceName(*target.Name))
-	return nil
-})
+		target := &WorkspaceArgs{}
+		if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
+			return err
+		}
+		ctx.SetWorkspaceName(core.WorkspaceName(*target.Name))
+		return nil
+	})

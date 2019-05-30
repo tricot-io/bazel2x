@@ -75,7 +75,7 @@ type CmakeConverter struct {
 	// workspace name will be used). ExternalTargets has precedence over this.
 	ExternalWorkspaces map[string]string `json:"externalWorkspaces"`
 
-	build         *bazel.Build
+	build *bazel.Build
 }
 
 func (self *CmakeConverter) Init(build *bazel.Build) error {
@@ -325,7 +325,7 @@ func (self *CmakeConverter) writeTargets(packageTargets *core.PackageTargets, w 
 
 func (self *CmakeConverter) writeAddSubdirs(w io.Writer) error {
 	workspaceTargets := self.build.BuildTargets[core.MainWorkspaceName]
-	pkgs := make([]string, 0, len(workspaceTargets) - 1)
+	pkgs := make([]string, 0, len(workspaceTargets)-1)
 	for packageName := range workspaceTargets {
 		if packageName != "" {
 			pkgs = append(pkgs, string(packageName))

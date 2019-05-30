@@ -16,7 +16,7 @@ func ReadBazelIgnore(workspaceDir string) []string {
 	}
 
 	result := strings.FieldsFunc(string(contents), func(c rune) bool {
-		return c == '\n' || c == '\r';
+		return c == '\n' || c == '\r'
 	})
 
 	// Be nice and clean the results (e.g., in case there are trailing slashes).

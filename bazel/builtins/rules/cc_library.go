@@ -43,10 +43,10 @@ func (self *CcLibraryTarget) String() string {
 var CcLibrary = newRule("cc_library",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
-	target := &CcLibraryTarget{}
-	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
-		return err
-	}
-	ctx.BuildTargets().Add(target)
-	return nil
-})
+		target := &CcLibraryTarget{}
+		if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
+			return err
+		}
+		ctx.BuildTargets().Add(target)
+		return nil
+	})

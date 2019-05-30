@@ -43,10 +43,10 @@ func (self *CcBinaryTarget) String() string {
 var CcBinary = newRule("cc_binary",
 	func(ctx core.Context, args starlark.Tuple, kwargs []starlark.Tuple) error {
 
-	target := &CcBinaryTarget{}
-	if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
-		return err
-	}
-	ctx.BuildTargets().Add(target)
-	return nil
-})
+		target := &CcBinaryTarget{}
+		if err := builtins_args.ProcessArgs(args, kwargs, ctx, target); err != nil {
+			return err
+		}
+		ctx.BuildTargets().Add(target)
+		return nil
+	})

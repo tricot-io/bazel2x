@@ -89,17 +89,21 @@ func main() {
 				*configFileFlag, err)
 			os.Exit(1)
 		}
+		fmt.Printf("Configuration file: %v\n", *configFileFlag)
 	} else {
 		// Otherwise, try <workspaceDir>/bazel2cmake.json.
 		configFile := filepath.Join(workspaceDir, "bazel2cmake.json")
 		bazel2cmakeConfig, err = ioutil.ReadFile(configFile)
-		if err != nil {
+		if err == nil {
+			fmt.Printf("Configuration file: %v\n", configFile)
+		} else {
 			if !os.IsNotExist(err) {
 				fmt.Printf("ERROR: failed to read configuration file %v: %v\n",
 					configFile, err)
 				os.Exit(1)
 			}
 			bazel2cmakeConfig = nil
+			fmt.Printf("Configuration file: n/a (using default configuration)\n")
 		}
 	}
 

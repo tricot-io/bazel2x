@@ -51,26 +51,48 @@ type CmakeConverter struct {
 	// used.
 	ProjectPrefix string
 
-	// NonRootIncludes are the includes for non-root CMakeLists.txt files.
-	NonRootIncludes []string
+	// CcLibraryName is the CMake name to use for cc_library targets. If empty,
+	// "bazel2cmake_cc_library" will be used.
+	CcLibraryName string
+
+	// CcBinaryName is the CMake name to use for cc_binary targets. If empty,
+	// "bazel2cmake_cc_binary" will be used.
+	CcBinaryName string
+
+	// CcTestName is the CMake name to use for cc_test targets. If empty, "bazel2cmake_cc_test"
+	// will be used.
+	CcTestName string
+
+	// Includes are the includes for CMakeLists.txt files. If nil, "Bazel2cmakeSupport" will be
+	// included.
+	Includes []string
 
 	build         *bazel.Build
-	projectPrefix string
 }
 
 func (self *CmakeConverter) Init(build *bazel.Build) error {
 	self.build = build
-	if self.ProjectPrefix != "" {
-		self.projectPrefix = self.ProjectPrefix
-	} else {
-		self.projectPrefix = string(build.WorkspaceName)
+	if self.ProjectPrefix == "" {
+		self.ProjectPrefix = string(build.WorkspaceName)
+	}
+	if self.CcLibraryName == "" {
+		self.CcLibraryName = "bazel2cmake_cc_library"
+	}
+	if self.CcBinaryName == "" {
+		self.CcBinaryName = "bazel2cmake_cc_binary"
+	}
+	if self.CcTestName == "" {
+		self.CcTestName = "bazel2cmake_cc_test"
+	}
+	if self.Includes == nil {
+		self.Includes = []string{"Bazel2cmakeSupport"}
 	}
 	return nil
 }
 
 func (self *CmakeConverter) targetName(l core.Label) string {
 	if !l.IsExternal() {
-		return dashJoin(self.projectPrefix, toDashes(string(l.Package)),
+		return dashJoin(self.ProjectPrefix, toDashes(string(l.Package)),
 			toDashes(string(l.Target)))
 	} else {
 		return fmt.Sprintf("# TODO (external dep): %v", l)
@@ -87,28 +109,24 @@ func (self *CmakeConverter) writeNonRootHeader(packageName core.PackageName, w i
 		return err
 	}
 
-	if len(self.NonRootIncludes) > 0 {
-		for _, inc := range self.NonRootIncludes {
-			if _, err := fmt.Fprintf(w, "\ninclude(%v)\n", inc); err != nil {
+	if len(self.Includes) > 0 {
+		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+			return err
+		}
+		for _, inc := range self.Includes {
+			if _, err := fmt.Fprintf(w, "include(%v)\n", inc); err != nil {
 				return err
 			}
 		}
 	}
 
-	projectName := dashJoin(self.projectPrefix, toDashes(string(packageName)))
+	projectName := dashJoin(self.ProjectPrefix, toDashes(string(packageName)))
 	if _, err := fmt.Fprintf(w, "\nproject(%v LANGUAGES CXX)\n", projectName); err != nil {
 		return err
 	}
 
 	return nil
 }
-
-//FIXME
-//const cmakeCcLibraryName = "bazel2cmake_cc_library"
-//const cmakeCcTestName = "bazel2cmake_cc_test"
-const cmakeCcLibraryName = "tricot_cc_library"
-const cmakeCcBinaryName = "tricot_cc_binary"
-const cmakeCcTestName = "tricot_cc_test"
 
 func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target core.Target,
 	w io.Writer) error {
@@ -117,7 +135,7 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 	case *rules.CcLibraryTarget:
 		t := target.(*rules.CcLibraryTarget)
 
-		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcLibraryName); err != nil {
+		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcLibraryName); err != nil {
 			return err
 		}
 
@@ -172,7 +190,7 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 	case *rules.CcBinaryTarget:
 		t := target.(*rules.CcBinaryTarget)
 
-		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcBinaryName); err != nil {
+		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcBinaryName); err != nil {
 			return err
 		}
 
@@ -213,7 +231,7 @@ func (self *CmakeConverter) writeNonRootBody(targetName core.TargetName, target 
 	case *rules.CcTestTarget:
 		t := target.(*rules.CcTestTarget)
 
-		if _, err := fmt.Fprintf(w, "\n%v(\n", cmakeCcTestName); err != nil {
+		if _, err := fmt.Fprintf(w, "\n%v(\n", self.CcTestName); err != nil {
 			return err
 		}
 
@@ -405,15 +423,21 @@ func main() {
 	// TODO(vtl)
 	/*
 	converter := &CmakeConverter{
-		MinimumVersion:  "3.10.0",
-		NonRootIncludes: []string{"Bazel2cmakeCommon"},
-		// ProjectPrefix: "hello",
+		MinimumVersion: "3.10.0",
+		ProjectPrefix:  "",  // Use default.
+		Includes:       nil, // Use default.
+		CcLibraryName:  "",  // Use default.
+		CcBinaryName:   "",  // Use default.
+		CcTestName:     "",  // Use default.
 	}
 	*/
 	converter := &CmakeConverter{
-		MinimumVersion:  "3.10.0",
-		ProjectPrefix:   "", // Use default.
-		NonRootIncludes: []string{"TricotCommon"},
+		MinimumVersion: "3.10.0",
+		ProjectPrefix:  "", // Use default.
+		Includes:       []string{"TricotCommon"},
+		CcLibraryName:  "tricot_cc_library",
+		CcBinaryName:   "tricot_cc_binary",
+		CcTestName:     "tricot_cc_test",
 	}
 
 	err = converter.Init(build)

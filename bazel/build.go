@@ -9,8 +9,8 @@ import (
 
 	"go.starlark.net/starlark"
 
-	"bazel2cmake/bazel/builtins"
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/builtins"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 type loadCacheEntry struct {

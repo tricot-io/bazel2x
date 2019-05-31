@@ -8,10 +8,10 @@ import (
 	"go.starlark.net/starlark"
 	"go.starlark.net/starlarkstruct"
 
-	"bazel2cmake/bazel/builtins/functions"
-	"bazel2cmake/bazel/builtins/rules"
-	"bazel2cmake/bazel/builtins/workspace_rules"
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/builtins/functions"
+	"src.tricot.io/public/bazel2x/bazel/builtins/rules"
+	"src.tricot.io/public/bazel2x/bazel/builtins/workspace_rules"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 func starlarkUnion(dicts ...starlark.StringDict) starlark.StringDict {

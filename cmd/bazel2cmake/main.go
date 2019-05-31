@@ -12,10 +12,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"bazel2cmake/bazel"
-	"bazel2cmake/bazel/core"
-	"bazel2cmake/bazel/utils"
-	"bazel2cmake/converters/cmake"
+	"src.tricot.io/public/bazel2x/bazel"
+	"src.tricot.io/public/bazel2x/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/utils"
+	"src.tricot.io/public/bazel2x/converters/cmake"
 )
 
 var bazelOutputBaseFlag = flag.String("bazel_output_base", "", "Bazel output base directory")

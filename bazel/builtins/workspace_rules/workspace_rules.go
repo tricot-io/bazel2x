@@ -10,7 +10,7 @@ import (
 
 	"go.starlark.net/starlark"
 
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 // TODO(vtl): Mostly copy-pasta of rules.newRule.

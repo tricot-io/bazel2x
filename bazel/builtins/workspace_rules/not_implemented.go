@@ -6,7 +6,7 @@ package workspace_rules
 import (
 	"go.starlark.net/starlark"
 
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 // NotImplemented is used for Bazel workspace rules that we haven't implemented (yet).

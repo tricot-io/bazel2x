@@ -6,8 +6,8 @@ package rules
 import (
 	"fmt"
 
-	"bazel2cmake/bazel/builtins/args"
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/builtins/args"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 type TargetCommon struct {

@@ -8,8 +8,8 @@ import (
 
 	"go.starlark.net/starlark"
 
-	builtins_args "bazel2cmake/bazel/builtins/args"
-	"bazel2cmake/bazel/core"
+	builtins_args "src.tricot.io/public/bazel2x/bazel/builtins/args"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 // WorkspaceArgs contains the argument for the workspace Bazel function.

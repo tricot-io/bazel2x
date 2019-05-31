@@ -6,7 +6,7 @@ package core_test
 import (
 	"testing"
 
-	. "bazel2cmake/bazel/core"
+	. "src.tricot.io/public/bazel2x/bazel/core"
 )
 
 func TestWorkspaceName_IsValid(t *testing.T) {

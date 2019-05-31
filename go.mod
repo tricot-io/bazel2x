@@ -1,4 +1,4 @@
-module bazel2cmake
+module src.tricot.io/public/bazel2x
 
 go 1.12
 

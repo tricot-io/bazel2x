@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 type SourceFileReader func(sourceFileLabel core.Label) ([]byte, error)

@@ -12,9 +12,9 @@ import (
 	"sort"
 	"strings"
 
-	"bazel2cmake/bazel"
-	"bazel2cmake/bazel/builtins/rules"
-	"bazel2cmake/bazel/core"
+	"src.tricot.io/public/bazel2x/bazel"
+	"src.tricot.io/public/bazel2x/bazel/builtins/rules"
+	"src.tricot.io/public/bazel2x/bazel/core"
 )
 
 func toDashes(s string) string {

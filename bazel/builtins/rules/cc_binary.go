@@ -1,7 +1,7 @@
 // Copyright 2019 Tricot Inc.
 // Use of this source code is governed by the license in the LICENSE file.
 
-package rules
+package rules // import "src.tricot.io/public/bazel2x/bazel/builtins/rules"
 
 import (
 	"go.starlark.net/starlark"

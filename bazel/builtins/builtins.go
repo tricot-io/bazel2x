@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license in the LICENSE file.
 
 // Package builtins provides the initial globals (builtins) for executing a Bazel file.
-package builtins
+package builtins // import "src.tricot.io/public/bazel2x/bazel/builtins"
 
 import (
 	"go.starlark.net/starlark"

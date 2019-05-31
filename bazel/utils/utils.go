@@ -2,4 +2,4 @@
 // Use of this source code is governed by the license in the LICENSE file.
 
 // Package utils contains various utility functions for working with Bazel (build files).
-package utils
+package utils // import "src.tricot.io/public/bazel2x/bazel/utils"

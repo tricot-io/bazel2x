@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license in the LICENSE file.
 
 // Package args contains various helpers for extracting/processing starlark arguments.
-package args
+package args // import "src.tricot.io/public/bazel2x/bazel/builtins/args"
 
 import (
 	"fmt"

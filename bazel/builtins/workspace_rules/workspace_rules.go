@@ -3,7 +3,7 @@
 
 // Package workspace_rules contains implementations of Bazel workspace rules (only callable from
 // WORKSPACE files).
-package workspace_rules
+package workspace_rules // import "src.tricot.io/public/bazel2x/bazel/builtins/workspace_rules"
 
 import (
 	"fmt"

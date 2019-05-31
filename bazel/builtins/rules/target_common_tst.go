@@ -3,7 +3,7 @@
 
 // NOTE: This file is named "target_common_tst.go", since those ending in "_test.go" are test files.
 
-package rules
+package rules // import "src.tricot.io/public/bazel2x/bazel/builtins/rules"
 
 import (
 	"src.tricot.io/public/bazel2x/bazel/builtins/args"

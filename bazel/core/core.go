@@ -2,4 +2,4 @@
 // Use of this source code is governed by the license in the LICENSE file.
 
 // Package core contains core Bazel concepts.
-package core
+package core // import "src.tricot.io/public/bazel2x/bazel/core"

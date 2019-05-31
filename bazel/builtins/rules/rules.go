@@ -3,7 +3,7 @@
 
 // Package rules contains implementations of Bazel build rules (only callable from BUILD[.bazel]
 // files).
-package rules
+package rules // import "src.tricot.io/public/bazel2x/bazel/builtins/rules"
 
 import (
 	"fmt"

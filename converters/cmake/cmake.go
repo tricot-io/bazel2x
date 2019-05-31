@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license in the LICENSE file.
 
 // Package cmake implements the conversion of Bazel BUILD files to CMake CMakeLists.txt files.
-package cmake
+package cmake // import "src.tricot.io/public/bazel2x/converters/cmake"
 
 import (
 	"fmt"

@@ -74,11 +74,22 @@ type CmakeConverter struct {
 	// workspace name will be used). ExternalTargets has precedence over this.
 	ExternalWorkspaces map[string]string `json:"externalWorkspaces"`
 
+	// SkipTargets are targets to skip converting; its entries should be labels, like
+	// "//foo/bar:baz". "//foo/bar:all" is also supported, in which case everything in the
+	// "foo/bar" package is skipped. Warning: "//foo/bar" means "//foo/bar:bar". The root
+	// package ("//:all") should not be skipped. TODO(vtl): Patterns involving ... aren't
+	// supported yet.
+	SkipTargets []string `json:"skipTargets"`
+
 	build *bazel.Build
+
+	skipPackagesSet map[string]struct{}
+	skipTargetsSet  map[string]struct{}
 }
 
 func (self *CmakeConverter) Init(build *bazel.Build) error {
 	self.build = build
+
 	if self.MinimumVersion == "" {
 		self.MinimumVersion = "3.10.0"
 	}
@@ -107,9 +118,21 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 	if self.Includes == nil {
 		self.Includes = []string{"cmake/bazel2cmake.cmake"}
 	}
-	if self.RootUserHeader == nil {
-		self.RootUserHeader = []string{}
+
+	self.skipPackagesSet = make(map[string]struct{})
+	self.skipTargetsSet = make(map[string]struct{})
+	for _, r := range self.SkipTargets {
+		l, err := core.ParseLabel("", "", r)
+		if err != nil {
+			return err
+		}
+		if l.Target == "all" {
+			self.skipPackagesSet[l.Workspace.String()+l.Package.String()] = struct{}{}
+		} else {
+			self.skipTargetsSet[l.String()] = struct{}{}
+		}
 	}
+
 	return nil
 }
 
@@ -297,6 +320,10 @@ func (self *CmakeConverter) writeTarget(targetName core.TargetName, target core.
 
 func (self *CmakeConverter) writeTargets(packageTargets *core.PackageTargets, w io.Writer) error {
 	for _, target := range packageTargets.TargetList {
+		if _, skip := self.skipTargetsSet[target.Label().String()]; skip {
+			continue
+		}
+
 		if err := self.writeTarget(target.Label().Target, target, w); err != nil {
 			return err
 		}
@@ -320,6 +347,16 @@ func (self *CmakeConverter) writeAddSubdirs(w io.Writer) error {
 			return err
 		}
 		for _, pkg := range pkgs {
+			// TODO(vtl): This is kind of hacky, but we used string(packageName) since
+			// we didn't want the leading //. If we didn't want to add "skipped"
+			// comments, we could have skipped adding them to pkgs instead.
+			if _, skip := self.skipPackagesSet[
+				core.MainWorkspaceName.String()+"//"+pkg]; skip {
+				if _, err := fmt.Fprintf(w, "# %v skipped.\n", pkg); err != nil {
+					return err
+				}
+				continue
+			}
 			if _, err := fmt.Fprintf(w, "add_subdirectory(%v)\n", pkg); err != nil {
 				return err
 			}
@@ -422,6 +459,11 @@ func (self *CmakeConverter) Convert(outputPath string) error {
 	}
 
 	for packageName, packageTargets := range workspaceTargets {
+		if _, skip := self.skipPackagesSet[
+			core.MainWorkspaceName.String()+packageName.String()]; skip {
+			continue
+		}
+
 		packagePath := filepath.Join(outputPath, string(packageName))
 		if err := os.MkdirAll(packagePath, os.ModePerm); err != nil {
 			return err

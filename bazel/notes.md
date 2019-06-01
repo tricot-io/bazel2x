@@ -11,8 +11,8 @@
     *   In translating Bazel to CMake, you probably don't want to automatically
         cross workspace boundaries.
     *   Even if you actually depend on something from another workspace, it's
-        quite possible that that workspace has a more natural, "native" CMake
-        build.
+        quite possible that that workspace has a more natural, "native" (e.g.,
+        handwritten) CMake build.
     *   So you'd at least want to *support* mapping external dependencies to a
         CMake dependency of some other name.
 *   All that said, it's hard to simply ignore external workspaces. E.g., they
@@ -27,10 +27,15 @@
 
 ## Decisions
 
-*   Don't read *WORKSPACE* files.
-*   Assume that other workspaces are available under *bazel-\<project
-    name\>/external* (where *\<project name\>* seems to be the name of the
-    directory containing the *WORKSPACE* file).
+*   Read *WORKSPACE* files, just to glean the workspace name. We could skip this
+    if it's too troublesome.
+*   Assume that other workspaces are available under *\<outputBase\>/external*
+    (see https://docs.bazel.build/versions/master/output_directories.html for
+    the definition of *\<outputBase\>*).
+    *   `bazel sync` will fetch all dependencies. (There's also `bazel fetch`.)
+    *   *bazel-\<project name\>* (where *\<project name\>* is the name of the
+        directory containing the *WORKSPACE* file) doesn't contain everything,
+        so accessing the *\<outputBase\>* really is necessary.
 *   This is enough to load *.bzl* files from other workspaces, as far as I can
     tell. (Presumably, any name mappings are *not* applied in this case, or so I
     hope. Or, rather, name mappings are only applied when a *BUILD* file is

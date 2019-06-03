@@ -351,8 +351,8 @@ func (self *CmakeConverter) writeAddSubdirs(w io.Writer) error {
 			// TODO(vtl): This is kind of hacky, but we used string(packageName) since
 			// we didn't want the leading //. If we didn't want to add "skipped"
 			// comments, we could have skipped adding them to pkgs instead.
-			if _, skip := self.skipPackagesSet[
-				core.MainWorkspaceName.String()+"//"+pkg]; skip {
+			if _, skip := self.skipPackagesSet[core.MainWorkspaceName.String()+
+				"//"+pkg]; skip {
 				if _, err := fmt.Fprintf(w, "# %v skipped.\n", pkg); err != nil {
 					return err
 				}
@@ -460,8 +460,8 @@ func (self *CmakeConverter) Convert(outputPath string) error {
 	}
 
 	for packageName, packageTargets := range workspaceTargets {
-		if _, skip := self.skipPackagesSet[
-			core.MainWorkspaceName.String()+packageName.String()]; skip {
+		if _, skip := self.skipPackagesSet[core.MainWorkspaceName.String()+
+			packageName.String()]; skip {
 			continue
 		}
 

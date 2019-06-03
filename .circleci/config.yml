@@ -1,0 +1,42 @@
+# Copyright 2019 Tricot Inc.
+# Use of this source code is governed by the license in the LICENSE file.
+
+version: 2
+jobs:
+  build:
+    docker:
+        - image: tricot/build-public-circleci:1.12.5-0.25.2-fce7056b
+
+    working_directory: ~/bazel2x
+
+    steps:
+      - checkout
+
+      ### Restore cache:
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "go.sum" }}-{{ .Revision}}
+          - v1-dependencies-{{ checksum "go.sum" }}-
+          - v1-dependencies-
+
+      ### Main Go stuff:
+
+      # Gofmt:
+      - run: .circleci/check-gofmt.sh
+
+      # Go vet:
+      - run: go vet -composites=false ./...
+
+      # Go build:
+      - run: go build -v ./...
+
+      # Go tests:
+      - run: go test -v ./...
+
+      ### Save cache:
+
+      - save_cache:
+          paths:
+            - /go/pkg/mod
+          key: v1-dependencies-{{ checksum "go.sum" }}-{{ .Revision}}

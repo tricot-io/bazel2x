@@ -67,6 +67,7 @@ type CmakeConverter struct {
 
 	// ExternalTargets are external targets that may appear as dependencies; it is a map from
 	// label to CMake target name. This has precedence over ExternalWorkspaces.
+	// TODO(vtl): Possibly the values should be a list of targets.
 	ExternalTargets map[string]string `json:"externalTargets"`
 
 	// ExternalWorkspaces are external workspaces also converted by bazel2cmake; it is a map

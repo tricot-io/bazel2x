@@ -74,7 +74,11 @@ func main() {
 
 	var outputBase string
 	if *bazelOutputBaseFlag == "" {
-		outputBase = utils.DefaultOutputBaseDir(workspaceDir)
+		outputBase, err = utils.DefaultOutputBaseDir(workspaceDir)
+		if err != nil {
+			fmt.Printf("ERROR: failed to get Bazel outputBase directory: %v\n", err)
+			os.Exit(1)
+		}
 	} else {
 		outputBase = *bazelOutputBaseFlag
 	}

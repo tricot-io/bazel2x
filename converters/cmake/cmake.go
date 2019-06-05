@@ -30,10 +30,9 @@ type CmakeConverter struct {
 	// used.
 	MinimumVersion string `json:"minimumVersion"`
 
-	// ProjectPrefix is the prefix to prepend (not including separating '-') to all project
-	// names (it is also the name of the root project). If empty, the workspace name will be
-	// used.
-	ProjectPrefix string `json:"projectPrefix"`
+	// ProjectName is the name of the (root) project, and which will be prepended (followed by a
+	// separating '-') to all target names. If empty, the workspace name will be used.
+	ProjectName string `json:"projectName"`
 
 	// StartWorkspaceName is the CMake name for the macro to call in the root CMakeLists.txt
 	// before emitting any of our own targets (possibly by adding our own subdirectories). If
@@ -71,7 +70,7 @@ type CmakeConverter struct {
 	ExternalTargets map[string]string `json:"externalTargets"`
 
 	// ExternalWorkspaces are external workspaces also converted by bazel2cmake; it is a map
-	// from workspace name (not including the leading '@') to project prefix (if empty, the
+	// from workspace name (not including the leading '@') to project name (if empty, the
 	// workspace name will be used). ExternalTargets has precedence over this.
 	ExternalWorkspaces map[string]string `json:"externalWorkspaces"`
 
@@ -94,11 +93,11 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 	if self.MinimumVersion == "" {
 		self.MinimumVersion = "3.10.0"
 	}
-	if self.ProjectPrefix == "" {
+	if self.ProjectName == "" {
 		if build.WorkspaceName != "" {
-			self.ProjectPrefix = string(build.WorkspaceName)
+			self.ProjectName = string(build.WorkspaceName)
 		} else {
-			self.ProjectPrefix = "bazel2cmake_project"
+			self.ProjectName = "bazel2cmake_project"
 		}
 	}
 	if self.StartWorkspaceName == "" {
@@ -139,17 +138,17 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 
 func (self *CmakeConverter) targetName(l core.Label) (string, error) {
 	if !l.IsExternal() {
-		return dashJoin(self.ProjectPrefix, toDashes(string(l.Package)),
+		return dashJoin(self.ProjectName, toDashes(string(l.Package)),
 			toDashes(string(l.Target))), nil
 	}
 	if rv, ok := self.ExternalTargets[l.String()]; ok {
 		return rv, nil
 	}
-	if projectPrefix, ok := self.ExternalWorkspaces[string(l.Workspace)]; ok {
-		if projectPrefix == "" {
-			projectPrefix = string(l.Workspace)
+	if projectName, ok := self.ExternalWorkspaces[string(l.Workspace)]; ok {
+		if projectName == "" {
+			projectName = string(l.Workspace)
 		}
-		return dashJoin(projectPrefix, toDashes(string(l.Package)),
+		return dashJoin(projectName, toDashes(string(l.Package)),
 			toDashes(string(l.Target))), nil
 	}
 	return "", fmt.Errorf("no known CMake target for label %v", l)
@@ -162,16 +161,6 @@ func (self *CmakeConverter) writeHeader(packageName core.PackageName, w io.Write
 
 	if _, err := fmt.Fprintf(w, "\ncmake_minimum_required(VERSION %v)\n",
 		self.MinimumVersion); err != nil {
-		return err
-	}
-
-	var projectName string
-	if packageName == "" {
-		projectName = self.ProjectPrefix
-	} else {
-		projectName = dashJoin(self.ProjectPrefix, toDashes(string(packageName)))
-	}
-	if _, err := fmt.Fprintf(w, "project(%v LANGUAGES CXX)\n", projectName); err != nil {
 		return err
 	}
 
@@ -378,6 +367,10 @@ func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 	defer w.Close()
 
 	if err := self.writeHeader(packageName, w); err != nil {
+		return err
+	}
+
+	if _, err := fmt.Fprintf(w, "project(%v LANGUAGES CXX)\n", self.ProjectName); err != nil {
 		return err
 	}
 

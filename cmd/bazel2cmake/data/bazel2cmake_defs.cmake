@@ -7,26 +7,9 @@ cmake_policy(SET CMP0048 NEW)
 
 enable_testing()
 
-function(bazel2cmake_start_workspace)
-    if(NOT "${_BAZEL2CMAKE_WORKSPACE_DIR}" STREQUAL "")
-        message(FATAL_ERROR "ERROR: already inside a workspace")
-    endif()
-    set(_BAZEL2CMAKE_WORKSPACE_DIR "${CMAKE_CURRENT_LIST_DIR}" PARENT_SCOPE)
-endfunction()
-
-function(bazel2cmake_end_workspace)
-    if("${_BAZEL2CMAKE_WORKSPACE_DIR}" STREQUAL "")
-        message(FATAL_ERROR "ERROR: not inside a workspace")
-    endif()
-    set(_BAZEL2CMAKE_WORKSPACE_DIR "" PARENT_SCOPE)
-endfunction()
-
 function(bazel2cmake_cc_config name scope)
-    if("${_BAZEL2CMAKE_WORKSPACE_DIR}" STREQUAL "")
-        message(FATAL_ERROR "ERROR: not inside a workspace")
-    endif()
     target_compile_features("${name}" "${scope}" cxx_std_11)
-    target_include_directories("${name}" "${scope}" "${_BAZEL2CMAKE_WORKSPACE_DIR}")
+    target_include_directories("${name}" "${scope}" "${PROJECT_SOURCE_DIR}")
 endfunction()
 
 function(bazel2cmake_cc_library name)

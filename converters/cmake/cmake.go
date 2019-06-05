@@ -34,16 +34,6 @@ type CmakeConverter struct {
 	// separating '-') to all target names. If empty, the workspace name will be used.
 	ProjectName string `json:"projectName"`
 
-	// StartWorkspaceName is the CMake name for the macro to call in the root CMakeLists.txt
-	// before emitting any of our own targets (possibly by adding our own subdirectories). If
-	// empty, "bazel2cmake_start_workspace" will be used.
-	StartWorkspaceName string `json:"startWorkspaceName"`
-
-	// EndWorkspaceName is the CMake name for the macro to call in the root CMakeLists.txt
-	// after emitting all of our own targets (possibly by adding our own subdirectories). If
-	// empty, "bazel2cmake_end_workspace" will be used.
-	EndWorkspaceName string `json:"endWorkspaceName"`
-
 	// CcLibraryName is the CMake name to use for cc_library targets. If empty,
 	// "bazel2cmake_cc_library" will be used.
 	CcLibraryName string `json:"ccLibraryName"`
@@ -99,12 +89,6 @@ func (self *CmakeConverter) Init(build *bazel.Build) error {
 		} else {
 			self.ProjectName = "bazel2cmake_project"
 		}
-	}
-	if self.StartWorkspaceName == "" {
-		self.StartWorkspaceName = "bazel2cmake_start_workspace"
-	}
-	if self.EndWorkspaceName == "" {
-		self.EndWorkspaceName = "bazel2cmake_end_workspace"
 	}
 	if self.CcLibraryName == "" {
 		self.CcLibraryName = "bazel2cmake_cc_library"
@@ -396,19 +380,11 @@ func (self *CmakeConverter) writeRootCmakeLists(packageName core.PackageName,
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "\n%v()\n", self.StartWorkspaceName); err != nil {
-		return err
-	}
-
 	if err := self.writeTargets(packageTargets, w); err != nil {
 		return err
 	}
 
 	if err := self.writeAddSubdirs(w); err != nil {
-		return err
-	}
-
-	if _, err := fmt.Fprintf(w, "\n%v()\n", self.EndWorkspaceName); err != nil {
 		return err
 	}
 

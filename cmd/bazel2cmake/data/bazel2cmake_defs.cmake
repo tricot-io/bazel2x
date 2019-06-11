@@ -7,22 +7,13 @@ cmake_policy(SET CMP0048 NEW)
 
 enable_testing()
 
-function(_bazel2cmake_skip_target out name)
-    if(DEFINED BAZEL2CMAKE_SKIP_TARGET_REGEX AND name MATCHES "${BAZEL2CMAKE_SKIP_TARGET_REGEX}")
-        set("${out}" TRUE PARENT_SCOPE)
-    else()
-        set("${out}" FALSE PARENT_SCOPE)
-    endif()
-endfunction()
-
 function(_bazel2cmake_cc_config name scope)
     target_compile_features("${name}" "${scope}" cxx_std_11)
     target_include_directories("${name}" "${scope}" "${PROJECT_SOURCE_DIR}")
 endfunction()
 
 function(bazel2cmake_cc_library name)
-    _bazel2cmake_skip_target(skip "${name}")
-    if(skip)
+    if(DEFINED BAZEL2CMAKE_SKIP_TARGET_REGEX AND name MATCHES "${BAZEL2CMAKE_SKIP_TARGET_REGEX}")
         return()
     endif()
 
@@ -42,8 +33,7 @@ function(bazel2cmake_cc_library name)
 endfunction() 
 
 function(bazel2cmake_cc_binary name)
-    _bazel2cmake_skip_target(skip "${name}")
-    if(skip)
+    if(DEFINED BAZEL2CMAKE_SKIP_TARGET_REGEX AND name MATCHES "${BAZEL2CMAKE_SKIP_TARGET_REGEX}")
         return()
     endif()
 
@@ -55,8 +45,7 @@ function(bazel2cmake_cc_binary name)
 endfunction() 
 
 function(bazel2cmake_cc_test name)
-    _bazel2cmake_skip_target(skip "${name}")
-    if(skip)
+    if(DEFINED BAZEL2CMAKE_SKIP_TARGET_REGEX AND name MATCHES "${BAZEL2CMAKE_SKIP_TARGET_REGEX}")
         return()
     endif()
 

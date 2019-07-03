@@ -1,2 +1,2 @@
-go.starlark.net v0.0.0-20190702193000-dbbb761c3745 h1:6xTJWSq3+ccYfDUGI5gkPl+VqD4v/AX6+ZhQQrlaIKQ=
-go.starlark.net v0.0.0-20190702193000-dbbb761c3745/go.mod h1:c1/X6cHgvdXj6pUlmWKMkuqRnW4K8x2vwt6JAaaircg=
+go.starlark.net v0.0.0-20190702223751-32f345186213 h1:lkYv5AKwvvduv5XWP6szk/bvvgO6aDeUujhZQXIFTes=
+go.starlark.net v0.0.0-20190702223751-32f345186213/go.mod h1:c1/X6cHgvdXj6pUlmWKMkuqRnW4K8x2vwt6JAaaircg=

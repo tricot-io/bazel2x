@@ -116,6 +116,8 @@ var commonGlobals = starlark.StringDict{
 	"depset": functions.NotImplemented("depset"),
 	"fail":   functions.NotImplemented("fail"),
 	"select": functions.NotImplemented("select"),
+	// TODO(vtl): This probably doesn't belong here.
+	"struct": functions.NotImplemented("struct"),
 }
 
 // buildAndbzlCommonGlobals are globals that are common to BUILD and .bzl files.

@@ -14,38 +14,35 @@ import (
 
 func getAttr(attrName string, src reflect.Value) string {
 	var attrValue string
-	v := src.Interface()
-	switch v.(type) {
+	switch v := src.Interface().(type) {
 	case bool:
-		if v.(bool) {
+		if v {
 			attrValue = "True"
 		} else {
 			attrValue = "False"
 		}
 	case int64:
-		attrValue = fmt.Sprintf("%v", v.(int64))
+		attrValue = fmt.Sprintf("%v", v)
 	case string:
-		attrValue = fmt.Sprintf("%q", v.(string))
+		attrValue = fmt.Sprintf("%q", v)
 	case core.Label:
-		attrValue = fmt.Sprintf("%q", v.(core.Label).String())
+		attrValue = fmt.Sprintf("%q", v.String())
 	case []string:
 		attrValue = "["
-		vs := v.([]core.Label)
-		for i := range vs {
+		for i := range v {
 			if i > 0 {
 				attrValue += ", "
 			}
-			attrValue += fmt.Sprintf("%q", vs[i])
+			attrValue += fmt.Sprintf("%q", v[i])
 		}
 		attrValue += "]"
 	case []core.Label:
 		attrValue = "["
-		vl := v.([]core.Label)
-		for i := range vl {
+		for i := range v {
 			if i > 0 {
 				attrValue += ", "
 			}
-			attrValue += fmt.Sprintf("%q", vl[i].String())
+			attrValue += fmt.Sprintf("%q", v[i].String())
 		}
 		attrValue += "]"
 	default:

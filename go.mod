@@ -5,4 +5,4 @@ module src.tricot.io/public/bazel2x
 
 go 1.13
 
-require go.starlark.net v0.0.0-20200330013621-be5394c419b6
+require go.starlark.net v0.0.0-20200519165436-0aa95694c768

@@ -19,9 +19,9 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "go.sum" }}-{{ .Revision}}
-          - v1-dependencies-{{ checksum "go.sum" }}-
-          - v1-dependencies-
+          - v2-dependencies-{{ checksum "go.sum" }}-{{ .Revision }}
+          - v2-dependencies-{{ checksum "go.sum" }}-
+          - v2-dependencies-
 
       ### Main Go stuff:
 
@@ -39,4 +39,4 @@ jobs:
       - save_cache:
           paths:
             - /go/pkg/mod
-          key: v1-dependencies-{{ checksum "go.sum" }}-{{ .Revision}}
+          key: v2-dependencies-{{ checksum "go.sum" }}-{{ .Revision }}
